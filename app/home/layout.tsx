@@ -4,14 +4,13 @@ import Main from './Main'
 import Courses from './Courses'
 
 
-export default function RootLayout({
+export default function HomeLayout({
     children,
   }: {
     children: React.ReactNode
   }) {
     return (
     <>
-        <nav>About NavBar</nav>
         <main>
             <Navbar />
             <Main />
