@@ -5,17 +5,18 @@ import Courses from './Courses'
 
 
 export default function HomeLayout({
-    children,
-  }: {
-    children: React.ReactNode
-  }) {
-    return (
+  children,
+}: {
+  children: React.ReactNode
+}) {
+  return (
     <>
-        <main>
-            <Navbar />
-            <Main />
-            <Courses />
-        </main>
+
+      <main>
+        <Navbar />
+        <Main />
+        <Courses />
+      </main>
     </>
   )
 }
