@@ -1,7 +1,7 @@
 import React from 'react'
 
 
-export default function SignUpLayout({
+export default function layoutSignup({
   children,
 }: {
   children: React.ReactNode

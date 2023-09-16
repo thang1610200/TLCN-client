@@ -1,30 +1,25 @@
 import { Metadata } from "next"
 import Image from "next/image"
+import Link from "next/link"
 
-
-import * as React from "react"
-
+import Navbar from "../home/Navbar"
+import { Icons } from "@/components/icons"
+import { Button } from "@/components/ui/button"
+import { BiArrowBack } from "react-icons/bi";
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
 import {
   Card,
   CardContent,
 
 } from "@/components/ui/card"
 
-import { Icons } from "@/components/icons"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-
-import { BiArrowBack } from "react-icons/bi";
-import Link from 'next/link'
-import Navbar from "../home/Navbar"
-
 export const metadata: Metadata = {
   title: "Authentication",
   description: "Authentication forms built using the components.",
 }
 
-export default function AuthenticationPage() {
+export default function ForgotPassword() {
   return (
     <>
       <Navbar />
@@ -62,10 +57,10 @@ export default function AuthenticationPage() {
           <div className="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[350px]">
             <div className="flex flex-col space-y-2 text-center">
               <h1 className="text-2xl font-semibold tracking-tight">
-                Create an account
+                Forgot account
               </h1>
               <p className="text-sm text-muted-foreground">
-                Enter your email below to create your account
+                Enter your email below to get a link to reset your password.
               </p>
             </div>
             <Card className="grid gap-4 pt-4">
@@ -92,27 +87,13 @@ export default function AuthenticationPage() {
                   </div>
                   <div className="relative flex justify-center text-xs uppercase">
                     <span className="px-2 bg-background text-muted-foreground">
-                      Or continue with
+                      Or
                     </span>
                   </div>
                 </div>
-                <div className="grid grid-cols-2 gap-6">
-                  <Button variant="outline">
-                    <Icons.gitHub className="w-4 h-4 mr-2" />
-                    Github
-                  </Button>
-                  <Button variant="outline">
-                    <Icons.google className="w-4 h-4 mr-2" />
-                    Google
-                  </Button>
-                </div>
-                <div className="relative px-4">
-                  <div className="absolute inset-0 flex items-center">
-                    <span className="w-full border-t" />
-                  </div>
-                </div>
+                
                 <Link rel="stylesheet" href="\login" className="grid gap-2">
-                  <Button type="button">
+                  <Button variant="outline" type="button">
                     <BiArrowBack className="w-4 h-4 mr-2" />
                     Back to login
                   </Button>

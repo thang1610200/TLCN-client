@@ -8,10 +8,8 @@ import { Button } from "@/components/ui/button"
 import {
   Card,
   CardContent,
-  CardDescription,
   CardFooter,
-  CardHeader,
-  CardTitle,
+
 } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -68,12 +66,14 @@ export default function LoginPage() {
                 <CardContent className="grid gap-4 pt-4">
                   <div className="grid gap-2">
                     <Label htmlFor="email">Email</Label>
-                    <Input id="email" type="email" placeholder="m@example.com" />
+                    <Input id="email" type="email" placeholder="m@example.com" className="
+                    invalid:[&:not(:placeholder-shown):not(:focus)]:ring-red-600 invalid:[&:not(:placeholder-shown):not(:focus)]:ring-2 invalid:[&:not(:placeholder-shown):not(:focus)]:text-red-600 "/>
                   </div>
                   <div className="grid gap-2">
                     <Label htmlFor="password">Password</Label>
                     <Input id="password" type="password" />
                   </div>
+                  <a rel="help" href="\forgotpassword" className="underline text-xs text-right -my-2">Forgot password?</a>
                   <Button className="w-full">Login</Button>
                   <div className="relative">
                     <div className="absolute inset-0 flex items-center">
@@ -105,7 +105,7 @@ export default function LoginPage() {
                       <span className="px-2 bg-background text-muted-foreground">
                         Don't have an account?
                       </span>
-                      <a rel="stylesheet" href="\signup" className="grid gap-2 pr-2 underline bg-background decoration-solid">
+                      <a rel="next" href="\signup" className="grid gap-2 pr-2 underline bg-background decoration-solid">
                         Sign up
                       </a>
                     </div>
