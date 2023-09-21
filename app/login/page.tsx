@@ -73,7 +73,7 @@ export default function LoginPage() {
                     <Label htmlFor="password">Password</Label>
                     <Input id="password" type="password" />
                   </div>
-                  <a rel="help" href="\forgotpassword" className="underline text-xs text-right -my-2">Forgot password?</a>
+                  <a rel="help" href="\forgotpassword" className="-my-2 text-xs text-right underline">Forgot password?</a>
                   <Button className="w-full">Login</Button>
                   <div className="relative">
                     <div className="absolute inset-0 flex items-center">
