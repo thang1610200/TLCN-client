@@ -1,23 +1,19 @@
-import { Metadata } from "next"
-import Image from "next/image"
-import Link from "next/link"
+import { Metadata } from "next";
+import Image from "next/image";
+import Link from "next/link";
 
-import Navbar from "../home/Navbar"
-import { Icons } from "@/components/icons"
-import { Button } from "@/components/ui/button"
+import Navbar from "../home/Navbar";
+import { Icons } from "@/components/icons";
+import { Button } from "@/components/ui/button";
 import { BiArrowBack } from "react-icons/bi";
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import {
-  Card,
-  CardContent,
-
-} from "@/components/ui/card"
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Card, CardContent } from "@/components/ui/card";
 
 export const metadata: Metadata = {
   title: "Authentication",
   description: "Authentication forms built using the components.",
-}
+};
 
 export default function ForgotPassword() {
   return (
@@ -66,9 +62,7 @@ export default function ForgotPassword() {
             <Card className="grid gap-4 pt-4">
               <CardContent className="grid gap-4">
                 <div className="grid gap-2">
-                  <Label htmlFor="email">
-                    Email
-                  </Label>
+                  <Label htmlFor="email">Email</Label>
                   <Input
                     id="email"
                     placeholder="name@example.com"
@@ -78,9 +72,7 @@ export default function ForgotPassword() {
                     autoCorrect="off"
                   />
                 </div>
-                <Button>
-                  Sign In with Email
-                </Button>
+                <Button>Submit</Button>
                 <div className="relative px-4">
                   <div className="absolute inset-0 flex items-center">
                     <span className="w-full border-t" />
@@ -91,7 +83,7 @@ export default function ForgotPassword() {
                     </span>
                   </div>
                 </div>
-                
+
                 <Link rel="stylesheet" href="\login" className="grid gap-2">
                   <Button variant="outline" type="button">
                     <BiArrowBack className="w-4 h-4 mr-2" />
@@ -121,5 +113,5 @@ export default function ForgotPassword() {
         </div>
       </div>
     </>
-  )
+  );
 }

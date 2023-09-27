@@ -1,47 +1,47 @@
 [
-    {
-        "id": "1",
-        "title": "Portfolio Html Css",
-        "username": "Universe Code",
-        "vote": "4.7",
-        "students": "(84,985)",
-        "price": "$14,99",
-        "oldPrice": "$89,99"
-    },
-    {
-        "id": "2",
-        "title": "React project",
-        "username": "Universe Code",
-        "vote": "4.7",
-        "students": "(84,985)",
-        "price": "$14,99",
-        "oldPrice": "$89,99"
-    },
-    {
-        "id": "3",
-        "title": "Vue project is coming",
-        "username": "Universe Code",
-        "vote": "4.7",
-        "students": "(84,985)",
-        "price": "$14,99",
-        "oldPrice": "$89,99"
-    },
-    {
-        "id": "4",
-        "title": "Next.Js Tailwind Css",
-        "username": "Universe Code",
-        "vote": "4.7",
-        "students": "(84,985)",
-        "price": "$14,99",
-        "oldPrice": "$89,99"
-    },
-    {
-        "id": "1",
-        "title": "React and Tailwind",
-        "username": "Universe Code",
-        "vote": "4.7",
-        "students": "(84,985)",
-        "price": "$14,99",
-        "oldPrice": "$89,99"
-    }
+  {
+    "id": "1",
+    "title": "Portfolio Html Css",
+    "username": "Universe Code",
+    "vote": "4.7",
+    "students": "(84,985)",
+    "price": "$14,99",
+    "oldPrice": "$89,99"
+  },
+  {
+    "id": "2",
+    "title": "React project",
+    "username": "Universe Code",
+    "vote": "4.7",
+    "students": "(84,985)",
+    "price": "$14,99",
+    "oldPrice": "$89,99"
+  },
+  {
+    "id": "3",
+    "title": "Vue project is coming",
+    "username": "Universe Code",
+    "vote": "4.7",
+    "students": "(84,985)",
+    "price": "$14,99",
+    "oldPrice": "$89,99"
+  },
+  {
+    "id": "4",
+    "title": "Next.Js Tailwind Css",
+    "username": "Universe Code",
+    "vote": "4.7",
+    "students": "(84,985)",
+    "price": "$14,99",
+    "oldPrice": "$89,99"
+  },
+  {
+    "id": "1",
+    "title": "React and Tailwind",
+    "username": "Universe Code",
+    "vote": "4.7",
+    "students": "(84,985)",
+    "price": "$14,99",
+    "oldPrice": "$89,99"
+  }
 ]

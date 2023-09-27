@@ -1,14 +1,15 @@
-import React from 'react'
-
+import React from "react";
+import Navbar from "../home/Navbar";
 
 export default function layoutSignup({
   children,
 }: {
-  children: React.ReactNode
+  children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
-      <body>{children}</body>
-    </html>
-  )
+    <>
+        <Navbar />
+        {children}
+    </>
+  );
 }
