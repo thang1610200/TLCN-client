@@ -2,7 +2,7 @@ import { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 
-import Navbar from "../home/Navbar";
+import Navbar from "../../components/Navbar";
 import { Icons } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import { BiArrowBack } from "react-icons/bi";
