@@ -4,7 +4,7 @@ import { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 
-import Navbar from "../../components/Navbar";
+import Navbar from "@/components/Navbar";
 import { Icons } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import { BiArrowBack } from "react-icons/bi";
@@ -36,12 +36,14 @@ export const metadata: Metadata = {
 
 const formSchema = z.object({
   email: z.string().email(),
+  password: z.string().min(6),
+  confirmpassword: z.string().min(6)
 });
 
 type LoginFormValues = z.infer<typeof formSchema>
 
 
-export default function ForgotPassword() {
+export default function ResetPassword() {
 
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
@@ -50,6 +52,8 @@ export default function ForgotPassword() {
     resolver: zodResolver(formSchema),
     defaultValues: {
       email: '',
+      password: '',
+      confirmpassword: ''
     }
   });
 
@@ -108,40 +112,55 @@ export default function ForgotPassword() {
                   <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
                     <div className="grid gap-2">
                       <FormField
-                        disabled={isLoading}
+                        disabled={true}
                         control={form.control}
                         name="email"
                         render={({ field }) => (
                           <FormItem>
                             <FormLabel className="after:content-['_*'] after:text-red-600 pb-1">Email</FormLabel>
                             <FormControl>
-                              <Input placeholder="m@example.com" className="invalid:[&:not(:placeholder-shown):not(:focus)]:ring-red-600 invalid:[&:not(:placeholder-shown):not(:focus)]:ring-2 invalid:[&:not(:placeholder-shown):not(:focus)]:text-red-600" {...field} />
+                              <Input disabled={true} placeholder="m@example.com" className="invalid:[&:not(:placeholder-shown):not(:focus)]:ring-red-600 invalid:[&:not(:placeholder-shown):not(:focus)]:ring-2 invalid:[&:not(:placeholder-shown):not(:focus)]:text-red-600 disabled:bg-slate-300 " {...field} />
                             </FormControl>
                             <FormMessage />
                           </FormItem>
                         )}
                       />
                     </div>
-                    <Button disabled={isLoading} className="w-full mt-5" type="submit">Reset Email</Button>
+                    <div className="grid gap-2">
+                      <FormField
+                        disabled={isLoading}
+                        control={form.control}
+                        name="password"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel className="after:content-['_*'] after:text-red-600 pb-1">Password</FormLabel>
+                            <FormControl>
+                              <Input placeholder="••••••••" type="password" {...field} />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    </div>
+                    <div className="grid gap-2">
+                      <FormField
+                        disabled={isLoading}
+                        control={form.control}
+                        name="confirmpassword"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel className="after:content-['_*'] after:text-red-600 pb-1">Confirm Password</FormLabel>
+                            <FormControl>
+                              <Input placeholder="••••••••" type="password" {...field} />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    </div>
+                    <Button disabled={isLoading} className="w-full mt-5" type="submit">Confirm</Button>
                   </form>
                 </Form>
-                <div className="relative px-4">
-                  <div className="absolute inset-0 flex items-center">
-                    <span className="w-full border-t" />
-                  </div>
-                  <div className="relative flex justify-center text-xs uppercase">
-                    <span className="px-2 bg-background text-muted-foreground">
-                      Or
-                    </span>
-                  </div>
-                </div>
-
-                <Link rel="stylesheet" href="\login" className="grid gap-2">
-                  <Button variant="outline" type="button">
-                    <BiArrowBack className="w-4 h-4 mr-2" />
-                    Back to login
-                  </Button>
-                </Link>
               </CardContent>
             </Card>
             <p className="px-8 text-sm text-center text-muted-foreground">

@@ -1,6 +1,6 @@
 import React from "react";
 
-export default function layoutForgotPassword({
+export default function layoutResetPassword({
   children,
 }: {
   children: React.ReactNode;

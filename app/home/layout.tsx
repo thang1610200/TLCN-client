@@ -1,7 +1,7 @@
 import React from "react";
 import Navbar from "../../components/Navbar";
-import Main from "./Main";
-import Courses from "./Courses";
+
+
 
 export default function HomeLayout({
   children,
@@ -12,9 +12,7 @@ export default function HomeLayout({
     <>
       <main>
         <Navbar />
-        <Main />
-        <Courses />
-        { children }
+        {children}
       </main>
     </>
   );
