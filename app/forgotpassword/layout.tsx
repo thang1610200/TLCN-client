@@ -1,14 +1,13 @@
-import React from 'react'
+import React from "react";
 
-
-export default function layoutRegister({
-    children,
+export default function layoutForgotPassword({
+  children,
 }: {
-    children: React.ReactNode
+  children: React.ReactNode;
 }) {
-    return (
-        <>
-            <body>{children}</body>
-        </>
-    )
+  return (
+    <>
+      <body>{children}</body>
+    </>
+  );
 }

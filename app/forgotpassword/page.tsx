@@ -1,25 +1,64 @@
-import { Metadata } from "next"
-import Image from "next/image"
-import Link from "next/link"
+"use client";
 
-import Navbar from "../home/Navbar"
-import { Icons } from "@/components/icons"
-import { Button } from "@/components/ui/button"
+import { Metadata } from "next";
+import Image from "next/image";
+import Link from "next/link";
+
+import Navbar from "../../components/Navbar";
+import { Icons } from "@/components/icons";
+import { Button } from "@/components/ui/button";
 import { BiArrowBack } from "react-icons/bi";
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Card, CardContent } from "@/components/ui/card";
 import {
-  Card,
-  CardContent,
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form"
 
-} from "@/components/ui/card"
+
+
+import { useForm } from "react-hook-form";
+import * as z from "zod"
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { zodResolver } from "@hookform/resolvers/zod";
+
 
 export const metadata: Metadata = {
   title: "Authentication",
   description: "Authentication forms built using the components.",
-}
+};
+
+const formSchema = z.object({
+  email: z.string().email(),
+});
+
+type LoginFormValues = z.infer<typeof formSchema>
+
 
 export default function ForgotPassword() {
+
+  const [isLoading, setIsLoading] = useState(false);
+  const router = useRouter();
+
+  const form = useForm<LoginFormValues>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      email: '',
+    }
+  });
+
+  function onSubmit(values: z.infer<typeof formSchema>) {
+    setIsLoading(true)
+    setTimeout(() => {
+      setIsLoading(false)
+    }, 3000)
+  }
   return (
     <>
       <Navbar />
@@ -65,22 +104,27 @@ export default function ForgotPassword() {
             </div>
             <Card className="grid gap-4 pt-4">
               <CardContent className="grid gap-4">
-                <div className="grid gap-2">
-                  <Label htmlFor="email">
-                    Email
-                  </Label>
-                  <Input
-                    id="email"
-                    placeholder="name@example.com"
-                    type="email"
-                    autoCapitalize="none"
-                    autoComplete="email"
-                    autoCorrect="off"
-                  />
-                </div>
-                <Button>
-                  Sign In with Email
-                </Button>
+                <Form {...form}>
+                  <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+                    <div className="grid gap-2">
+                      <FormField
+                        disabled={isLoading}
+                        control={form.control}
+                        name="email"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel className="after:content-['_*'] after:text-red-600 pb-1">Email</FormLabel>
+                            <FormControl>
+                              <Input placeholder="m@example.com" className="invalid:[&:not(:placeholder-shown):not(:focus)]:ring-red-600 invalid:[&:not(:placeholder-shown):not(:focus)]:ring-2 invalid:[&:not(:placeholder-shown):not(:focus)]:text-red-600" {...field} />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    </div>
+                    <Button disabled={isLoading} className="w-full mt-5" type="submit">Reset Email</Button>
+                  </form>
+                </Form>
                 <div className="relative px-4">
                   <div className="absolute inset-0 flex items-center">
                     <span className="w-full border-t" />
@@ -91,7 +135,7 @@ export default function ForgotPassword() {
                     </span>
                   </div>
                 </div>
-                
+
                 <Link rel="stylesheet" href="\login" className="grid gap-2">
                   <Button variant="outline" type="button">
                     <BiArrowBack className="w-4 h-4 mr-2" />
@@ -121,5 +165,5 @@ export default function ForgotPassword() {
         </div>
       </div>
     </>
-  )
+  );
 }

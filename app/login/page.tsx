@@ -1,18 +1,33 @@
+"use client";
+
 import { Metadata } from "next"
 import Image from "next/image"
 import Link from "next/link"
 
-import Navbar from "../home/Navbar"
+import Navbar from "../../components/Navbar"
 import { Icons } from "@/components/icons"
 import { Button } from "@/components/ui/button"
 import {
   Card,
   CardContent,
   CardFooter,
-
 } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form"
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import * as z from "zod"
+import { signIn } from 'next-auth/react'
+import { useRouter } from "next/navigation";
+import toast from "react-hot-toast";
+import { useState } from "react";
 
 
 export const metadata: Metadata = {
@@ -20,21 +35,71 @@ export const metadata: Metadata = {
   description: "Authentication forms built using the components.",
 }
 
+const formSchema = z.object({
+  email: z.string().email(),
+  password: z.string().min(6)
+});
+
+
+
+
+type LoginFormValues = z.infer<typeof formSchema>
+
 export default function LoginPage() {
+  const [isLoading, setIsLoading] = useState(false);
+  const router = useRouter();
+
+  const form = useForm<LoginFormValues>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      email: '',
+      password: ''
+    }
+  });
+
+  function onSubmit(values: z.infer<typeof formSchema>) {
+    setIsLoading(true);
+    signIn('credentials', {
+      email: values.email,
+      password: values.password,
+      redirect: false
+    })
+      .then((callback) => {
+        if (callback?.error) {
+          toast.error("Invalid credentials");
+        }
+
+        if (callback?.ok && !callback?.error) {
+          toast.success("Logged in!");
+          router.push("/home");
+        }
+      })
+      .finally(() => {
+        setIsLoading(false);
+      })
+  }
+
+  const socialAction = (action: string) => {
+    signIn(action, {
+      redirect: false,
+      callbackUrl: "/home"
+    });
+  }
+
   return (
     <>
       <Navbar />
       <div className="relative">
         <div className="md:hidden">
           <Image
-            src=""///examples/authentication-light.png
+            src="/examples/authentication-light.png"///
             width={1280}
             height={843}
             alt="Authentication"
             className="block dark:hidden"
           />
           <Image
-            src=""///examples/authentication-dark.png
+            src="/examples/authentication-dark.png"///examples/authentication-dark.png
             width={1280}
             height={843}
             alt="Authentication"
@@ -64,17 +129,44 @@ export default function LoginPage() {
               </div>
               <Card>
                 <CardContent className="grid gap-4 pt-4">
-                  <div className="grid gap-2">
-                    <Label htmlFor="email">Email</Label>
-                    <Input id="email" type="email" placeholder="m@example.com" className="
-                    invalid:[&:not(:placeholder-shown):not(:focus)]:ring-red-600 invalid:[&:not(:placeholder-shown):not(:focus)]:ring-2 invalid:[&:not(:placeholder-shown):not(:focus)]:text-red-600 "/>
-                  </div>
-                  <div className="grid gap-2">
-                    <Label htmlFor="password">Password</Label>
-                    <Input id="password" type="password" />
-                  </div>
-                  <a rel="help" href="\forgotpassword" className="-my-2 text-xs text-right underline">Forgot password?</a>
-                  <Button className="w-full">Login</Button>
+                  <Form {...form}>
+                    <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+                      <div className="grid gap-2">
+                        <FormField
+                          disabled={isLoading}
+                          control={form.control}
+                          name="email"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel className="after:content-['_*'] after:text-red-600 pb-1">Email</FormLabel>
+                              <FormControl>
+                                <Input placeholder="m@example.com" className="invalid:[&:not(:placeholder-shown):not(:focus)]:ring-red-600 invalid:[&:not(:placeholder-shown):not(:focus)]:ring-2 invalid:[&:not(:placeholder-shown):not(:focus)]:text-red-600" {...field} />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                      </div>
+                      <div className="grid gap-2">
+                        <FormField
+                          disabled={isLoading}
+                          control={form.control}
+                          name="password"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel className="after:content-['_*'] after:text-red-600 pb-1">Password</FormLabel>
+                              <FormControl>
+                                <Input placeholder="••••••••" type="password" {...field} />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                      </div>
+                      <a rel="help" href="/forgotpassword" className="-my-2 text-xs text-right underline">Forgot password?</a>
+                      <Button disabled={isLoading} className="w-full mt-5" type="submit">Login</Button>
+                    </form>
+                  </Form>
                   <div className="relative">
                     <div className="absolute inset-0 flex items-center">
                       <span className="w-full border-t" />
@@ -86,11 +178,11 @@ export default function LoginPage() {
                     </div>
                   </div>
                   <div className="grid grid-cols-2 gap-6">
-                    <Button variant="outline">
+                    <Button disabled={isLoading} onClick={() => socialAction('github')} variant="outline">
                       <Icons.gitHub className="w-4 h-4 mr-2" />
                       Github
                     </Button>
-                    <Button variant="outline">
+                    <Button disabled={isLoading} onClick={() => socialAction('google')} variant="outline">
                       <Icons.google className="w-4 h-4 mr-2" />
                       Google
                     </Button>
@@ -105,7 +197,7 @@ export default function LoginPage() {
                       <span className="px-2 bg-background text-muted-foreground">
                         Don't have an account?
                       </span>
-                      <a rel="next" href="\signup" className="grid gap-2 pr-2 underline bg-background decoration-solid">
+                      <a rel="next" href="/signup" className="grid gap-2 pr-2 underline bg-background decoration-solid">
                         Sign up
                       </a>
                     </div>
