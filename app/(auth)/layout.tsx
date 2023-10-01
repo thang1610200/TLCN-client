@@ -1,13 +1,15 @@
+import Navbar from "@/components/Navbar";
 import React from "react";
 
-export default function layoutForgotPassword({
+export default function layout({
   children,
 }: {
   children: React.ReactNode;
 }) {
   return (
     <>
-      <body>{children}</body>
+      <Navbar />
+      {children}
     </>
   );
 }

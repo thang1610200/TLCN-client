@@ -1,7 +1,7 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
-import { BiCartAlt, BiSearch, BiGlobe, BiMenu } from "react-icons/bi";
+import React from "react";
+import { BiSearch, BiGlobe, BiMenu } from "react-icons/bi";
 import Link from "next/link";
 import { useSession } from "next-auth/react";
 import { Button } from "@/components/ui/button"
@@ -16,26 +16,13 @@ import {
 } from "@/components/ui/dropdown-menu"
 
 import { signOut } from 'next-auth/react'
-
-
-
-
-
 import {
   Avatar,
   AvatarFallback,
   AvatarImage,
 } from "@/components/ui/avatar"
-
-
-
-
-
 export default function Navbar() {
   const session = useSession();
-
-
-
   return (
     <>
       {session.data !== undefined ?
@@ -84,7 +71,7 @@ export default function Navbar() {
                     </DropdownMenuGroup>
                     <DropdownMenuSeparator />
                     <DropdownMenuItem className="hover:bg-inherit" onClick={() => {
-                      signOut();
+                      signOut({callbackUrl: "/login"});
                     }}>
                       Log out
                     </DropdownMenuItem>

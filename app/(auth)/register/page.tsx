@@ -67,12 +67,14 @@ export default function Register() {
   // });
   const form = useForm<ValidationSchema>({
     resolver: zodResolver(registerFormSchema),
+    defaultValues: {
+      username: "Nguyen Huu Thang"
+    }
   });
   const { errors, isValid } = form.formState
   const onSubmit: SubmitHandler<ValidationSchema> = (data) => console.log(data);
   return (
     <>
-      <Navbar />
       <div className="md:hidden">
         <Image
           src="/examples/authentication-light.png"
@@ -124,7 +126,7 @@ export default function Register() {
                         <FormItem>
                           <FormLabel htmlFor="userName" className="after:content-['_*'] after:text-red-600 pb-1">Username</FormLabel>
                           <FormControl>
-                            <Input id="userName" type="text" placeholder="" {...form.register("username")} autoComplete="off" />
+                            <Input disabled={true} id="userName" type="text" placeholder="" {...form.register("username")} autoComplete="off" />
                           </FormControl>
                           <FormMessage />
                         </FormItem>

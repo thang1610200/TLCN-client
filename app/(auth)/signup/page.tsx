@@ -26,7 +26,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { BACKEND_URL } from "@/lib/constant";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
-import { signIn } from "next-auth/react";
+import { signIn, useSession } from "next-auth/react";
 import { useState } from "react";
 
 export const metadata: Metadata = {
@@ -59,6 +59,11 @@ type RegisterFormValues = z.infer<typeof formSchema>;
 export default function AuthenticationPage() {
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
+  const session = useSession();
+
+  if(session.status === "authenticated"){
+    router.push("/home");
+  }
 
   const form = useForm<RegisterFormValues>({
     resolver: zodResolver(formSchema),
@@ -163,14 +168,13 @@ export default function AuthenticationPage() {
                   <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
                     <div className="grid gap-2">
                       <FormField
-                          disabled = {isLoading}
                           control={form.control}
                           name="name"
                           render={({field}) => (
                             <FormItem>
                               <FormLabel className="after:content-['_*'] after:text-red-600 pb-1">Username</FormLabel>
                               <FormControl>
-                                <Input placeholder="e.g. Bonnie Green" className="invalid:[&:not(:placeholder-shown):not(:focus)]:ring-red-600 invalid:[&:not(:placeholder-shown):not(:focus)]:ring-2 invalid:[&:not(:placeholder-shown):not(:focus)]:text-red-600" {...field} />
+                                <Input disabled = {isLoading} placeholder="e.g. Bonnie Green" className="invalid:[&:not(:placeholder-shown):not(:focus)]:ring-red-600 invalid:[&:not(:placeholder-shown):not(:focus)]:ring-2 invalid:[&:not(:placeholder-shown):not(:focus)]:text-red-600" {...form.register("name")} />
                               </FormControl>
                               <FormMessage />
                             </FormItem>
@@ -179,14 +183,13 @@ export default function AuthenticationPage() {
                     </div>
                     <div className="grid gap-2">
                       <FormField
-                          disabled = {isLoading}
                           control={form.control}
                           name="email"
                           render={({field}) => (
                             <FormItem>
                               <FormLabel className="after:content-['_*'] after:text-red-600 pb-1">Email</FormLabel>
                               <FormControl>
-                                <Input placeholder="m@example.com" className="invalid:[&:not(:placeholder-shown):not(:focus)]:ring-red-600 invalid:[&:not(:placeholder-shown):not(:focus)]:ring-2 invalid:[&:not(:placeholder-shown):not(:focus)]:text-red-600" {...field} />
+                                <Input disabled = {isLoading} placeholder="m@example.com" className="invalid:[&:not(:placeholder-shown):not(:focus)]:ring-red-600 invalid:[&:not(:placeholder-shown):not(:focus)]:ring-2 invalid:[&:not(:placeholder-shown):not(:focus)]:text-red-600" {...form.register("email")} />
                               </FormControl>
                               <FormMessage />
                             </FormItem>
@@ -195,14 +198,13 @@ export default function AuthenticationPage() {
                     </div>
                     <div className="grid gap-2">
                       <FormField
-                        disabled = {isLoading}
                         control={form.control}
                         name="password"
                         render={({field}) => (
                           <FormItem>
                             <FormLabel className="after:content-['_*'] after:text-red-600 pb-1">Password</FormLabel>
                             <FormControl>
-                              <Input placeholder="••••••••" type="password" {...field} />
+                              <Input disabled = {isLoading} placeholder="••••••••" type="password" {...form.register("password")} />
                             </FormControl>
                             <FormMessage />
                           </FormItem>
