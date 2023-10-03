@@ -1,6 +1,8 @@
 "use client";
+import * as React from "react";
+import { cn } from "@/lib/utils";
 
-import React from "react";
+
 import { BiSearch, BiGlobe, BiMenu } from "react-icons/bi";
 import Link from "next/link";
 import { useSession } from "next-auth/react";
@@ -21,106 +23,155 @@ import {
   AvatarFallback,
   AvatarImage,
 } from "@/components/ui/avatar"
+import {
+  NavigationMenu,
+  NavigationMenuList,
+  NavigationMenuItem,
+  NavigationMenuLink,
+  NavigationMenuTrigger,
+  NavigationMenuContent
+} from "@/components/ui/navigation-menu";
+
+
+
+
+import data from "@/public/data_category_example.json"
+
+
+const components: { title: string; href: string; description: string }[] = [
+  {
+    title: "Alert Dialog",
+    href: "/docs/primitives/alert-dialog",
+    description:
+      "A modal dialog that interrupts the user with important content and expects a response.",
+  },
+  {
+    title: "Hover Card",
+    href: "/docs/primitives/hover-card",
+    description:
+      "For sighted users to preview content available behind a link.",
+  },
+  {
+    title: "Progress",
+    href: "/docs/primitives/progress",
+    description:
+      "Displays an indicator showing the completion progress of a task, typically displayed as a progress bar.",
+  },
+  {
+    title: "Scroll-area",
+    href: "/docs/primitives/scroll-area",
+    description: "Visually or semantically separates content.",
+  },
+  {
+    title: "Tabs",
+    href: "/docs/primitives/tabs",
+    description:
+      "A set of layered sections of content—known as tab panels—that are displayed one at a time.",
+  },
+  {
+    title: "Tooltip",
+    href: "/docs/primitives/tooltip",
+    description:
+      "A popup that displays information related to an element when the element receives keyboard focus or the mouse hovers over it.",
+  },
+]
+
 export default function Navbar() {
   const session = useSession();
   return (
     <>
-      {session.data !== undefined ?
-        <nav >
-          <div className='flex space-x-2 bg-white h-[74px] shadow-lg text-center justify-between items-center fixed w-full z-10'>
-            <BiMenu className="w-6 h-6 md:hidden" />
-            <a href="/home"><h2 className='text-3xl font-bold'>Udemy</h2></a>
-            <h3 className='hidden text-sm md:block'>Categories</h3>
-            <form className='hidden bg-[#f8fafb] md:flex border border-black rounded-3xl flex-1 h-12 items-center'>
-              <BiSearch className="w-5 h-5 mx-4 text-gray-400" />
-              <input type="text" placeholder='Search for anything' className='w-full h-full text-sm bg-transparent focus:outline-none' />
-            </form>
-            <h3 className='hidden text-sm lg:block'>Udemy Business</h3>
-            <h3 className='hidden text-sm lg:block md:hidden'>Teach on Udemy</h3>
-            <div className="flex">
-              <BiSearch className="w-6 h-6 text-gray-400 md:hidden" />
-            </div>
-            <div className="justify-end hidden pr-4 space-x-4 md:flex">
-              {session.data ?
-                <DropdownMenu modal={false}>
-                  <DropdownMenuTrigger asChild>
-                    <Button variant="ghost" className="relative w-20 h-10 rounded-full focus:ring-0 focus:ring-offset-0 hover:bg-inherit">
-                      <Avatar className="w-10 h-10">
-                        <AvatarImage src={session.data?.user.image} alt="User Image" />
-                        <AvatarFallback>User</AvatarFallback>
-                      </Avatar>
-                    </Button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent className="w-56" align="end" forceMount>
-                    <DropdownMenuLabel className="font-normal">
-                      <div className="flex flex-col space-y-1">
-                        <p className="text-sm font-medium leading-none">{session.data?.user.name}</p>
-                        <p className="text-xs leading-none text-muted-foreground">
-                          {session.data?.user.email}
-                        </p>
-                      </div>
-                    </DropdownMenuLabel>
-                    <DropdownMenuSeparator />
-                    <DropdownMenuGroup>
-                      <DropdownMenuItem>
-                        Profile
-                      </DropdownMenuItem>
-                      <DropdownMenuItem>
-                        Settings
-                      </DropdownMenuItem>
-                    </DropdownMenuGroup>
-                    <DropdownMenuSeparator />
-                    <DropdownMenuItem className="hover:bg-inherit" onClick={() => {
-                      signOut({callbackUrl: "/login"});
-                    }}>
-                      Log out
+      <nav >
+        <div className='flex space-x-2 bg-white h-[74px] shadow-lg text-center justify-between items-center fixed w-full z-10 px-4'>
+          <BiMenu className="w-6 h-6 md:hidden " />
+          {/* <a href="/home"><h2 className='text-3xl font-bold'>Udemy</h2></a> */}
+          <NavigationMenu className="fixed justify-around p-4 bg-white max-w-none ">
+            <NavigationMenuList className="space-x-4">
+              <NavigationMenuItem>
+                <Link href="/home" legacyBehavior passHref>
+                  <NavigationMenuLink>
+                    <h2 className="text-3xl font-bold">Udemy</h2>
+                  </NavigationMenuLink>
+                </Link>
+              </NavigationMenuItem>
+              <NavigationMenuItem className="">
+                <NavigationMenuTrigger className="text-lg">Category</NavigationMenuTrigger>
+                <NavigationMenuContent>
+                  <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px] ">
+                    {components.map((components) => (
+                      <ListItem
+                        key={components.title}
+                        title={components.title}
+                        href={components.href}
+                      >
+                        {components.description}
+                      </ListItem>
+                    ))}
+                  </ul>
+                </NavigationMenuContent>
+              </NavigationMenuItem>
+            </NavigationMenuList>
+          </NavigationMenu>
+          <form className=' bg-[#f8fafb] flex border border-black rounded-3xl max-w-lg flex-1 h-12 items-center p-2'>
+            <BiSearch className="w-5 h-5 mx-4 text-gray-400" />
+            <input type="text" placeholder='Search for anything' className='w-full h-full text-sm bg-transparent focus:outline-none' />
+          </form>
+          <div className="flex justify-end pr-4 space-x-4">
+            {session.status == "authenticated" &&
+              <DropdownMenu modal={false}>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="ghost" className="relative w-20 h-10 rounded-full focus:ring-0 focus:ring-offset-0 hover:bg-inherit">
+                    <Avatar className="w-12 h-12">
+                      <AvatarImage src={session.data?.user.image} alt="User Image" />
+                      <AvatarFallback>User</AvatarFallback>
+                    </Avatar>
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent className="w-56" align="end" forceMount>
+                  <DropdownMenuLabel className="font-normal">
+                    <div className="flex flex-col space-y-1">
+                      <p className="text-sm font-medium leading-none">{session.data?.user.name}</p>
+                      <p className="text-xs leading-none text-muted-foreground">
+                        {session.data?.user.email}
+                      </p>
+                    </div>
+                  </DropdownMenuLabel>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuGroup>
+                    <DropdownMenuItem>
+                      Profile
                     </DropdownMenuItem>
-                  </DropdownMenuContent>
-                </DropdownMenu>
-                : <div className="hidden md:flex">
-                  <Link rel="stylesheet" href="\login" >
-                    <button className='border border-black text-sm font-bold w-20 h-10 hover:bg-[#F5F5F5] rounded-full'>
-                      Log In
-                    </button>
-                  </Link>
-                </div>
-              }
-              <Link rel="stylesheet" href="\" >
-                <button className="border border-black h-10 w-10 flex items-center justify-center hover:bg-[#F5F5F5]">
-                  <BiGlobe className="w-5 h-5" />
-                </button>
-              </Link>
-            </div>
+                    <DropdownMenuItem>
+                      Settings
+                    </DropdownMenuItem>
+                  </DropdownMenuGroup>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem className="hover:bg-inherit" onClick={() => {
+                    signOut({ callbackUrl: "/login" });
+                  }}>
+                    Log out
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>}
+            {(session.status == "unauthenticated") &&
+              <div className="flex">
+                <Link rel="stylesheet" href="\login" >
+                  <button className='border border-black text-sm font-bold w-20 h-10 hover:bg-[#F5F5F5] rounded-full'>
+                    Log In
+                  </button>
+                </Link>
+              </div>
+            }
+            {session.status == "loading" &&
+              <div className="flex w-20 h-10"></div>
+            }
+            <Link rel="stylesheet" href="\" >
+              <button className="border border-black h-10 w-10 lg:flex items-center justify-center hover:bg-[#F5F5F5] hidden rounded-3xl ">
+                <BiGlobe className="w-8 h-8" />
+              </button>
+            </Link>
           </div>
-        </nav>
-        :
-        <nav >
-          <div className='flex space-x-4 bg-white h-[74px] shadow-lg text-center justify-between items-center px-4 fixed w-full z-10'>
-            <BiMenu className="w-6 h-6 md:hidden" />
-            <a href="/home"><h2 className='text-3xl font-bold'>Udemy</h2></a>
-            <h3 className='hidden text-sm md:block'>Categories</h3>
-            <form className='hidden bg-[#f8fafb] md:flex border border-black rounded-3xl flex-1 h-12 items-center'>
-              <BiSearch className="w-5 h-5 mx-4 text-gray-400" />
-              <input type="text" placeholder='Search for anything' className='w-full h-full text-sm bg-transparent focus:outline-none' />
-            </form>
-            <h3 className='hidden text-sm lg:block'>Udemy Business</h3>
-            <h3 className='hidden text-sm lg:block md:hidden'>Teach on Udemy</h3>
-            <div className="flex">
-              <BiSearch className="w-6 h-6 text-gray-400 md:hidden" />
-            </div>
-            <div className="justify-end hidden pr-4 space-x-4 md:flex">
-              <div className="relative w-20 h-10"></div>
-              <Link rel="stylesheet" href="\" >
-                <button className="border border-black h-10 w-10 flex items-center justify-center hover:bg-[#F5F5F5]">
-                  <BiGlobe className="w-5 h-5" />
-                </button>
-              </Link>
-            </div>
-          </div>
-        </nav>}
-
-
-
+        </div>
+      </nav>
 
       {/* <NavigationMenu className="fixed justify-around  w-[1525px] h-[74px] p-4 bg-white max-w-none ">
         <NavigationMenuList className="space-x-4">
@@ -191,3 +242,31 @@ export default function Navbar() {
     </>
   );
 }
+
+
+
+const ListItem = React.forwardRef<
+  React.ElementRef<"a">,
+  React.ComponentPropsWithoutRef<"a">
+>(({ className, title, children, ...props }, ref) => {
+  return (
+    <li>
+      <NavigationMenuLink asChild>
+        <a
+          ref={ref}
+          className={cn(
+            "block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground",
+            className
+          )}
+          {...props}
+        >
+          <div className="text-sm font-medium leading-none">{title}</div>
+          <p className="text-sm leading-snug line-clamp-2 text-muted-foreground">
+            {children}
+          </p>
+        </a>
+      </NavigationMenuLink>
+    </li>
+  )
+})
+ListItem.displayName = "ListItem"

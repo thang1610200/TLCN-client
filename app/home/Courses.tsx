@@ -1,6 +1,6 @@
 import React from "react";
 import Course from "./Course";
-import data from "@/public/data.json";
+import data from "@/public/data_course_example.json";
 
 export default function Courses() {
   return (
