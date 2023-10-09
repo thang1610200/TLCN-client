@@ -46,7 +46,7 @@ export default function LoginPage() {
   const router = useRouter();
   const session = useSession();
 
-  if(session.status === "authenticated"){
+  if (session.status === "authenticated") {
     router.push("/home");
   }
 
@@ -90,22 +90,6 @@ export default function LoginPage() {
   return (
     <>
       <div className="relative">
-        <div className="md:hidden">
-          <Image
-            src="/examples/authentication-light.png"///
-            width={1280}
-            height={843}
-            alt="Authentication"
-            className="block dark:hidden"
-          />
-          <Image
-            src="/examples/authentication-dark.png"///examples/authentication-dark.png
-            width={1280}
-            height={843}
-            alt="Authentication"
-            className="hidden dark:block"
-          />
-        </div>
         <div className="container relative flex-col items-center justify-center hidden h-screen md:grid lg:max-w-none lg:grid-cols-2 lg:px-0">
           <div className="relative flex-col hidden h-full p-10 text-white bg-muted dark:border-r lg:flex">
             <div className="absolute inset-0 bg-zinc-900" />

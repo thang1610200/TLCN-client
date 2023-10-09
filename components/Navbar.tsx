@@ -36,6 +36,7 @@ import {
 
 
 import data from "@/public/data_category_example.json"
+import { User } from "lucide-react";
 
 
 const components: { title: string; href: string; description: string }[] = [
@@ -80,98 +81,98 @@ export default function Navbar() {
   const session = useSession();
   return (
     <>
-      <nav >
-        <div className='flex space-x-2 bg-white h-[74px] shadow-lg text-center justify-between items-center fixed w-full z-10 px-4'>
-          <BiMenu className="w-6 h-6 md:hidden " />
-          {/* <a href="/home"><h2 className='text-3xl font-bold'>Udemy</h2></a> */}
-          <NavigationMenu className="fixed justify-around p-4 bg-white max-w-none ">
-            <NavigationMenuList className="space-x-4">
-              <NavigationMenuItem>
-                <Link href="/home" legacyBehavior passHref>
-                  <NavigationMenuLink>
-                    <h2 className="text-3xl font-bold">Udemy</h2>
-                  </NavigationMenuLink>
-                </Link>
-              </NavigationMenuItem>
-              <NavigationMenuItem className="">
-                <NavigationMenuTrigger className="text-lg">Category</NavigationMenuTrigger>
-                <NavigationMenuContent>
-                  <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px] ">
-                    {components.map((components) => (
-                      <ListItem
-                        key={components.title}
-                        title={components.title}
-                        href={components.href}
-                      >
-                        {components.description}
-                      </ListItem>
-                    ))}
-                  </ul>
-                </NavigationMenuContent>
-              </NavigationMenuItem>
-            </NavigationMenuList>
-          </NavigationMenu>
-          <form className=' bg-[#f8fafb] flex border border-black rounded-3xl max-w-lg flex-1 h-12 items-center p-2'>
-            <BiSearch className="w-5 h-5 mx-4 text-gray-400" />
-            <input type="text" placeholder='Search for anything' className='w-full h-full text-sm bg-transparent focus:outline-none' />
-          </form>
-          <div className="flex justify-end pr-4 space-x-4">
-            {session.status == "authenticated" &&
-              <DropdownMenu modal={false}>
-                <DropdownMenuTrigger asChild>
-                  <Button variant="ghost" className="relative w-20 h-10 rounded-full focus:ring-0 focus:ring-offset-0 hover:bg-inherit">
-                    <Avatar className="w-12 h-12">
-                      <AvatarImage src={session.data?.user.image} alt="User Image" />
-                      <AvatarFallback>User</AvatarFallback>
-                    </Avatar>
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent className="w-56" align="end" forceMount>
-                  <DropdownMenuLabel className="font-normal">
-                    <div className="flex flex-col space-y-1">
-                      <p className="text-sm font-medium leading-none">{session.data?.user.name}</p>
-                      <p className="text-xs leading-none text-muted-foreground">
-                        {session.data?.user.email}
-                      </p>
-                    </div>
-                  </DropdownMenuLabel>
-                  <DropdownMenuSeparator />
-                  <DropdownMenuGroup>
-                    <DropdownMenuItem>
-                      Profile
-                    </DropdownMenuItem>
-                    <DropdownMenuItem>
-                      Settings
-                    </DropdownMenuItem>
-                  </DropdownMenuGroup>
-                  <DropdownMenuSeparator />
-                  <DropdownMenuItem className="hover:bg-inherit" onClick={() => {
-                    signOut({ callbackUrl: "/login" });
-                  }}>
-                    Log out
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>}
-            {(session.status == "unauthenticated") &&
-              <div className="flex">
-                <Link rel="stylesheet" href="\login" >
-                  <button className='border border-black text-sm font-bold w-20 h-10 hover:bg-[#F5F5F5] rounded-full'>
-                    Log In
-                  </button>
-                </Link>
-              </div>
-            }
-            {session.status == "loading" &&
-              <div className="flex w-20 h-10"></div>
-            }
-            <Link rel="stylesheet" href="\" >
-              <button className="border border-black h-10 w-10 lg:flex items-center justify-center hover:bg-[#F5F5F5] hidden rounded-3xl ">
-                <BiGlobe className="w-8 h-8" />
-              </button>
+      {/* <div className='flex space-x-2 bg-white h-[74px] shadow-lg text-center justify-between items-center fixed w-full z-10 px-4'> */}
+      <NavigationMenu className="fixed space-x-8 bg-white max-w-none flex h-[74px] shadow-lg text-center justify-between items-center w-full z-10 px-4">
+        <NavigationMenuList className="space-x-4">
+          <NavigationMenuItem>
+            <Link href="/home" legacyBehavior passHref>
+              <NavigationMenuLink>
+                <h2 className="text-3xl font-bold">Udemy</h2>
+              </NavigationMenuLink>
             </Link>
-          </div>
+          </NavigationMenuItem>
+          <NavigationMenuItem className="">
+            <NavigationMenuTrigger className="text-lg">Category</NavigationMenuTrigger>
+            <NavigationMenuContent>
+              <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px] ">
+                {components.map((components) => (
+                  <ListItem
+                    key={components.title}
+                    title={components.title}
+                    href={components.href}
+                  >
+                    {components.description}
+                  </ListItem>
+                ))}
+              </ul>
+            </NavigationMenuContent>
+          </NavigationMenuItem>
+        </NavigationMenuList>
+        <form className=' bg-[#f8fafb] flex border border-black rounded-3xl max-w-lg flex-1 h-12 items-center p-2'>
+          <BiSearch className="w-5 h-5 mx-4 text-gray-400" />
+          <input type="text" placeholder='Search for anything' className='w-full h-full text-sm bg-transparent focus:outline-none' />
+        </form>
+        <div className="flex justify-end pr-4 space-x-4">
+          {session.status == "authenticated" &&
+            <DropdownMenu modal={false}>
+              <DropdownMenuTrigger asChild>
+                <Button variant="ghost" className="relative w-20 h-10 rounded-full focus:ring-0 focus:ring-offset-0 hover:bg-inherit">
+                  <Avatar className="w-12 h-12">
+                    <AvatarImage src={session.data?.user.image} alt="User Image" />
+                    <AvatarFallback>User</AvatarFallback>
+                  </Avatar>
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent className="w-56" align="end" forceMount>
+                <DropdownMenuLabel className="font-normal">
+                  <div className="flex flex-col space-y-1">
+                    <p className="text-sm font-medium leading-none">{session.data?.user.name}</p>
+                    <p className="text-xs leading-none text-muted-foreground">
+                      {session.data?.user.email}
+                    </p>
+                  </div>
+                </DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                <DropdownMenuGroup>
+                  <DropdownMenuItem>
+                    <Link href="/user" legacyBehavior passHref>
+                      <NavigationMenuLink>
+                        Profile
+                      </NavigationMenuLink>
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem>
+                    Settings
+                  </DropdownMenuItem>
+                </DropdownMenuGroup>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem className="hover:bg-inherit" onClick={() => {
+                  signOut({ callbackUrl: "/home" });
+                }}>
+                  Log out
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>}
+          {(session.status == "unauthenticated") &&
+            <div className="flex">
+              <Link rel="stylesheet" href="\login" >
+                <button className='border border-black text-sm font-bold w-20 h-10 hover:bg-[#F5F5F5] rounded-full'>
+                  Log In
+                </button>
+              </Link>
+            </div>
+          }
+          {session.status == "loading" &&
+            <div className="flex w-20 h-10"></div>
+          }
+          <Link rel="stylesheet" href="\" >
+            <button className="border border-black h-10 w-10 lg:flex items-center justify-center hover:bg-[#F5F5F5] hidden rounded-3xl ">
+              <BiGlobe className="w-8 h-8" />
+            </button>
+          </Link>
         </div>
-      </nav>
+      </NavigationMenu>
+      {/* </div > */}
 
       {/* <NavigationMenu className="fixed justify-around  w-[1525px] h-[74px] p-4 bg-white max-w-none ">
         <NavigationMenuList className="space-x-4">
