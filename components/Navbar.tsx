@@ -1,8 +1,6 @@
 "use client";
 import * as React from "react";
 import { cn } from "@/lib/utils";
-
-
 import { BiSearch, BiGlobe, BiMenu } from "react-icons/bi";
 import Link from "next/link";
 import { useSession } from "next-auth/react";
@@ -16,7 +14,6 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-
 import { signOut } from 'next-auth/react'
 import {
   Avatar,
@@ -31,11 +28,7 @@ import {
   NavigationMenuTrigger,
   NavigationMenuContent
 } from "@/components/ui/navigation-menu";
-
-
-
-
-import data from "@/public/data_category_example.json"
+import { useRouter } from "next/navigation";
 
 
 const components: { title: string; href: string; description: string }[] = [
@@ -78,6 +71,8 @@ const components: { title: string; href: string; description: string }[] = [
 
 export default function Navbar() {
   const session = useSession();
+  const router = useRouter();
+
   return (
     <>
       <nav >
@@ -137,7 +132,9 @@ export default function Navbar() {
                   </DropdownMenuLabel>
                   <DropdownMenuSeparator />
                   <DropdownMenuGroup>
-                    <DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => {
+                      router.push('/profile');
+                    }}>
                       Profile
                     </DropdownMenuItem>
                     <DropdownMenuItem>

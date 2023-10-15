@@ -8,7 +8,8 @@ const useVerifyResetPassword = (token?: string, email?: string) => {
         revalidateIfStale: false,
         revalidateOnFocus: false,
         revalidateOnReconnect: false,
-        shouldRetryOnError: false       // nếu khi gọi dữ liệu bị lỗi thì sẽ gọi lại (true)
+        shouldRetryOnError: false,       // nếu khi gọi dữ liệu bị lỗi thì sẽ gọi lại (true)
+        refreshInterval: 5 * 60 * 1000
     })
 
     return {

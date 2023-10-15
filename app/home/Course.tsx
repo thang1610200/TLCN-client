@@ -6,8 +6,6 @@ interface CourseProps {
   data: course;
 }
 
-
-
 export default function Course(props: CourseProps) {
   const data = props.data;
   return (
