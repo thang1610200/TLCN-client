@@ -1,10 +1,8 @@
-"use client"
+"use client";
 
-import Link from "next/link"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useFieldArray, useForm } from "react-hook-form"
 import * as z from "zod"
-
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import {
@@ -17,22 +15,14 @@ import {
     FormMessage,
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
-import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
-} from "@/components/ui/select"
 import { Textarea } from "@/components/ui/textarea"
-import { toast } from "@/components/ui/use-toast"
-import { useState } from "react"
-
-
-import { IUser } from "@/types"
-import useSWR from "swr";
-
-
+import { ProfileUser } from "@/app/types"
+import { useState } from "react";
+import axios, { AxiosError } from "axios";
+import { BACKEND_URL } from "@/lib/constant";
+import toast from "react-hot-toast";
+import { useRouter } from "next/navigation";
+import Loader from "@/components/loader";
 
 const profileFormSchema = z.object({
     username: z
@@ -47,25 +37,42 @@ const profileFormSchema = z.object({
         .string({
             required_error: "Please select an email to display.",
         })
-        .email()
+        .email(),
+    bio: z.string().max(160),
+    urls: z
+        .array(
+            z.object({
+                value: z.string().url({ message: "Please enter a valid URL." }),
+            })
+        )
+        .optional(),
 })
 
 type ProfileFormValues = z.infer<typeof profileFormSchema>
 
-// This can come from your database or API.
-// const defaultValues: Partial<ProfileFormValues> = {
-//     bio: "I own a computer.",
-//     urls: [
-//         { value: "https://shadcn.com" },
-//         { value: "http://twitter.com/shadcn" },
-//     ],
-// }
+interface ProfileUserProps {
+    user: ProfileUser,
+    token?: string
+}
 
-export default function ProfileForm() {
+const ProfileForm: React.FC<ProfileUserProps> = ({
+    user,
+    token
+}) => {
+    const [isLoading, setIsLoading] = useState(false);
+    const router = useRouter();
+    const defaultValues: Partial<ProfileFormValues> = {
+        username: user.name,
+        bio: user.bio || "",
+        urls: user.url.length !== 0 ? user.url.map(value => ({ value })) : [
+            { value: "" }
+        ],
+        email: user.email
+    };
+
     const form = useForm<ProfileFormValues>({
         resolver: zodResolver(profileFormSchema),
-        //,defaultValues
-        mode: "onChange",
+        defaultValues,
     })
 
     // const { fields, append } = useFieldArray({
@@ -74,28 +81,44 @@ export default function ProfileForm() {
     // })
 
     function onSubmit(data: ProfileFormValues) {
-        toast({
-            title: "You submitted the following values:",
-            description: (
-                <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-                    <code className="text-white">{JSON.stringify(data, null, 2)}</code>
-                </pre>
-            ),
+        setIsLoading(true);
+        axios.patch(`${BACKEND_URL}/user/profile`, {
+            email: user.email,
+            username: data.username,
+            bio: data.bio,
+            url: data.urls?.map(item => item.value)
+        }, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+                "Content-Type": "application/json"
+            }
         })
+            .then(() => {
+                toast.success("Update success!");
+            })
+            .catch((err: AxiosError<any, any>) => {
+                if (err.response?.status === 401) {
+                    router.push('/login');
+                }
+                else {
+                    toast.error(err.response?.data?.message || "Error");
+                }
+            })
+            .finally(() => setIsLoading(false));
     }
 
     const [isDisable, setIsDisable] = useState(true)
     const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
-    const { data, error, isLoading } = useSWR(
-        "https://dummyjson.com/users/1",
-        fetcher,
-        {
-            revalidateIfStale: false,
-            revalidateOnFocus: false,
-            revalidateOnReconnect: false
-        }
-    );
+    // const { data, error, isLoading } = useSWR(
+    //     "https://dummyjson.com/users/1",
+    //     fetcher,
+    //     {
+    //         revalidateIfStale: false,
+    //         revalidateOnFocus: false,
+    //         revalidateOnReconnect: false
+    //     }
+    // );
 
     return (
         <Form {...form}>
@@ -107,11 +130,11 @@ export default function ProfileForm() {
                         <FormItem>
                             <FormLabel>Username</FormLabel>
                             <FormControl>
-                                <Input value={data?.firstName + " " + data?.lastName} disabled={isDisable} />
+                                <Input disabled={isLoading} placeholder="shadcn" {...form.register("username")} />
                             </FormControl>
                             <FormDescription>
                                 This is your public display name. It can be your real name or a
-                                pseudonym. You can only change this once every 30 days.
+                                pseudonym.
                             </FormDescription>
                             <FormMessage />
                         </FormItem>
@@ -124,11 +147,10 @@ export default function ProfileForm() {
                         <FormItem>
                             <FormLabel>Email</FormLabel>
                             <FormControl>
-                                <Input value={data?.email} disabled={isDisable} />
+                                <Input disabled={true} placeholder="m@example.com" className="invalid:[&:not(:placeholder-shown):not(:focus)]:ring-red-600 invalid:[&:not(:placeholder-shown):not(:focus)]:ring-2 invalid:[&:not(:placeholder-shown):not(:focus)]:text-red-600" {...form.register("email")} />
                             </FormControl>
                             <FormDescription>
-                                You can manage verified email addresses in your{" "}
-                                <Link href="/examples/forms">email settings</Link>.
+                                You can manage verified email addresses in your email settings.
                             </FormDescription>
                             <FormMessage />
                         </FormItem>
@@ -142,9 +164,10 @@ export default function ProfileForm() {
                             <FormLabel>Bio</FormLabel>
                             <FormControl>
                                 <Textarea
+                                    disabled={isLoading}
                                     placeholder="Tell us a little bit about yourself"
                                     className="resize-none"
-                                    {...field}
+                                    {...form.register("bio")}
                                 />
                             </FormControl>
                             <FormDescription>
@@ -158,6 +181,7 @@ export default function ProfileForm() {
                 <div>
                     {fields.map((field, index) => (
                         <FormField
+                            disabled={isLoading}
                             control={form.control}
                             key={field.id}
                             name={`urls.${index}.value`}
@@ -178,6 +202,7 @@ export default function ProfileForm() {
                         />
                     ))}
                     <Button
+                        disabled={isLoading}
                         type="button"
                         variant="outline"
                         size="sm"
@@ -191,10 +216,12 @@ export default function ProfileForm() {
                     <Button type="button" className="flex" onClick={() => setIsDisable(false)}>Update profile</Button>
                     <Button className="flex disabled:bg-slate-200 disabled:cursor-not-allowed" type="submit" disabled={isDisable} >Save</Button>
                 </div>
-
+                <Button disabled={isLoading} type="submit">{isLoading ? <Loader /> : 'Update profile'}</Button>
             </form>
 
 
         </Form>
     )
-}
+};
+
+export default ProfileForm;

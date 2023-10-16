@@ -23,10 +23,10 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod"
 import { signIn } from 'next-auth/react'
-import { useRouter } from "next/navigation";
+import { useRouter } from 'next/navigation';
 import toast from "react-hot-toast";
 import { useState } from "react";
-import { useSession } from "next-auth/react";
+import Loader from "@/components/loader";
 
 
 export const metadata: Metadata = {
@@ -36,7 +36,7 @@ export const metadata: Metadata = {
 
 const formSchema = z.object({
   email: z.string().email(),
-  password: z.string().min(6)
+  password: z.string().min(8)
 });
 
 type LoginFormValues = z.infer<typeof formSchema>
@@ -44,11 +44,6 @@ type LoginFormValues = z.infer<typeof formSchema>
 export default function LoginPage() {
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
-  const session = useSession();
-
-  if (session.status === "authenticated") {
-    router.push("/home");
-  }
 
   const form = useForm<LoginFormValues>({
     resolver: zodResolver(formSchema),
@@ -72,7 +67,7 @@ export default function LoginPage() {
 
         if (callback?.ok && !callback?.error) {
           toast.success("Logged in!");
-          router.push("/home");
+          router.push('/home');
         }
       })
       .finally(() => {
@@ -146,7 +141,7 @@ export default function LoginPage() {
                         />
                       </div>
                       <a rel="help" href="/forgotpassword" className="-my-2 text-xs text-right underline">Forgot password?</a>
-                      <Button disabled={isLoading} className="w-full mt-5" type="submit">Login</Button>
+                      <Button disabled={isLoading} className="w-full mt-5" type="submit">{isLoading ? <Loader /> : 'Login'}</Button>
                     </form>
                   </Form>
                   <div className="relative">

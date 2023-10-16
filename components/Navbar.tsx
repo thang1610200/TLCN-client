@@ -1,8 +1,6 @@
 "use client";
 import * as React from "react";
 import { cn } from "@/lib/utils";
-
-
 import { BiSearch, BiGlobe, BiMenu } from "react-icons/bi";
 import Link from "next/link";
 import { useSession } from "next-auth/react";
@@ -16,7 +14,6 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-
 import { signOut } from 'next-auth/react'
 import {
   Avatar,
@@ -36,7 +33,7 @@ import {
 
 
 import data from "@/public/data_category_example.json"
-import { User } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 
 const components: { title: string; href: string; description: string }[] = [
@@ -79,6 +76,8 @@ const components: { title: string; href: string; description: string }[] = [
 
 export default function Navbar() {
   const session = useSession();
+  const router = useRouter();
+
   return (
     <>
       {/* <div className='flex space-x-2 bg-white h-[74px] shadow-lg text-center justify-between items-center fixed w-full z-10 px-4'> */}
@@ -172,74 +171,6 @@ export default function Navbar() {
           </Link>
         </div>
       </NavigationMenu>
-      {/* </div > */}
-
-      {/* <NavigationMenu className="fixed justify-around  w-[1525px] h-[74px] p-4 bg-white max-w-none ">
-        <NavigationMenuList className="space-x-4">
-          <NavigationMenuItem>
-            <Link href="/home" legacyBehavior passHref>
-              <NavigationMenuLink>
-                <h2 className="text-3xl font-bold">Udemy</h2>
-              </NavigationMenuLink>
-            </Link>
-          </NavigationMenuItem>
-          <NavigationMenuItem className="">
-            <NavigationMenuTrigger className="text-lg">Category</NavigationMenuTrigger>
-          </NavigationMenuItem>
-        </NavigationMenuList>
-        <Input
-          type="search"
-          placeholder="Search..."
-          className="md:w-min lg:w-[500px] bg-[#f8fafb] border border-black rounded-3xl focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0 "
-        />
-        {session ? <DropdownMenu modal={false}>
-          <DropdownMenuTrigger asChild>
-            <Button variant="ghost" className="relative w-10 h-10 pr-12 rounded-full">
-              <Avatar className="w-10 h-10">
-                <AvatarImage src={session.data?.user.image} alt="User Image" />
-                <AvatarFallback>User</AvatarFallback>
-              </Avatar>
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent className="w-56" align="end" forceMount>
-            <DropdownMenuLabel className="font-normal">
-              <div className="flex flex-col space-y-1">
-                <p className="text-sm font-medium leading-none">{session.data?.user.name}</p>
-                <p className="text-xs leading-none text-muted-foreground">
-                  {session.data?.user.email}
-                </p>
-              </div>
-            </DropdownMenuLabel>
-            <DropdownMenuSeparator />
-            <DropdownMenuGroup>
-              <DropdownMenuItem>
-                Profile
-              </DropdownMenuItem>
-              <DropdownMenuItem>
-                Settings
-              </DropdownMenuItem>
-            </DropdownMenuGroup>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem>
-              Log out
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
-          :
-          <div className="justify-end hidden pr-4 space-x-4 md:flex">
-            <Link rel="stylesheet" href="\login" >
-              <button className='border border-black h-10 text-sm font-bold w-20 hover:bg-[#F5F5F5]'>
-                Log In
-              </button>
-            </Link>
-            <Link rel="stylesheet" href="\" >
-              <button className="border border-black h-10 w-10 flex items-center justify-center hover:bg-[#F5F5F5]">
-                <BiGlobe className="w-5 h-5" />
-              </button>
-            </Link>
-
-          </div>}
-      </NavigationMenu> */}
     </>
   );
 }

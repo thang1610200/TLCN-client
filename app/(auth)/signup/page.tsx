@@ -26,8 +26,9 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { BACKEND_URL } from "@/lib/constant";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
-import { signIn, useSession } from "next-auth/react";
+import { signIn } from "next-auth/react";
 import { useState } from "react";
+import Loader from "@/components/loader";
 
 export const metadata: Metadata = {
   title: "Authentication",
@@ -44,7 +45,7 @@ const formSchema = z.object({
                 message: "Username must not be longer than 50 characters.",
               }),
   password: z.string()
-              .min(10, { message: "Password must be at least 10 characters" })
+              .min(8, { message: "Password must be at least 8 characters" })
               .regex(
                 new RegExp("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*]).{8,}$"),
                 {
@@ -59,11 +60,6 @@ type RegisterFormValues = z.infer<typeof formSchema>;
 export default function AuthenticationPage() {
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
-  const session = useSession();
-
-  if(session.status === "authenticated"){
-    router.push("/home");
-  }
 
   const form = useForm<RegisterFormValues>({
     resolver: zodResolver(formSchema),
@@ -108,11 +104,13 @@ export default function AuthenticationPage() {
               router.push("/home");
           }
         })
-        .finally(() => setIsLoading(false)); 
       }
     }
     catch(err){
       toast.error("Error");
+    }
+    finally{
+      setIsLoading(false);
     }
   }
 
@@ -211,7 +209,7 @@ export default function AuthenticationPage() {
                         )}
                       />
                     </div>
-                    <Button disabled={isLoading} className="w-full mt-5" type="submit">Sign In</Button>
+                    <Button disabled={isLoading} className="w-full mt-5" type="submit">{ isLoading ? <Loader /> : 'Sign In' }</Button>
                   </form>
                 </Form>
                 <div className="relative px-4">

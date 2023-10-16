@@ -24,8 +24,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import axios, { AxiosError } from 'axios';
 import { BACKEND_URL } from "@/lib/constant";
 import toast from "react-hot-toast";
-import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
+import Loader from "@/components/loader";
 
 
 export const metadata: Metadata = {
@@ -43,11 +43,6 @@ type ForgotPasswordFormValues = z.infer<typeof formSchema>
 export default function ForgotPassword() {
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
-  const session = useSession();
-
-  if(session.status === "authenticated"){
-    router.push("/home");
-  }
 
   const form = useForm<ForgotPasswordFormValues>({
     resolver: zodResolver(formSchema),
@@ -63,8 +58,8 @@ export default function ForgotPassword() {
         toast.success("Check your email to reset your password");
         form.setValue("email","");
       })
-      .catch((err: AxiosError) => {
-          toast.error(err.response?.statusText || "Error");
+      .catch((err: AxiosError<any,any>) => {
+          toast.error(err.response?.data?.message || "Error");
       })
       .finally(() => setIsLoading(false));
   }
@@ -129,7 +124,7 @@ export default function ForgotPassword() {
                         )}
                       />
                     </div>
-                    <Button disabled={isLoading} className="w-full mt-5" type="submit">Reset Email</Button>
+                    <Button disabled={isLoading} className="w-full mt-5" type="submit">{ isLoading ? <Loader /> : 'Reset Email' }</Button>
                   </form>
                 </Form>
                 <div className="relative px-4">
@@ -143,7 +138,7 @@ export default function ForgotPassword() {
                   </div>
                 </div>
 
-                <Link rel="stylesheet" href="\login" className="grid gap-2">
+                <Link rel="stylesheet" href="/login" className="grid gap-2">
                   <Button variant="outline" type="button">
                     <BiArrowBack className="w-4 h-4 mr-2" />
                     Back to login

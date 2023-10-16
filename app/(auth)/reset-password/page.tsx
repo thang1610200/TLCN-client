@@ -26,7 +26,7 @@ import ErrorModal from "@/components/error";
 import { BACKEND_URL } from "@/lib/constant";
 import axios, { AxiosError } from "axios";
 import toast from "react-hot-toast";
-import { useSession } from "next-auth/react";
+import Loader from "@/components/loader";
 
 export const metadata: Metadata = {
   title: "Authentication",
@@ -35,7 +35,7 @@ export const metadata: Metadata = {
 
 const formSchema = z.object({
     email: z.string(),
-    password: z.string().min(6).regex(
+    password: z.string().min(8).regex(
     new RegExp("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*]).{8,}$"),
     {
       message:
@@ -54,14 +54,8 @@ export default function ResetPassword() {
     const token = searchParams.get("token") || undefined;
     const email = searchParams.get("email") || undefined;
     const { isLoading, error } = useVerifyResetPassword(token, email);
-
     const [isLoadingSubmit, setIsLoadingSubmit] = useState(false);
     const router = useRouter();
-    const session = useSession();
-
-    if(session.status === "authenticated"){
-      router.push("/home");
-    }
 
     const form = useForm<ResetPasswordFormValues>({
         resolver: zodResolver(formSchema),
@@ -74,7 +68,7 @@ export default function ResetPassword() {
 
     function onSubmit(values: z.infer<typeof formSchema>) {
         setIsLoadingSubmit(true)
-        axios.post(`${BACKEND_URL}/auth/update-password`,{
+        axios.patch(`${BACKEND_URL}/auth/update-password`,{
             email,
             token,
             password: values.password
@@ -83,8 +77,8 @@ export default function ResetPassword() {
           toast.success("Reset password success!");
           router.push("/login");
         })
-        .catch((err: AxiosError) => {
-            toast.error(err.response?.statusText || "Error");
+        .catch((err: AxiosError<any,any>) => {
+            toast.error(err.response?.data?.message || "Error");
         })
         .finally(() => setIsLoadingSubmit(false));
     }
@@ -96,7 +90,7 @@ export default function ResetPassword() {
     return (
         <>
         {
-            error ? (<ErrorModal />) : (
+            error ? (<ErrorModal status_code={error.response?.status} status_name={error.response?.statusText} />) : (
         <div>
             <div className="md:hidden">
                 <Image
@@ -187,7 +181,7 @@ export default function ResetPassword() {
                                             )}
                                         />
                                     </div>
-                                    <Button disabled={isLoadingSubmit} className="w-full mt-5" type="submit">Confirm</Button>
+                                    <Button disabled={isLoadingSubmit} className="w-full mt-5" type="submit">{ isLoadingSubmit ? <Loader /> : 'Confirm' }</Button>
                                 </form>
                             </Form>
                         </CardContent>
