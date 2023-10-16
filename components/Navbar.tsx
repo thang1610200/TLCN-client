@@ -32,7 +32,7 @@ import {
 
 
 
-import data from "@/public/data_category_example.json"
+
 import { useRouter } from "next/navigation";
 
 
