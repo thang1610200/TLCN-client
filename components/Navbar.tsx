@@ -133,13 +133,13 @@ export default function Navbar() {
                 </DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 <DropdownMenuGroup>
-                  <DropdownMenuItem>
-                    <Link href="/profile" legacyBehavior passHref>
+                  <Link href="/profile" legacyBehavior passHref>
+                    <DropdownMenuItem>
                       <NavigationMenuLink>
                         Profile
                       </NavigationMenuLink>
-                    </Link>
-                  </DropdownMenuItem>
+                    </DropdownMenuItem>
+                  </Link>
                   <DropdownMenuItem>
                     Settings
                   </DropdownMenuItem>
