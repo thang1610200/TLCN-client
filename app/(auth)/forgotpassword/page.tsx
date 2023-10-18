@@ -53,13 +53,13 @@ export default function ForgotPassword() {
 
   function onSubmit(values: z.infer<typeof formSchema>) {
     setIsLoading(true)
-    axios.post(`${BACKEND_URL}/auth/reset-password`,{email: values.email})
+    axios.post(`${BACKEND_URL}/auth/reset-password`, { email: values.email })
       .then(() => {
         toast.success("Check your email to reset your password");
-        form.setValue("email","");
+        form.setValue("email", "");
       })
-      .catch((err: AxiosError<any,any>) => {
-          toast.error(err.response?.data?.message || "Error");
+      .catch((err: AxiosError<any, any>) => {
+        toast.error(err.response?.data?.message || "Error");
       })
       .finally(() => setIsLoading(false));
   }
@@ -83,6 +83,9 @@ export default function ForgotPassword() {
       </div>
       <div className="container relative flex-col items-center justify-center hidden h-screen md:grid lg:max-w-none lg:grid-cols-2 lg:px-0">
         <div className="relative flex-col hidden h-full p-10 text-white bg-muted dark:border-r lg:flex">
+          <Link href="/home" legacyBehavior passHref>
+            <h2 className="z-10 text-4xl font-bold cursor-pointer">Udemy</h2>
+          </Link>
           <div className="absolute inset-0 bg-zinc-900" />
           <div className="relative z-20 mt-auto">
             <blockquote className="space-y-2">
@@ -124,7 +127,7 @@ export default function ForgotPassword() {
                         )}
                       />
                     </div>
-                    <Button disabled={isLoading} className="w-full mt-5" type="submit">{ isLoading ? <Loader /> : 'Reset Email' }</Button>
+                    <Button disabled={isLoading} className="w-full mt-5" type="submit">{isLoading ? <Loader /> : 'Reset Email'}</Button>
                   </form>
                 </Form>
                 <div className="relative px-4">

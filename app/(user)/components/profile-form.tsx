@@ -23,7 +23,12 @@ import { BACKEND_URL } from "@/lib/constant";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
 import Loader from "@/components/loader";
+import { Session } from "inspector";
 
+
+
+const MAX_FILE_SIZE = 1000000;
+const ACCEPTED_IMAGE_TYPES = ["image/jpeg", "image/jpg", "image/png", "image/webp"];
 const profileFormSchema = z.object({
     username: z
         .string()
@@ -38,14 +43,23 @@ const profileFormSchema = z.object({
             required_error: "Please select an email to display.",
         })
         .email(),
-    bio: z.string().max(160),
-    urls: z
-        .array(
-            z.object({
-                value: z.string().url({ message: "Please enter a valid URL." }),
-            })
+    bio: z.string().max(160).optional(),
+    // urls: z
+    //     .array(
+    //         z.object({
+    //             value: z.string().url({ message: "Please enter a valid URL." }),
+    //         })
+    //     )
+    //     .optional(),
+    image: z
+        .any()
+        .refine((files) => files?.[0]?.size <= MAX_FILE_SIZE, `Max image size is 10MB.`)
+        .refine(
+            (files) => ACCEPTED_IMAGE_TYPES.includes(files?.[0]?.type),
+            "Only .jpg, .jpeg, .png and .webp formats are supported."
         )
         .optional(),
+
 })
 
 type ProfileFormValues = z.infer<typeof profileFormSchema>
@@ -64,10 +78,11 @@ const ProfileForm: React.FC<ProfileUserProps> = ({
     const defaultValues: Partial<ProfileFormValues> = {
         username: user.name,
         bio: user.bio || "",
-        urls: user.url.length !== 0 ? user.url.map(value => ({ value })) : [
-            { value: "" }
-        ],
-        email: user.email
+        // urls: user.url.length !== 0 ? user.url.map(value => ({ value })) : [
+        //     { value: "" }
+        // ],
+        email: user.email,
+        image: user.image,
     };
 
     const form = useForm<ProfileFormValues>({
@@ -82,47 +97,67 @@ const ProfileForm: React.FC<ProfileUserProps> = ({
 
     function onSubmit(data: ProfileFormValues) {
         setIsLoading(true);
-        axios.patch(`${BACKEND_URL}/user/profile`, {
-            email: user.email,
-            username: data.username,
-            bio: data.bio,
-            url: data.urls?.map(item => item.value)
-        }, {
-            headers: {
-                Authorization: `Bearer ${token}`,
-                "Content-Type": "application/json"
-            }
-        })
-            .then(() => {
-                toast.success("Update success!");
-            })
-            .catch((err: AxiosError<any, any>) => {
-                if (err.response?.status === 401) {
-                    router.push('/login');
-                }
-                else {
-                    toast.error(err.response?.data?.message || "Error");
-                }
-            })
-            .finally(() => setIsLoading(false));
+        console.log(data.email);
+        console.log(data.username);
+        console.log(data.bio);
+        // console.log(data.urls);
+        console.log(data.image);
+
+        // axios.patch(`${BACKEND_URL}/user/profile`, {
+        //     email: user.email,
+        //     username: data.username,
+        //     bio: data.bio,
+        //     url: data.urls?.map(item => item.value),
+        //     image: data.image,
+        // }, {
+        //     headers: {
+        //         Authorization: `Bearer ${token}`,
+        //         "Content-Type": "application/json"
+        //     }
+        // })
+        //     .then(() => {
+        //         toast.success("Update success!");
+        //     })
+        //     .catch((err: AxiosError<any, any>) => {
+        //         if (err.response?.status === 401) {
+        //             router.push('/login');
+        //         }
+        //         else {
+        //             toast.error(err.response?.data?.message || "Error");
+        //         }
+        //     })
+        //     .finally(() => setIsLoading(false));
     }
 
     const [isDisable, setIsDisable] = useState(true)
-    const fetcher = (url: string) => fetch(url).then((res) => res.json());
-
-    // const { data, error, isLoading } = useSWR(
-    //     "https://dummyjson.com/users/1",
-    //     fetcher,
-    //     {
-    //         revalidateIfStale: false,
-    //         revalidateOnFocus: false,
-    //         revalidateOnReconnect: false
-    //     }
-    // );
-
+    const [isHidden, setIsHidden] = useState(true)
     return (
         <Form {...form}>
+
+            <div className="flex justify-center ">
+                <div className="w-[150px] h-[150px] relative">
+                    <img src={user.image.toString()} className="w-full rounded-full" />
+                    <Button onClick={() => { setIsHidden(false) }} className="absolute bottom-0 right-0 w-10 h-10 text-xl text-white rounded-full bg-slate-400">＋</Button>
+                </div>
+            </div>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+                <FormField
+                    control={form.control}
+                    name="image"
+                    render={({ field }) => (
+                        <FormItem hidden={isHidden}>
+                            <FormLabel>Image</FormLabel>
+                            <FormControl>
+                                <Input accept="image/*" type="file" {...form.register("image")} />
+                            </FormControl>
+                            <FormDescription>
+                                This is your public display name. It can be your real name or a
+                                pseudonym.
+                            </FormDescription>
+                            <FormMessage />
+                        </FormItem>
+                    )}
+                />
                 <FormField
                     control={form.control}
                     name="username"
@@ -213,10 +248,9 @@ const ProfileForm: React.FC<ProfileUserProps> = ({
                     </Button>
                 </div> */}
                 <div className="grid w-1/2 grid-cols-2 gap-10">
-                    <Button type="button" className="flex" onClick={() => setIsDisable(false)}>Update profile</Button>
-                    <Button className="flex disabled:bg-slate-200 disabled:cursor-not-allowed" type="submit" disabled={isDisable} >Save</Button>
+                    <Button disabled={isLoading} type="submit">{isLoading ? <Loader /> : 'Update profile'}</Button>
+                    <Button className="flex disabled:bg-slate-200 disabled:cursor-not-allowed" type="submit"  >Save</Button>
                 </div>
-                <Button disabled={isLoading} type="submit">{isLoading ? <Loader /> : 'Update profile'}</Button>
             </form>
 
 

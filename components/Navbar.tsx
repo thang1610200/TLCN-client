@@ -134,7 +134,7 @@ export default function Navbar() {
                 <DropdownMenuSeparator />
                 <DropdownMenuGroup>
                   <DropdownMenuItem>
-                    <Link href="/user" legacyBehavior passHref>
+                    <Link href="/profile" legacyBehavior passHref>
                       <NavigationMenuLink>
                         Profile
                       </NavigationMenuLink>

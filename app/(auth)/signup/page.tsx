@@ -38,21 +38,21 @@ export const metadata: Metadata = {
 const formSchema = z.object({
   email: z.string().email(),
   name: z.string()
-              .min(6, {
-                message: "Username must be at least 2 characters.",
-              })
-              .max(50, {
-                message: "Username must not be longer than 50 characters.",
-              }),
+    .min(6, {
+      message: "Username must be at least 2 characters.",
+    })
+    .max(50, {
+      message: "Username must not be longer than 50 characters.",
+    }),
   password: z.string()
-              .min(8, { message: "Password must be at least 8 characters" })
-              .regex(
-                new RegExp("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*]).{8,}$"),
-                {
-                  message:
-                    "Password must contain contain at least a capital letter, a small letter, a number, a special character",
-                }
-              )
+    .min(8, { message: "Password must be at least 8 characters" })
+    .regex(
+      new RegExp("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*]).{8,}$"),
+      {
+        message:
+          "Password must contain contain at least a capital letter, a small letter, a number, a special character",
+      }
+    )
 })
 
 type RegisterFormValues = z.infer<typeof formSchema>;
@@ -85,39 +85,39 @@ export default function AuthenticationPage() {
           "Content-Type": "application/json",
         }
       });
-      
-      if(!res.ok && res.status === 409){
+
+      if (!res.ok && res.status === 409) {
         toast.error("Email already exists");
       }
-      else if(res.ok){ 
+      else if (res.ok) {
         signIn('credentials', {
           ...values,
           redirect: false
         })
-        .then((callback) => {
-          if(callback?.error){
+          .then((callback) => {
+            if (callback?.error) {
               toast.error("Invalid credentials");
-          }
-  
-          if(callback?.ok && !callback?.error){
+            }
+
+            if (callback?.ok && !callback?.error) {
               toast.success("Logged in!");
               router.push("/home");
-          }
-        })
+            }
+          })
       }
     }
-    catch(err){
+    catch (err) {
       toast.error("Error");
     }
-    finally{
+    finally {
       setIsLoading(false);
     }
   }
 
   const socialAction = (action: string) => {
     signIn(action, {
-        redirect: false,
-        callbackUrl: "/home"
+      redirect: false,
+      callbackUrl: "/home"
     });
   }
 
@@ -141,6 +141,9 @@ export default function AuthenticationPage() {
       </div>
       <div className="container relative flex-col items-center justify-center hidden h-screen md:grid lg:max-w-none lg:grid-cols-2 lg:px-0">
         <div className="relative flex-col hidden h-full p-10 text-white bg-muted dark:border-r lg:flex">
+          <Link href="/home" legacyBehavior passHref>
+            <h2 className="z-10 text-4xl font-bold cursor-pointer">Udemy</h2>
+          </Link>
           <div className="absolute inset-0 bg-zinc-900" />
           <div className="relative z-20 mt-auto">
             <blockquote className="space-y-2">
@@ -166,50 +169,50 @@ export default function AuthenticationPage() {
                   <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
                     <div className="grid gap-2">
                       <FormField
-                          control={form.control}
-                          name="name"
-                          render={({field}) => (
-                            <FormItem>
-                              <FormLabel className="after:content-['_*'] after:text-red-600 pb-1">Username</FormLabel>
-                              <FormControl>
-                                <Input disabled = {isLoading} placeholder="e.g. Bonnie Green" className="invalid:[&:not(:placeholder-shown):not(:focus)]:ring-red-600 invalid:[&:not(:placeholder-shown):not(:focus)]:ring-2 invalid:[&:not(:placeholder-shown):not(:focus)]:text-red-600" {...form.register("name")} />
-                              </FormControl>
-                              <FormMessage />
-                            </FormItem>
-                          )}
-                      />
-                    </div>
-                    <div className="grid gap-2">
-                      <FormField
-                          control={form.control}
-                          name="email"
-                          render={({field}) => (
-                            <FormItem>
-                              <FormLabel className="after:content-['_*'] after:text-red-600 pb-1">Email</FormLabel>
-                              <FormControl>
-                                <Input disabled = {isLoading} placeholder="m@example.com" className="invalid:[&:not(:placeholder-shown):not(:focus)]:ring-red-600 invalid:[&:not(:placeholder-shown):not(:focus)]:ring-2 invalid:[&:not(:placeholder-shown):not(:focus)]:text-red-600" {...form.register("email")} />
-                              </FormControl>
-                              <FormMessage />
-                            </FormItem>
-                          )}
-                      />
-                    </div>
-                    <div className="grid gap-2">
-                      <FormField
                         control={form.control}
-                        name="password"
-                        render={({field}) => (
+                        name="name"
+                        render={({ field }) => (
                           <FormItem>
-                            <FormLabel className="after:content-['_*'] after:text-red-600 pb-1">Password</FormLabel>
+                            <FormLabel className="after:content-['_*'] after:text-red-600 pb-1">Username</FormLabel>
                             <FormControl>
-                              <Input disabled = {isLoading} placeholder="••••••••" type="password" {...form.register("password")} />
+                              <Input disabled={isLoading} placeholder="e.g. Bonnie Green" className="invalid:[&:not(:placeholder-shown):not(:focus)]:ring-red-600 invalid:[&:not(:placeholder-shown):not(:focus)]:ring-2 invalid:[&:not(:placeholder-shown):not(:focus)]:text-red-600" {...form.register("name")} />
                             </FormControl>
                             <FormMessage />
                           </FormItem>
                         )}
                       />
                     </div>
-                    <Button disabled={isLoading} className="w-full mt-5" type="submit">{ isLoading ? <Loader /> : 'Sign In' }</Button>
+                    <div className="grid gap-2">
+                      <FormField
+                        control={form.control}
+                        name="email"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel className="after:content-['_*'] after:text-red-600 pb-1">Email</FormLabel>
+                            <FormControl>
+                              <Input disabled={isLoading} placeholder="m@example.com" className="invalid:[&:not(:placeholder-shown):not(:focus)]:ring-red-600 invalid:[&:not(:placeholder-shown):not(:focus)]:ring-2 invalid:[&:not(:placeholder-shown):not(:focus)]:text-red-600" {...form.register("email")} />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    </div>
+                    <div className="grid gap-2">
+                      <FormField
+                        control={form.control}
+                        name="password"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel className="after:content-['_*'] after:text-red-600 pb-1">Password</FormLabel>
+                            <FormControl>
+                              <Input disabled={isLoading} placeholder="••••••••" type="password" {...form.register("password")} />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    </div>
+                    <Button disabled={isLoading} className="w-full mt-5" type="submit">{isLoading ? <Loader /> : 'Sign In'}</Button>
                   </form>
                 </Form>
                 <div className="relative px-4">

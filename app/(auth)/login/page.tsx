@@ -1,7 +1,7 @@
 "use client";
 
 import { Metadata } from "next"
-import Image from "next/image"
+
 import Link from "next/link"
 import { Icons } from "@/components/icons"
 import { Button } from "@/components/ui/button"
@@ -22,7 +22,7 @@ import {
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod"
-import { signIn } from 'next-auth/react'
+import { signIn, useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation';
 import toast from "react-hot-toast";
 import { useState } from "react";
@@ -42,6 +42,7 @@ const formSchema = z.object({
 type LoginFormValues = z.infer<typeof formSchema>
 
 export default function LoginPage() {
+  const session = useSession();
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
 
@@ -82,11 +83,25 @@ export default function LoginPage() {
     });
   }
 
+  // const dispatch = useAppDispatch();
+
+  // const hanleLoginClick = () => {
+  //   dispatch(authActions.login({
+  //     sessionStatus: session.status
+  //   }))
+  // }
+  // const hanleLogoutClick = () => {
+  //   dispatch(authActions.logout());
+  // }
+
   return (
     <>
       <div className="relative">
         <div className="container relative flex-col items-center justify-center hidden h-screen md:grid lg:max-w-none lg:grid-cols-2 lg:px-0">
           <div className="relative flex-col hidden h-full p-10 text-white bg-muted dark:border-r lg:flex">
+            <Link href="/home" legacyBehavior passHref>
+              <h2 className="z-10 text-4xl font-bold cursor-pointer">Udemy</h2>
+            </Link>
             <div className="absolute inset-0 bg-zinc-900" />
             <div className="relative z-20 mt-auto">
               <blockquote className="space-y-2">
@@ -140,7 +155,7 @@ export default function LoginPage() {
                           )}
                         />
                       </div>
-                      <a rel="help" href="/forgotpassword" className="-my-2 text-xs text-right underline">Forgot password?</a>
+                      <Link rel="help" href="/forgotpassword" className="-my-2 text-xs text-right underline">Forgot password?</Link>
                       <Button disabled={isLoading} className="w-full mt-5" type="submit">{isLoading ? <Loader /> : 'Login'}</Button>
                     </form>
                   </Form>
@@ -174,9 +189,9 @@ export default function LoginPage() {
                       <span className="px-2 bg-background text-muted-foreground">
                         Don't have an account?
                       </span>
-                      <a rel="next" href="/signup" className="grid gap-2 pr-2 underline bg-background decoration-solid">
+                      <Link rel="next" href="/signup" className="grid gap-2 pr-2 underline bg-background decoration-solid">
                         Sign up
-                      </a>
+                      </Link>
                     </div>
                   </div>
                 </CardFooter>
@@ -198,8 +213,14 @@ export default function LoginPage() {
                 </Link>
                 .
               </p>
+              {/* <div className="grid grid-cols-2 gap-2">
+                <Button onClick={hanleLoginClick}>Auth action login</Button>
+                <Button onClick={hanleLogoutClick}>Auth action logout</Button>
+              </div> */}
             </div>
+
           </div>
+
         </div>
       </div>
     </>
