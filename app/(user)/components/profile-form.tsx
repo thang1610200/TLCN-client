@@ -17,13 +17,15 @@ import {
 import { Input } from "@/components/ui/input"
 import { BiLogoFacebookCircle, BiLogoTiktok, BiLogoYoutube } from "react-icons/bi";
 import { ProfileUser } from "@/app/types"
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import axios, { AxiosError } from "axios";
 import { BACKEND_URL } from "@/lib/constant";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
 import Loader from "@/components/loader";
-import { Session } from "inspector";
+import UserImageModal from "@/components/user-image-modal";
+
+
 
 
 
@@ -51,15 +53,6 @@ const profileFormSchema = z.object({
             })
         )
         .optional(),
-    image: z
-        .any()
-        .refine((files) => files?.[0]?.size <= MAX_FILE_SIZE, `Max image size is 10MB.`)
-        .refine(
-            (files) => ACCEPTED_IMAGE_TYPES.includes(files?.[0]?.type),
-            "Only .jpg, .jpeg, .png and .webp formats are supported."
-        )
-        .optional(),
-
 })
 
 type ProfileFormValues = z.infer<typeof profileFormSchema>
@@ -79,12 +72,11 @@ const ProfileForm: React.FC<ProfileUserProps> = ({
         username: user.name,
         bio: user.bio || "",
         urls: user.url.length !== 0 ? user.url.map(value => ({ value })) : [
-            { value: "https://www.facebook.com/user/" },
-            { value: "https://www.youtube.com/@user" },
-            { value: "https://www.tiktok.com/@user" },
+            { value: "user" },
+            { value: "@user" },
+            { value: "@user" },
         ],
         email: user.email,
-        image: user.image,
     };
 
     const form = useForm<ProfileFormValues>({
@@ -103,7 +95,6 @@ const ProfileForm: React.FC<ProfileUserProps> = ({
         console.log(data.username);
         console.log(data.bio);
         console.log(data.urls);
-        console.log(data.image);
 
         // axios.patch(`${BACKEND_URL}/user/profile`, {
         //     email: user.email,
@@ -130,8 +121,9 @@ const ProfileForm: React.FC<ProfileUserProps> = ({
         //     })
         //     .finally(() => setIsLoading(false));
     }
-
-
+    const FB = "https://www.facebook.com/";
+    const YTB = "https://www.youtube.com/";
+    const TT = "https://www.tiktok.com/";
     const [isDisable, setIsDisable] = useState(true)
     const [isHidden, setIsHidden] = useState(true)
     const handleChangeImage = () => {
@@ -149,31 +141,8 @@ const ProfileForm: React.FC<ProfileUserProps> = ({
     }
     return (
         <Form {...form}>
-
-            <div className="flex justify-center ">
-                <div className="w-[150px] h-[150px] relative">
-                    <img src={user.image.toString()} className="w-full rounded-full" />
-                    <Button onClick={handleChangeImage} className="absolute bottom-0 right-0 w-10 h-10 text-xl text-white rounded-full bg-slate-400">＋</Button>
-                </div>
-            </div>
+            <UserImageModal data={user} />
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-                <FormField
-                    control={form.control}
-                    name="image"
-                    render={({ field }) => (
-                        <FormItem hidden={isHidden}>
-                            <FormLabel>Image</FormLabel>
-                            <FormControl>
-                                <Input disabled={isDisable} accept="image/*" type="file" {...form.register("image")} />
-                            </FormControl>
-                            <FormDescription>
-                                This is your public display name. It can be your real name or a
-                                pseudonym.
-                            </FormDescription>
-                            <FormMessage />
-                        </FormItem>
-                    )}
-                />
                 <FormField
                     control={form.control}
                     name="username"
@@ -244,12 +213,13 @@ const ProfileForm: React.FC<ProfileUserProps> = ({
                                     <FormDescription className={cn(index !== 0 && "sr-only")}>
                                         Add links to your website, blog, or social media profiles.
                                     </FormDescription>
-                                    <div className="grid grid-cols-12 ">
-                                        <BiLogoFacebookCircle hidden={index !== 0} className="w-[40px] h-[40px]" />
-                                        <BiLogoYoutube hidden={index !== 1} className="w-[40px] h-[40px]" />
-                                        <BiLogoTiktok hidden={index !== 2} className="w-[40px] h-[40px]" />
+                                    <div className="grid grid-cols-12 col-span-3 ">
+                                        <BiLogoFacebookCircle hidden={index !== 0} className="w-[40px] h-[40px] col-span-1" />
+                                        <BiLogoYoutube hidden={index !== 1} className="w-[40px] h-[40px] col-span-1" />
+                                        <BiLogoTiktok hidden={index !== 2} className="w-[40px] h-[40px] col-span-1" />
+                                        <Input className="col-span-4" disabled={true} placeholder={cn(index === 0 ? FB : (index === 1 ? YTB : TT))} />
                                         <FormControl>
-                                            <Input className="col-span-11" disabled={isDisable} placeholder="shadcn" {...form.register(`urls.${index}.value`)} />
+                                            <Input className="col-span-7" disabled={isDisable} placeholder="shadcn" {...form.register(`urls.${index}.value`)} />
                                         </FormControl>
                                         <FormMessage />
                                     </div>
