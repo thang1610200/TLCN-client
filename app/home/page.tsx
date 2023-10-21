@@ -1,13 +1,11 @@
 "use client";
 
 import React from "react";
-import { useSession } from "next-auth/react";
 import Courses from "./Courses";
 
 
 
 export default function page() {
-  const session = useSession();
   return (
     <>
       <div className="relative w-full border-gray-100 h-96 pt-[74px]">
@@ -23,7 +21,6 @@ export default function page() {
         </div>
       </div>
       <Courses />
-      <img src={session.data?.user.image} alt="" />
     </>
   )
 }

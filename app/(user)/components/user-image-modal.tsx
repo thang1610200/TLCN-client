@@ -1,27 +1,63 @@
-import React, { useEffect } from 'react'
-import { ProfileUser } from "@/app/types"
+import React, { useEffect } from 'react';
+import { ProfileUser } from "@/app/types";
+import * as z from "zod";
 import { Fragment, useState } from "react";
-import { Button } from "@/components/ui/button"
-import { Dialog, Transition } from '@headlessui/react'
-import { Input } from "@/components/ui/input"
-import { Slider } from "@/components/ui/slider"
-
+import { Button } from "@/components/ui/button";
+import { Dialog, Transition } from '@headlessui/react';
+import { Input } from "@/components/ui/input";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import {
+    Form,
+    FormControl,
+    FormField,
+    FormItem,
+    FormMessage,
+} from "@/components/ui/form"
+import { Slider } from "@/components/ui/slider";
+import axios, { AxiosError } from 'axios';
+import { useRouter } from 'next/navigation';
 import Resizer from 'react-image-file-resizer';
+import { BACKEND_URL } from '@/lib/constant';
+import toast from 'react-hot-toast';
+import { useSession } from 'next-auth/react';
+import Loader from '@/components/loader';
 
 interface UserProps {
-    data: ProfileUser;
+    data: ProfileUser,
+    token?: string
 }
 
+const MAX_FILE_SIZE = 1000000;
+const ACCEPTED_IMAGE_TYPES = ["image/jpeg", "image/jpg", "image/png", "image/webp"];
 
+const avatarFormSchema = z.object({
+    image: z.any()
+            .refine((files) => files?.[0]?.size <= MAX_FILE_SIZE, `Max image size is 10MB.`)
+            .refine(
+                (files) => ACCEPTED_IMAGE_TYPES.includes(files?.[0]?.type),
+                "Only .jpg, .jpeg, .png and .webp formats are supported."
+            )
+});
+
+type AvatarFormValues = z.infer<typeof avatarFormSchema>;
 
 export default function UserImageModal(props: UserProps) {
     const user = props.data;
+    const { update, data: session } = useSession();
+    const router = useRouter();
     const maxWidth = 600;
     const maxHeight = 600;
     // const [fileInput, setFileInput] = useState();
     const [isOpenChangeImage, setIsOpenChangeImage] = useState(false)
     const [imageUser, setImageUser] = useState(user.image);
     const [valueWH, setValueWH] = useState([500]);
+    const [isLoading, setIsLoading] = useState(false);
+
+    const defaultValues: Partial<AvatarFormValues> = {
+        image: ""
+    };
+
     const handleOnChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const file = event.target.files?.[0]
         if (file) {
@@ -34,9 +70,55 @@ export default function UserImageModal(props: UserProps) {
             };
 
             reader.readAsDataURL(file);
-            console.log(imageUser);
+            //console.log(imageUser);
         }
     }
+
+    const form = useForm<AvatarFormValues>({
+        resolver: zodResolver(avatarFormSchema),
+        defaultValues,
+    })
+
+    function SubmitUpdate(data: AvatarFormValues) {
+        setIsLoading(true);
+        axios.patch(`${BACKEND_URL}/user/update-avatar`, {
+            email: user.email,
+            file: data.image[0]
+        }, {
+            headers: {
+                Authorization: `Bearer ${props.token}`,
+                'Content-Type': 'multipart/form-data'
+            }
+        })
+            .then((res: any) => {
+                toast.success("Update success!");
+                CancelImage();
+                update({
+                    user: {
+                        ...session?.user,
+                        image: res.data.jobData.image as string,
+                        name: res.data.jobData.name as string
+                    }
+                });
+                router.refresh();
+            })
+            .catch((err: AxiosError<any, any>) => {
+                if (err.response?.status === 401) {
+                    router.push('/login');
+                }
+                else {
+                    console.log(err);
+                    toast.error(err.response?.data?.message || "Error");
+                }
+            })
+            .finally(() => setIsLoading(false));
+    }
+
+    function CancelImage() {
+        setIsOpenChangeImage(false);
+        setImageUser(user.image);
+    }
+
     // const resizeFile = (file: File) =>
     //     new Promise((resolve) => {
     //         Resizer.imageFileResizer(
@@ -65,10 +147,10 @@ export default function UserImageModal(props: UserProps) {
     //     const file = event.target.files?.[0];
     //     console.log(file);
     //     console.log("Handle Submit");
-    // }
-    useEffect(() => {
-        console.log(valueWH)
-    }, [valueWH]);
+    // // }
+    // useEffect(() => {
+    //     console.log(valueWH)
+    // }, [valueWH]);
 
 
     return (
@@ -129,12 +211,28 @@ export default function UserImageModal(props: UserProps) {
 
                                     </div>
                                     <Slider defaultValue={valueWH} max={600} min={400} step={10} className='py-4' onValueChange={setValueWH} />
-                                    <Input onChange={handleOnChange} accept="image/*" type="file" />
+                                    <Form {...form}>
+                                        <form onSubmit={form.handleSubmit(SubmitUpdate)}>
+                                            <FormField
+                                                control={form.control}
+                                                name="image"
+                                                render={({ field }) => (
+                                                    <FormItem>
+                                                        <FormControl>
+                                                            <Input disabled={isLoading} accept="image/*" type="file" {...form.register("image")} onChange={handleOnChange} />
+                                                        </FormControl>
+                                                        <FormMessage />
+                                                    </FormItem>
+                                                )}
+                                            />
+                                            {/* <Input onChange={handleOnChange} accept="image/*" type="file" /> */}
 
-                                    <div className="grid w-full grid-cols-2 gap-10 pt-6">
-                                        <Button type="submit">Save</Button>
-                                        <Button type="button" onClick={() => { setIsOpenChangeImage(false) }}>Cancel</Button>
-                                    </div>
+                                            <div className="grid w-full grid-cols-2 gap-10 pt-6">
+                                                <Button disabled={isLoading} type="submit">{isLoading ? <Loader /> : 'Save'}</Button>
+                                                <Button type="button" onClick={() => { CancelImage() }}>Cancel</Button>
+                                            </div>
+                                        </form>
+                                    </Form>
                                 </Dialog.Panel>
                             </Transition.Child>
                         </div>

@@ -3,5 +3,7 @@ export interface ProfileUser {
     email: string,
     image: string,
     bio?: string,
-    url: string[]
+    facebook_id?: string
+    youtube_id?: string
+    titok_id?: string
 }

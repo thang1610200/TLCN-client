@@ -110,7 +110,12 @@ export const authOptions: NextAuthOptions = {
     }),
   ],
   callbacks: {
-    async jwt ({token, user}){
+    async jwt ({token, user, trigger, session}){
+      if(trigger === 'update') {
+        token.user.name = session.user.name;
+        token.user.image = session.user.image;
+        return {...token};
+      }
       if(user) return {...token, ...user};
       if (new Date().getTime() < token.backendTokens.expiresIn) {
           return token;
