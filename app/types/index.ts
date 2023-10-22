@@ -6,4 +6,5 @@ export interface ProfileUser {
     facebook_id?: string
     youtube_id?: string
     titok_id?: string
+    role: string;
 }

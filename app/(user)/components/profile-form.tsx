@@ -65,6 +65,7 @@ const ProfileForm: React.FC<ProfileUserProps> = ({
     user,
     token
 }) => {
+    console.log(user.role);
     const FB = "https://www.facebook.com/";
     const YTB = "https://www.youtube.com/";
     const TT = "https://www.tiktok.com/";
@@ -77,7 +78,7 @@ const ProfileForm: React.FC<ProfileUserProps> = ({
         urls: [
             { value: user.facebook_id || "" },
             { value: user.youtube_id || "" },
-            { value: user.titok_id || ""},
+            { value: user.titok_id || "" },
         ],
         email: user.email,
     };
@@ -140,98 +141,102 @@ const ProfileForm: React.FC<ProfileUserProps> = ({
     //         setIsHidden(true);
     //     }
     // }
-    // const handleCancel = () => {
-    //     form.reset();
-    //     setIsDisable(true);
-    // }
+    const handleInstructor = () => {
+        console.log("Change role learner to instructor");
+    }
+    const handleCancel = () => {
+        form.reset();
+    }
     return (
-        <Form {...form}>
-            <UserImageModal data={user} token={token} />
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-                <FormField
-                    control={form.control}
-                    name="username"
-                    render={({ field }) => (
-                        <FormItem>
-                            <FormLabel>Username</FormLabel>
-                            <FormControl>
-                                <Input disabled={isLoading} placeholder="Username" {...form.register("username")} />
-                            </FormControl>
-                            <FormDescription>
-                                This is your public display name. It can be your real name or a
-                                pseudonym.
-                            </FormDescription>
-                            <FormMessage />
-                        </FormItem>
-                    )}
-                />
-                <FormField
-                    control={form.control}
-                    name="email"
-                    render={({ field }) => (
-                        <FormItem>
-                            <FormLabel>Email</FormLabel>
-                            <FormControl>
-                                <Input disabled={true} placeholder="m@example.com" className="invalid:[&:not(:placeholder-shown):not(:focus)]:ring-red-600 invalid:[&:not(:placeholder-shown):not(:focus)]:ring-2 invalid:[&:not(:placeholder-shown):not(:focus)]:text-red-600" {...form.register("email")} />
-                            </FormControl>
-                            <FormDescription>
-                                You can manage verified email addresses in your email settings.
-                            </FormDescription>
-                            <FormMessage />
-                        </FormItem>
-                    )}
-                />
-                <FormField
-                    control={form.control}
-                    name="bio"
-                    render={({ field }) => (
-                        <FormItem>
-                            <FormLabel>Bio</FormLabel>
-                            <FormControl>
-                                <Textarea
-                                    disabled={isLoading}
-                                    placeholder="Tell us a little bit about yourself"
-                                    className="resize-none"
-                                    {...form.register("bio")}
-                                />
-                            </FormControl>
-                            <FormDescription>
-                                You can <span>@mention</span> other users and organizations to
-                                link to them.
-                            </FormDescription>
-                            <FormMessage />
-                        </FormItem>
-                    )}
-                />
-                <div>
-                    {fields.map((field, index) => (
+        <>
+            <div className="p-10 border-4 rounded-lg lg:max-w-2xl">
+                <Form {...form}>
+                    <UserImageModal data={user} token={token} />
+                    <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
                         <FormField
                             control={form.control}
-                            key={field.id}
-                            name={`urls.${index}.value`}
+                            name="username"
                             render={({ field }) => (
                                 <FormItem>
-                                    <FormLabel className={cn(index !== 0 && "sr-only")}>
-                                        URLs
-                                    </FormLabel>
-                                    <FormDescription className={cn(index !== 0 && "sr-only")}>
-                                        Add links to your website, blog, or social media profiles.
+                                    <FormLabel>Username</FormLabel>
+                                    <FormControl>
+                                        <Input disabled={isLoading} placeholder="Username" {...form.register("username")} />
+                                    </FormControl>
+                                    <FormDescription>
+                                        This is your public display name. It can be your real name or a
+                                        pseudonym.
                                     </FormDescription>
-                                    <div className="grid grid-cols-12 col-span-3 ">
-                                        <BiLogoFacebookCircle hidden={index !== 0} className="w-[40px] h-[40px] col-span-1" />
-                                        <BiLogoYoutube hidden={index !== 1} className="w-[40px] h-[40px] col-span-1" />
-                                        <BiLogoTiktok hidden={index !== 2} className="w-[40px] h-[40px] col-span-1" />
-                                        <Input className="col-span-4" disabled value={cn(index === 0 ? FB : (index === 1 ? YTB : TT))} />
-                                        <FormControl>
-                                            <Input className="col-span-7" disabled={isLoading} placeholder="Resource ID" {...form.register(`urls.${index}.value`)} />
-                                        </FormControl>
-                                        <FormMessage />
-                                    </div>
+                                    <FormMessage />
                                 </FormItem>
                             )}
                         />
-                    ))}
-                    {/* <Button
+                        <FormField
+                            control={form.control}
+                            name="email"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>Email</FormLabel>
+                                    <FormControl>
+                                        <Input disabled={true} placeholder="m@example.com" className="invalid:[&:not(:placeholder-shown):not(:focus)]:ring-red-600 invalid:[&:not(:placeholder-shown):not(:focus)]:ring-2 invalid:[&:not(:placeholder-shown):not(:focus)]:text-red-600" {...form.register("email")} />
+                                    </FormControl>
+                                    <FormDescription>
+                                        You can manage verified email addresses in your email settings.
+                                    </FormDescription>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+                        <FormField
+                            control={form.control}
+                            name="bio"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>Bio</FormLabel>
+                                    <FormControl>
+                                        <Textarea
+                                            disabled={isLoading}
+                                            placeholder="Tell us a little bit about yourself"
+                                            className="resize-none"
+                                            {...form.register("bio")}
+                                        />
+                                    </FormControl>
+                                    <FormDescription>
+                                        You can <span>@mention</span> other users and organizations to
+                                        link to them.
+                                    </FormDescription>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+                        <div>
+                            {fields.map((field, index) => (
+                                <FormField
+                                    control={form.control}
+                                    key={field.id}
+                                    name={`urls.${index}.value`}
+                                    render={({ field }) => (
+                                        <FormItem>
+                                            <FormLabel className={cn(index !== 0 && "sr-only")}>
+                                                URLs
+                                            </FormLabel>
+                                            <FormDescription className={cn(index !== 0 && "sr-only")}>
+                                                Add links to your website, blog, or social media profiles.
+                                            </FormDescription>
+                                            <div className="grid grid-cols-12 col-span-3 ">
+                                                <BiLogoFacebookCircle hidden={index !== 0} className="w-[40px] h-[40px] col-span-1" />
+                                                <BiLogoYoutube hidden={index !== 1} className="w-[40px] h-[40px] col-span-1" />
+                                                <BiLogoTiktok hidden={index !== 2} className="w-[40px] h-[40px] col-span-1" />
+                                                <Input className="col-span-4" disabled value={cn(index === 0 ? FB : (index === 1 ? YTB : TT))} />
+                                                <FormControl>
+                                                    <Input className="col-span-7" disabled={isLoading} placeholder="Resource ID" {...form.register(`urls.${index}.value`)} />
+                                                </FormControl>
+                                                <FormMessage />
+                                            </div>
+                                        </FormItem>
+                                    )}
+                                />
+                            ))}
+                            {/* <Button
                         disabled={isLoading}
                         type="button"
                         variant="outline"
@@ -241,14 +246,23 @@ const ProfileForm: React.FC<ProfileUserProps> = ({
                     >
                         Add URL
                     </Button> */}
+                        </div>
+                        <div className="grid w-3/4 grid-cols-3 gap-10">
+                            {/* <Button type="button" onClick={() => { setIsDisable(false) }}>Update Profile</Button> */}
+                            <Button type="submit" disabled={isLoading} className="flex disabled:bg-slate-200 disabled:cursor-not-allowed" >{isLoading ? <Loader /> : 'Submit'}</Button>
+                            <Button type="button" onClick={handleCancel} className="flex disabled:bg-slate-200 disabled:cursor-not-allowed">Cancel</Button>
+                        </div>
+                    </form>
+                </Form>
+            </div>
+            {user.role !== "Instructor" &&
+                <div className="relative grid justify-center grid-cols-2 grid-rows-2 p-10 border-4 rounded-lg align-items lg:max-w-2xl">
+                    <h2 className="text-2xl font-bold tracking-tight ">Instructor</h2>
+                    <Button type="button" className="row-span-2 mt-3" onClick={handleInstructor}>Register</Button>
+                    <p className="text-muted-foreground ">Do you want become Instructor</p>
                 </div>
-                <div className="grid w-3/4 grid-cols-3 gap-10">
-                    {/* <Button type="button" onClick={() => { setIsDisable(false) }}>Update Profile</Button> */}
-                    <Button type="submit" disabled={isLoading} className="flex disabled:bg-slate-200 disabled:cursor-not-allowed" >{isLoading ? <Loader /> : 'Submit'}</Button>
-                    {/* <Button type="button" onClick={handleCancel} disabled={isDisable} className="flex disabled:bg-slate-200 disabled:cursor-not-allowed">Cancel</Button> */}
-                </div>
-            </form>
-        </Form>
+            }
+        </>
     )
 };
 

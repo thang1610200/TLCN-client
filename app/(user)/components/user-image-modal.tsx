@@ -33,11 +33,11 @@ const ACCEPTED_IMAGE_TYPES = ["image/jpeg", "image/jpg", "image/png", "image/web
 
 const avatarFormSchema = z.object({
     image: z.any()
-            .refine((files) => files?.[0]?.size <= MAX_FILE_SIZE, `Max image size is 10MB.`)
-            .refine(
-                (files) => ACCEPTED_IMAGE_TYPES.includes(files?.[0]?.type),
-                "Only .jpg, .jpeg, .png and .webp formats are supported."
-            )
+        .refine((files) => files?.[0]?.size <= MAX_FILE_SIZE, `Max image size is 10MB.`)
+        .refine(
+            (files) => ACCEPTED_IMAGE_TYPES.includes(files?.[0]?.type),
+            "Only .jpg, .jpeg, .png and .webp formats are supported."
+        )
 });
 
 type AvatarFormValues = z.infer<typeof avatarFormSchema>;
@@ -46,12 +46,8 @@ export default function UserImageModal(props: UserProps) {
     const user = props.data;
     const { update, data: session } = useSession();
     const router = useRouter();
-    const maxWidth = 600;
-    const maxHeight = 600;
-    // const [fileInput, setFileInput] = useState();
     const [isOpenChangeImage, setIsOpenChangeImage] = useState(false)
     const [imageUser, setImageUser] = useState(user.image);
-    const [valueWH, setValueWH] = useState([500]);
     const [isLoading, setIsLoading] = useState(false);
 
     const defaultValues: Partial<AvatarFormValues> = {
@@ -193,24 +189,25 @@ export default function UserImageModal(props: UserProps) {
                                     >
                                         Select image user
                                     </Dialog.Title>
-                                    <div className='relative'>
+                                    <img
+                                        src={imageUser}
+                                        alt="User image"
+                                        className="relative justify-center object-cover p-4 bg-no-repeat rounded-full max-w-[400px] min-w-[400px] max-h-[400px] min-h-[400px]"
+                                        width={400}
+                                        height={400}
+                                    />
+                                    {/* <div className='relative'>
+                                        
                                         <img
                                             src={imageUser}
                                             alt="User image"
-                                            className="relative justify-center object-contain p-4 bg-no-repeat opacity-30"
-                                            width={valueWH[0]}
-                                            height={valueWH[0]}
-                                        />
-                                        <img
-                                            src={imageUser}
-                                            alt="User image"
-                                            className="absolute justify-center object-contain w-full h-full p-4 translate-x-1/2 -translate-y-1/2 bg-no-repeat rounded-full top-1/2 right-1/2"
+                                            className="absolute justify-center object-contain w-full h-full p-4 translate-x-1/2 -translate-y-1/2 bg-no-repeat top-1/2 right-1/2"
                                             width={valueWH[0]}
                                             height={valueWH[0]}
                                         />
 
-                                    </div>
-                                    <Slider defaultValue={valueWH} max={600} min={400} step={10} className='py-4' onValueChange={setValueWH} />
+                                    </div> */}
+                                    {/* <Slider defaultValue={valueWH} max={600} min={400} step={10} className='py-4' onValueChange={setValueWH} /> */}
                                     <Form {...form}>
                                         <form onSubmit={form.handleSubmit(SubmitUpdate)}>
                                             <FormField
