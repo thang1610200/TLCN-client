@@ -65,11 +65,12 @@ const ProfileForm: React.FC<ProfileUserProps> = ({
     user,
     token
 }) => {
-    console.log(user.role);
     const FB = "https://www.facebook.com/";
     const YTB = "https://www.youtube.com/";
     const TT = "https://www.tiktok.com/";
     const [isLoading, setIsLoading] = useState(false);
+    const [isLoadingRegister, setIsLoadingRegister] = useState(false);
+
     const router = useRouter();
     const { update, data: session } = useSession();
     const defaultValues: Partial<ProfileFormValues> = {
@@ -141,9 +142,26 @@ const ProfileForm: React.FC<ProfileUserProps> = ({
     //         setIsHidden(true);
     //     }
     // }
+
     const handleInstructor = () => {
-        console.log("Change role learner to instructor");
+        setIsLoadingRegister(true);
+        axios.patch(`${BACKEND_URL}/user/register-instructer`,{
+            email: user.email
+        }, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+                "Content-Type": "application/json"
+            }
+        }).then(() => {
+            toast.success('Registration Instructor success');
+            router.refresh();
+        })
+        .catch(() => {
+            toast.error('Registration Instructor failed!');
+        })
+        .finally(() => setIsLoadingRegister(false));
     }
+
     const handleCancel = () => {
         form.reset();
     }
@@ -255,10 +273,10 @@ const ProfileForm: React.FC<ProfileUserProps> = ({
                     </form>
                 </Form>
             </div>
-            {user.role !== "Instructor" &&
+            {user.role === "LEARNER" &&
                 <div className="relative grid justify-center grid-cols-2 grid-rows-2 p-10 border-4 rounded-lg align-items lg:max-w-2xl">
                     <h2 className="text-2xl font-bold tracking-tight ">Instructor</h2>
-                    <Button type="button" className="row-span-2 mt-3" onClick={handleInstructor}>Register</Button>
+                    <Button type="button" disabled={isLoadingRegister} className="row-span-2 mt-3" onClick={handleInstructor}>{isLoadingRegister ? <Loader /> : 'Register'}</Button>
                     <p className="text-muted-foreground ">Do you want become Instructor</p>
                 </div>
             }

@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { ProfileUser } from "@/app/types";
 import * as z from "zod";
 import { Fragment, useState } from "react";
@@ -14,10 +14,8 @@ import {
     FormItem,
     FormMessage,
 } from "@/components/ui/form"
-import { Slider } from "@/components/ui/slider";
 import axios, { AxiosError } from 'axios';
 import { useRouter } from 'next/navigation';
-import Resizer from 'react-image-file-resizer';
 import { BACKEND_URL } from '@/lib/constant';
 import toast from 'react-hot-toast';
 import { useSession } from 'next-auth/react';
@@ -66,7 +64,6 @@ export default function UserImageModal(props: UserProps) {
             };
 
             reader.readAsDataURL(file);
-            //console.log(imageUser);
         }
     }
 
@@ -88,14 +85,15 @@ export default function UserImageModal(props: UserProps) {
         })
             .then((res: any) => {
                 toast.success("Update success!");
-                CancelImage();
                 update({
                     user: {
                         ...session?.user,
-                        image: res.data.jobData.image as string,
-                        name: res.data.jobData.name as string
+                        image: res.data.image as string,
+                        name: res.data.name as string
                     }
                 });
+                setImageUser(res.data.image);
+                setIsOpenChangeImage(false);
                 router.refresh();
             })
             .catch((err: AxiosError<any, any>) => {
@@ -103,11 +101,12 @@ export default function UserImageModal(props: UserProps) {
                     router.push('/login');
                 }
                 else {
-                    console.log(err);
                     toast.error(err.response?.data?.message || "Error");
                 }
             })
-            .finally(() => setIsLoading(false));
+            .finally(() => {
+                setIsLoading(false);
+            });
     }
 
     function CancelImage() {
