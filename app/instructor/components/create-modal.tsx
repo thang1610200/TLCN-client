@@ -15,63 +15,35 @@ import {
     FormLabel,
     FormMessage,
 } from "@/components/ui/form"
-import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input"
 import Loader from "@/components/loader";
-
 import * as z from "zod";
-
-const MAX_FILE_SIZE = 1000000;
-const ACCEPTED_IMAGE_TYPES = ["image/jpeg", "image/jpg", "image/png", "image/webp"];
+import axios from 'axios';
+import { BACKEND_URL } from '@/lib/constant';
+import toast from 'react-hot-toast';
+import { useSession } from 'next-auth/react';
 
 const profileFormSchema = z.object({
-    name: z
+    title: z
         .string()
         .min(2, {
-            message: "Name must be at least 2 characters.",
+            message: "Title must be at least 2 characters.",
         })
         .max(100, {
-            message: "Username must not be longer than 100 characters.",
+            message: "Title must not be longer than 100 characters.",
         }),
-    description: z
-        .string()
-        .min(2, {
-            message: "Description must be at least 2 characters.",
-        })
-        .max(500, {
-            message: "Description must not be longer than 500 characters.",
-        }),
-    learning_outcome: z
-        .string()
-        .min(2, {
-            message: "Name must be at least 2 characters.",
-        })
-        .max(100, {
-            message: "Username must not be longer than 100 characters.",
-        }),
-    // picture: z.any()
-    //     .refine((files) => files?.[0]?.size <= MAX_FILE_SIZE, `Max image size is 10MB.`)
-    //     .refine(
-    //         (files) => ACCEPTED_IMAGE_TYPES.includes(files?.[0]?.type),
-    //         "Only .jpg, .jpeg, .png and .webp formats are supported."
-    //     )
 })
 
 
-type ProfileFormValues = z.infer<typeof profileFormSchema>
-
-
+type ProfileFormValues = z.infer<typeof profileFormSchema>;
 
 export default function CreateCourseModal() {
     const [isLoading, setIsLoading] = useState(false);
-    const [isLoadingRegister, setIsLoadingRegister] = useState(false);
-
+    const [isOpen, setIsOpen] = useState(false);
+    const session = useSession();
 
     const defaultValues: Partial<ProfileFormValues> = {
-        name: "Python",
-        description: "This course will teach about python",
-        learning_outcome: "Build a website with python",
-        // picture: ""
+        title: "",
     };
 
     const form = useForm<ProfileFormValues>({
@@ -79,27 +51,37 @@ export default function CreateCourseModal() {
         defaultValues,
     })
 
-
     function onSubmit(data: ProfileFormValues) {
         setIsLoading(true);
-
-
+        axios.post(`${BACKEND_URL}/course/create-course`, {
+            title: data.title
+        }, {
+            headers: {
+                Authorization: `Bearer ${session.data?.backendTokens.accessToken}`,
+                "Content-Type": "application/json"
+            }
+        }).then(() => {
+            toast.success('Create success');
+            //router.refresh();
+        })
+            .catch(() => {
+                toast.error('Create failed!');
+            })
+            .finally(() => setIsLoading(false));
     }
-
 
     const handleCancel = () => {
         form.reset();
         setIsOpen(false)
     }
 
+    // const setLearnerToInstructor = () => {
+    //     console.log("Set Learner to Instructor");
+    //     setIsOpen(false);
+    //     //set role = instructor
+    //     //link to instructor page
+    // }
 
-    let [isOpen, setIsOpen] = useState(false);
-    const setLearnerToInstructor = () => {
-        console.log("Set Learner to Instructor");
-        setIsOpen(false);
-        //set role = instructor
-        //link to instructor page
-    }
     return (
         <div>
             <div className="ml-auto mr-4" onClick={() => setIsOpen(true)}>
@@ -146,54 +128,15 @@ export default function CreateCourseModal() {
                                             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
                                                 <FormField
                                                     control={form.control}
-                                                    name="name"
+                                                    name="title"
                                                     render={({ field }) => (
                                                         <FormItem>
-                                                            <FormLabel>Name</FormLabel>
+                                                            <FormLabel>Course title</FormLabel>
                                                             <FormControl>
-                                                                <Input disabled={isLoading} placeholder="name" {...form.register("name")} />
+                                                                <Input disabled={isLoading} placeholder="e.g. 'Advanced Web Development'" {...form.register("title")} />
                                                             </FormControl>
                                                             <FormDescription>
-                                                                This is your public display name. It can be your real name or a
-                                                                pseudonym.
-                                                            </FormDescription>
-                                                            <FormMessage />
-                                                        </FormItem>
-                                                    )}
-                                                />
-                                                <FormField
-                                                    control={form.control}
-                                                    name="description"
-                                                    render={({ field }) => (
-                                                        <FormItem>
-                                                            <FormLabel>Bio</FormLabel>
-                                                            <FormControl>
-                                                                <Textarea
-                                                                    disabled={isLoading}
-                                                                    placeholder="Tell us a little bit about yourself"
-                                                                    className="resize-none"
-                                                                    {...form.register("description")}
-                                                                />
-                                                            </FormControl>
-                                                            <FormDescription>
-                                                                You can <span>@mention</span> other users and organizations to
-                                                                link to them.
-                                                            </FormDescription>
-                                                            <FormMessage />
-                                                        </FormItem>
-                                                    )}
-                                                />
-                                                <FormField
-                                                    control={form.control}
-                                                    name="learning_outcome"
-                                                    render={({ field }) => (
-                                                        <FormItem>
-                                                            <FormLabel>Email</FormLabel>
-                                                            <FormControl>
-                                                                <Input disabled={true} placeholder="learning_outcome" {...form.register("learning_outcome")} />
-                                                            </FormControl>
-                                                            <FormDescription>
-                                                                You can manage verified email addresses in your email settings.
+                                                                What will you teach in this course?
                                                             </FormDescription>
                                                             <FormMessage />
                                                         </FormItem>
@@ -201,7 +144,7 @@ export default function CreateCourseModal() {
                                                 />
                                                 <div className="grid w-full grid-cols-2 px-10 gap-x-10 ">
                                                     {/* <Button type="button" onClick={() => { setIsDisable(false) }}>Update Profile</Button> */}
-                                                    <Button type="submit" disabled={isLoading} className="flex disabled:bg-slate-200 disabled:cursor-not-allowed" >{isLoading ? <Loader /> : 'Submit'}</Button>
+                                                    <Button type="submit" disabled={isLoading} className="flex disabled:bg-slate-200 disabled:cursor-not-allowed" >{isLoading ? <Loader /> : 'Continue'}</Button>
                                                     <Button type="button" onClick={handleCancel} className="flex disabled:bg-slate-200 disabled:cursor-not-allowed">Cancel</Button>
                                                 </div>
                                             </form>
