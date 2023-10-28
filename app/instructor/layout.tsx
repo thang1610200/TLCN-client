@@ -8,7 +8,7 @@ export default function InstructorLayout({
 }) {
     return (
         <>
-            <main   >
+            <main className="bg-black">
                 {children}
             </main>
         </>

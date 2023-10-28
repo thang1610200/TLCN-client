@@ -15,16 +15,19 @@ import {
 
 import { Album } from "../data/albums"
 import { playlists } from "../data/playlists"
+import { course } from "@/types";
+import { BiStar } from "react-icons/bi";
+
 
 interface AlbumArtworkProps extends React.HTMLAttributes<HTMLDivElement> {
-    album: Album
+    course: course
     aspectRatio?: "portrait" | "square"
     width?: number
     height?: number
 }
 
 export function AlbumArtwork({
-    album,
+    course,
     aspectRatio = "portrait",
     width,
     height,
@@ -37,8 +40,8 @@ export function AlbumArtwork({
                 <ContextMenuTrigger>
                     <div className="rounded-md ">
                         <Image
-                            src={album.cover}
-                            alt={album.name}
+                            src="/images/learning.webp"
+                            alt={course.title}
                             width={width}
                             height={height}
                             className={cn(
@@ -87,8 +90,15 @@ export function AlbumArtwork({
                 </ContextMenuContent>
             </ContextMenu>
             <div className="space-y-1 text-sm">
-                <h3 className="font-medium leading-none">{album.name}</h3>
-                <p className="text-xs text-muted-foreground">{album.artist}</p>
+                <div className="flex items-center">
+                    <BiStar className="w-4 text-orange-400" />
+                    <BiStar className="w-4 text-orange-400" />
+                    <BiStar className="w-4 text-orange-400" />
+                    <BiStar className="w-4 text-orange-400" />
+                    <BiStar className="w-4 text-orange-400" />
+                </div>
+                <h3 className="font-medium leading-none">{course.title}</h3>
+                <p className="text-xs text-muted-foreground">{course.students}</p>
             </div>
         </div>
     )

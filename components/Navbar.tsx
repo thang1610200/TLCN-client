@@ -29,7 +29,7 @@ import {
   NavigationMenuContent
 } from "@/components/ui/navigation-menu";
 
-
+import RegisterInsModal from "@/components/Reg-Ins-Modal"
 
 
 
@@ -77,6 +77,12 @@ const components: { title: string; href: string; description: string }[] = [
 export default function Navbar() {
   const session = useSession();
   const router = useRouter();
+  const roleLearner = "LEARNER";
+  const roleInstructor = "INSTRUCTOR";
+  const role = roleInstructor;
+  const handleBecomeInstructor = () => {
+
+  }
 
   return (
     <>
@@ -111,7 +117,13 @@ export default function Navbar() {
           <BiSearch className="w-5 h-5 mx-4 text-gray-400" />
           <input type="text" placeholder='Search for anything' className='w-full h-full text-sm bg-transparent focus:outline-none' />
         </form>
-        <div className="flex justify-end pr-4 space-x-4">
+        <div className="flex justify-end pr-4 space-x-4 cursor-pointer">
+          {role.toString() === "LEARNER" ?
+            <RegisterInsModal />
+            : <Link href="/instructor" legacyBehavior passHref className="justify-center align-middle ">
+              <span className="pt-2 text-base hover:underline">Instructor</span>
+            </Link>
+          }
           {session.status == "authenticated" &&
             <DropdownMenu modal={false}>
               <DropdownMenuTrigger asChild>

@@ -131,21 +131,11 @@ const ProfileForm: React.FC<ProfileUserProps> = ({
             })
             .finally(() => setIsLoading(false));
     }
-    // const [isDisable, setIsDisable] = useState(true)
-    //const [isHidden, setIsHidden] = useState(true)
-    // const handleChangeImage = () => {
-    //     if (isHidden === true) {
-    //         setIsHidden(false);
-    //         setIsDisable(false);
-    //     }
-    //     else {
-    //         setIsHidden(true);
-    //     }
-    // }
+
 
     const handleInstructor = () => {
         setIsLoadingRegister(true);
-        axios.patch(`${BACKEND_URL}/user/register-instructer`,{
+        axios.patch(`${BACKEND_URL}/user/register-instructer`, {
             email: user.email
         }, {
             headers: {
@@ -156,10 +146,10 @@ const ProfileForm: React.FC<ProfileUserProps> = ({
             toast.success('Registration Instructor success');
             router.refresh();
         })
-        .catch(() => {
-            toast.error('Registration Instructor failed!');
-        })
-        .finally(() => setIsLoadingRegister(false));
+            .catch(() => {
+                toast.error('Registration Instructor failed!');
+            })
+            .finally(() => setIsLoadingRegister(false));
     }
 
     const handleCancel = () => {

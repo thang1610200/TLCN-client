@@ -218,7 +218,7 @@ export default function UserImageModal(props: UserProps) {
                                                             <Input disabled={isLoading} accept="image/*" type="file" {...form.register("image")} onChange={handleOnChange} />
                                                         </FormControl>
                                                         <FormMessage />
-                                                    </FormItem>
+                                                        1                </FormItem>
                                                 )}
                                             />
                                             {/* <Input onChange={handleOnChange} accept="image/*" type="file" /> */}
