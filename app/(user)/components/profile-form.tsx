@@ -143,7 +143,7 @@ const ProfileForm: React.FC<ProfileUserProps> = ({
                 "Content-Type": "application/json"
             }
         }).then(() => {
-            toast.success('Registration Instructor success');
+            toast.success('Registration Instructor success');   
             router.refresh();
         })
             .catch(() => {

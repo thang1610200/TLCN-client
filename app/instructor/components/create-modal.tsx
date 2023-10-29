@@ -54,7 +54,8 @@ export default function CreateCourseModal() {
     function onSubmit(data: ProfileFormValues) {
         setIsLoading(true);
         axios.post(`${BACKEND_URL}/course/create-course`, {
-            title: data.title
+            title: data.title,
+            email: session.data?.user.email
         }, {
             headers: {
                 Authorization: `Bearer ${session.data?.backendTokens.accessToken}`,
