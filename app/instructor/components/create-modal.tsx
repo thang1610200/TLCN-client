@@ -23,7 +23,7 @@ import { BACKEND_URL } from '@/lib/constant';
 import toast from 'react-hot-toast';
 import { useSession } from 'next-auth/react';
 
-const profileFormSchema = z.object({
+const courseTitleFormSchema = z.object({
     title: z
         .string()
         .min(2, {
@@ -35,23 +35,23 @@ const profileFormSchema = z.object({
 })
 
 
-type ProfileFormValues = z.infer<typeof profileFormSchema>;
+type courseTitleFormValues = z.infer<typeof courseTitleFormSchema>;
 
 export default function CreateCourseModal() {
     const [isLoading, setIsLoading] = useState(false);
     const [isOpen, setIsOpen] = useState(false);
     const session = useSession();
 
-    const defaultValues: Partial<ProfileFormValues> = {
+    const defaultValues: Partial<courseTitleFormValues> = {
         title: "",
     };
 
-    const form = useForm<ProfileFormValues>({
-        resolver: zodResolver(profileFormSchema),
+    const form = useForm<courseTitleFormValues>({
+        resolver: zodResolver(courseTitleFormSchema),
         defaultValues,
     })
 
-    function onSubmit(data: ProfileFormValues) {
+    function onSubmit(data: courseTitleFormValues) {
         setIsLoading(true);
         axios.post(`${BACKEND_URL}/course/create-course`, {
             title: data.title
@@ -64,7 +64,8 @@ export default function CreateCourseModal() {
             toast.success('Create success');
             //router.refresh();
         })
-            .catch(() => {
+            .catch((e) => {
+                console.log(e);
                 toast.error('Create failed!');
             })
             .finally(() => setIsLoading(false));

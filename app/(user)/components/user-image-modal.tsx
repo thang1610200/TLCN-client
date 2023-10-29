@@ -1,4 +1,5 @@
 import React from 'react';
+import Image from "next/image"
 import { ProfileUser } from "@/app/types";
 import * as z from "zod";
 import { Fragment, useState } from "react";
@@ -151,8 +152,10 @@ export default function UserImageModal(props: UserProps) {
     return (
         <>
             <div className="flex justify-center ">
-                <div className="w-[150px] h-[150px] relative">
-                    <img src={user.image.toString()} className="w-full rounded-full" />
+                <div className="w-[150px] h-[150px] relative   ">
+                    <div className='flex overflow-hidden rounded-full shrink-0'>
+                        <img src={user.image.toString()} className="w-full h-full aspect-square " width={100} height={100} />
+                    </div>
                     <Button onClick={() => { setIsOpenChangeImage(true) }} className="absolute bottom-0 right-0 w-10 h-10 text-xl text-white rounded-full bg-slate-400">＋</Button>
                 </div>
             </div>
@@ -218,7 +221,7 @@ export default function UserImageModal(props: UserProps) {
                                                             <Input disabled={isLoading} accept="image/*" type="file" {...form.register("image")} onChange={handleOnChange} />
                                                         </FormControl>
                                                         <FormMessage />
-                                                        1                </FormItem>
+                                                    </FormItem>
                                                 )}
                                             />
                                             {/* <Input onChange={handleOnChange} accept="image/*" type="file" /> */}
