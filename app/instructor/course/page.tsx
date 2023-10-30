@@ -10,22 +10,32 @@ import {
     TabsTrigger,
 } from "@/components/ui/tabs"
 
-import { AlbumArtwork } from "./components/album-artwork"
-import { Menu } from "./components/menu"
-import { PodcastEmptyPlaceholder } from "./components/podcast-empty-placeholder"
-import { Sidebar } from "./components/sidebar"
-import { listenNowAlbums, madeForYouAlbums } from "./data/albums"
-import { playlists } from "./data/playlists"
-
-import CreateCourseModal from "./components/create-modal"
+import { AlbumArtwork } from "../components/album-artwork"
+import { Menu } from "../components/menu"
+import { PodcastEmptyPlaceholder } from "../components/podcast-empty-placeholder"
+import { Sidebar } from "../components/sidebar"
+import { listenNowAlbums, madeForYouAlbums } from "../data/albums"
+import { playlists } from "../data/playlists"
+import axios from 'axios';
+import CreateCourseModal from "../components/create-modal"
 import data from "@/public/data_course_example.json";
+import { BACKEND_URL } from "@/lib/constant"
+import getSession from "@/app/actions/getSession"
 
 export const metadata: Metadata = {
     title: "Music App",
     description: "Example music app using the components.",
 }
 
-export default function MusicPage() {
+export default async function MusicPage() {
+    const session = await getSession();
+    const course = await axios.get(`${BACKEND_URL}/course/all-course?email=${session?.user.email}`, {
+        headers: {
+            Authorization: `Bearer ${session?.backendTokens.accessToken}`,
+            "Content-Type": "application/json"
+        }
+    });
+
     return (
         <>
             <div className="md:hidden">

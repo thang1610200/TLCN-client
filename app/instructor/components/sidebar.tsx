@@ -31,7 +31,7 @@ export function Sidebar({ className, playlists }: SidebarProps) {
                                 <circle cx="12" cy="12" r="10" />
                                 <polygon points="10 8 16 12 10 16 10 8" />
                             </svg>
-                            Listen Now
+                            Course
                         </Button>
                         <Button variant="ghost" className="justify-start w-full">
                             <svg
@@ -72,7 +72,7 @@ export function Sidebar({ className, playlists }: SidebarProps) {
                         </Button>
                     </div>
                 </div>
-                <div className="px-3 py-2">
+                {/* <div className="px-3 py-2">
                     <h2 className="px-4 mb-2 text-lg font-semibold tracking-tight">
                         Library
                     </h2>
@@ -197,7 +197,7 @@ export function Sidebar({ className, playlists }: SidebarProps) {
                             ))}
                         </div>
                     </ScrollArea>
-                </div>
+                </div> */}
             </div>
         </div>
     )
