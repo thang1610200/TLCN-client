@@ -43,5 +43,23 @@
     "students": "(84,985)",
     "price": "$14,99",
     "oldPrice": "$89,99"
+  },
+  {
+    "id": 6,
+    "title": "React and Tailwind",
+    "username": "Universe Code",
+    "vote": "4.7",
+    "students": "(84,985)",
+    "price": "$14,99",
+    "oldPrice": "$89,99"
+  },
+  {
+    "id": 7,
+    "title": "React and Tailwind",
+    "username": "Universe Code",
+    "vote": "4.7",
+    "students": "(84,985)",
+    "price": "$14,99",
+    "oldPrice": "$89,99"
   }
 ]
