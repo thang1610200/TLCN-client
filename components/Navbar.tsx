@@ -1,10 +1,11 @@
 "use client";
-import * as React from "react";
+import React, { useRef } from "react";
 import { cn } from "@/lib/utils";
-import { BiSearch, BiGlobe, BiMenu } from "react-icons/bi";
+import { BiSearch, BiGlobe, BiMenu, BiSolidGraduation } from "react-icons/bi";
 import Link from "next/link";
 import { useSession } from "next-auth/react";
 import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -80,24 +81,29 @@ export default function Navbar() {
   const roleLearner = "LEARNER";
   const roleInstructor = "INSTRUCTOR";
   const role = roleInstructor;
+  const navRef = useRef()
   const handleBecomeInstructor = () => {
+  }
+  const handleSearch = () => {
 
   }
-
   return (
     <>
-      {/* <div className='flex space-x-2 bg-white h-[74px] shadow-lg text-center justify-between items-center fixed w-full z-10 px-4'> */}
-      <NavigationMenu className="fixed space-x-8 bg-white max-w-none flex h-[74px] shadow-lg text-center justify-between items-center w-full z-10 px-4">
-        <NavigationMenuList className="space-x-4">
+
+      <NavigationMenu className="fixed z-10 flex items-center justify-between w-[calc(100%_-_2rem)] h-16 m-4 px-2 space-x-2 text-center bg-white max-w-none md:pl-10 md:pr-10 bg-opacity-25 backdrop-blur-sm shadow-[0_8px_32px_0_rgba(_31,38,135,0.37_)] border rounded-[10px] border-solid border-[rgba(_255,255,255,0.18_)]">
+        <NavigationMenuList className="">
+          <NavigationMenuItem className="flex md:hidden">
+            <BiMenu size={24} />
+          </NavigationMenuItem>
           <NavigationMenuItem>
             <Link href="/home" legacyBehavior passHref>
               <NavigationMenuLink>
-                <h2 className="text-3xl font-bold">Udemy</h2>
+                <h2 className="text-xl font-bold md:text-3xl">Udemy</h2>
               </NavigationMenuLink>
             </Link>
           </NavigationMenuItem>
-          <NavigationMenuItem className="">
-            <NavigationMenuTrigger className="text-lg">Category</NavigationMenuTrigger>
+          <NavigationMenuItem className="hidden md:flex">
+            <NavigationMenuTrigger className="text-lg bg-transparent hover:bg-transparent">Category</NavigationMenuTrigger>
             <NavigationMenuContent>
               <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px] ">
                 {components.map((components) => (
@@ -113,22 +119,35 @@ export default function Navbar() {
             </NavigationMenuContent>
           </NavigationMenuItem>
         </NavigationMenuList>
-        <form className=' bg-[#f8fafb] flex border border-black rounded-3xl max-w-lg flex-1 h-12 items-center p-2'>
+        <div className="w-full h-2/3">
+          <Input
+            type="search"
+            placeholder="Search..."
+            className="flex w-full h-full text-sm bg-transparent rounded-full border-slate-300 focus-visible:border-transparent focus-visible:ring-transparent "
+          />
+        </div>
+        {/* <form className=' bg-[#f8fafb] flex border border-black rounded-3xl max-w-lg flex-1 h-12 items-center p-2'>
           <BiSearch className="w-5 h-5 mx-4 text-gray-400" />
           <input type="text" placeholder='Search for anything' className='w-full h-full text-sm bg-transparent focus:outline-none' />
         </form>
         <div className="flex justify-end pr-4 space-x-4 cursor-pointer">
           {role.toString() === "LEARNER" ?
             <RegisterInsModal />
-            : <Link href="/instructor/course" legacyBehavior passHref className="justify-center align-middle ">
+            : <Link href="/instructor" legacyBehavior passHref className="justify-center align-middle ">
               <span className="pt-2 text-base hover:underline">Instructor</span>
             </Link>
-          }
+            {/* <Link href="/instructor" legacyBehavior passHref className="md:hidden">
+                <BiSolidGraduation />
+              </Link> */}
+          </div>
+
+        }
+        <div className="flex justify-end space-x-2 cursor-pointer ">
           {session.status == "authenticated" &&
             <DropdownMenu modal={false}>
               <DropdownMenuTrigger asChild>
-                <Button variant="ghost" className="relative w-20 h-10 rounded-full focus:ring-0 focus:ring-offset-0 hover:bg-inherit">
-                  <Avatar className="w-12 h-12">
+                <Button variant="ghost" className="relative w-16 h-16 pr-0 rounded-full focus:ring-0 focus:ring-offset-0 hover:bg-inherit">
+                  <Avatar className="w-full h-fit">
                     <AvatarImage src={session.data?.user.image} alt="User Image" />
                     <AvatarFallback>User</AvatarFallback>
                   </Avatar>
@@ -165,7 +184,7 @@ export default function Navbar() {
               </DropdownMenuContent>
             </DropdownMenu>}
           {(session.status == "unauthenticated") &&
-            <div className="flex">
+            <div className="flex p-3">
               <Link rel="stylesheet" href="\login" >
                 <button className='border border-black text-sm font-bold w-20 h-10 hover:bg-[#F5F5F5] rounded-full'>
                   Log In
@@ -176,11 +195,11 @@ export default function Navbar() {
           {session.status == "loading" &&
             <div className="flex w-20 h-10"></div>
           }
-          <Link rel="stylesheet" href="\" >
+          {/* <Link rel="stylesheet" href="\" >
             <button className="border border-black h-10 w-10 lg:flex items-center justify-center hover:bg-[#F5F5F5] hidden rounded-3xl ">
               <BiGlobe className="w-8 h-8" />
             </button>
-          </Link>
+          </Link> */}
         </div>
       </NavigationMenu>
     </>
