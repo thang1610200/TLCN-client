@@ -1,5 +1,7 @@
 import React from "react";
 import Navbar from "@/components/Navbar";
+import Image from "next/image";
+import { Sidebar } from "./components/sidebar";
 
 
 export default function InstructorLayout({
@@ -8,10 +10,22 @@ export default function InstructorLayout({
     children: React.ReactNode;
 }) {
     return (
-        <>
-            <main>
-                {children}
-            </main>
-        </>
+    <>
+        <div className="h-full">
+            <Navbar />
+            <div className="border-t pt-14">
+                <div className="bg-background">
+                    <div className="grid lg:grid-cols-5">
+                        <Sidebar/>
+                        <div className="col-span-3 lg:col-span-4 lg:border-l">
+                            <div className="h-full px-4 py-6 lg:px-8">
+                                { children }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div >
+    </>
     );
 }

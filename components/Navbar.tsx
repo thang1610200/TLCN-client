@@ -120,7 +120,7 @@ export default function Navbar() {
         <div className="flex justify-end pr-4 space-x-4 cursor-pointer">
           {role.toString() === "LEARNER" ?
             <RegisterInsModal />
-            : <Link href="/instructor" legacyBehavior passHref className="justify-center align-middle ">
+            : <Link href="/instructor/course" legacyBehavior passHref className="justify-center align-middle ">
               <span className="pt-2 text-base hover:underline">Instructor</span>
             </Link>
           }

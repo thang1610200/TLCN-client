@@ -10,7 +10,7 @@ export async function middleware(req: NextRequest) {
         return NextResponse.redirect(new URL('/home', req.url));
     }
 
-    if(!isAuthenticated && (req.nextUrl.pathname.startsWith("/profile"))){
+    if(!isAuthenticated && (req.nextUrl.pathname.startsWith("/profile") || req.nextUrl.pathname.startsWith("/instructor"))){
       return NextResponse.redirect(new URL('/login', req.url));
     }
 
@@ -18,5 +18,5 @@ export async function middleware(req: NextRequest) {
 }
 
 export const config = {
-  matcher: ['/login', '/signup', '/forgotpassword', '/reset-password', '/profile'],
+  matcher: ['/login', '/signup', '/forgotpassword', '/reset-password', '/profile', '/instructor/:path*'],
 }

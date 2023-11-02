@@ -22,6 +22,7 @@ import axios from 'axios';
 import { BACKEND_URL } from '@/lib/constant';
 import toast from 'react-hot-toast';
 import { useSession } from 'next-auth/react';
+import { useRouter } from 'next/navigation';
 
 const courseTitleFormSchema = z.object({
     title: z
@@ -40,6 +41,7 @@ type courseTitleFormValues = z.infer<typeof courseTitleFormSchema>;
 export default function CreateCourseModal() {
     const [isLoading, setIsLoading] = useState(false);
     const [isOpen, setIsOpen] = useState(false);
+    const router = useRouter();
     const session = useSession();
 
     const defaultValues: Partial<courseTitleFormValues> = {
@@ -63,7 +65,8 @@ export default function CreateCourseModal() {
             }
         }).then(() => {
             toast.success('Create success');
-            //router.refresh();
+            handleCancel();
+            router.refresh();
         })
             .catch((e) => {
                 console.log(e);
@@ -86,10 +89,10 @@ export default function CreateCourseModal() {
 
     return (
         <div>
-            <div className="ml-auto mr-4" onClick={() => setIsOpen(true)}>
+            <div className="ml-auto" onClick={() => setIsOpen(true)}>
                 <Button>
                     <BiPlusCircle className="w-4 h-4 mr-2" />
-                    Add New Course
+                    New Course
                 </Button>
             </div>
             <Transition appear show={isOpen} as={Fragment}>
