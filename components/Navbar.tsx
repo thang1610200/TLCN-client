@@ -129,19 +129,20 @@ export default function Navbar() {
         {/* <form className=' bg-[#f8fafb] flex border border-black rounded-3xl max-w-lg flex-1 h-12 items-center p-2'>
           <BiSearch className="w-5 h-5 mx-4 text-gray-400" />
           <input type="text" placeholder='Search for anything' className='w-full h-full text-sm bg-transparent focus:outline-none' />
-        </form>
-        <div className="flex justify-end pr-4 space-x-4 cursor-pointer">
+        </form> */}
+        {/* <div className="flex justify-end pr-4 space-x-4 cursor-pointer">
           {role.toString() === "LEARNER" ?
             <RegisterInsModal />
             : <Link href="/instructor" legacyBehavior passHref className="justify-center align-middle ">
               <span className="pt-2 text-base hover:underline">Instructor</span>
             </Link>
-            {/* <Link href="/instructor" legacyBehavior passHref className="md:hidden">
+          <Link href="/instructor" legacyBehavior passHref className="md:hidden">
                 <BiSolidGraduation />
-              </Link> */}
-          </div>
+            </Link>
+      }
+      </div> */}
 
-        }
+    
         <div className="flex justify-end space-x-2 cursor-pointer ">
           {session.status == "authenticated" &&
             <DropdownMenu modal={false}>
