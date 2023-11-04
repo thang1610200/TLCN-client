@@ -16,8 +16,8 @@ export default function RegisterInsModal() {
     }
     return (
         <div>
-            <div className="justify-center align-middle hover:underline" onClick={() => setIsOpen(true)}>
-                <p className="pt-2 text-base">
+            <div className="relative flex justify-center align-middle rounded-full w-fit h-fit hover:bg-slate-50 hover:bg-opacity-30 " onClick={() => setIsOpen(true)}>
+                <p className="items-center justify-center hidden text-center md:flex">
                     Become Instructor
                 </p>
             </div>
