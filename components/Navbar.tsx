@@ -141,8 +141,19 @@ export default function Navbar() {
             </Link>
       }
       </div> */}
+        {role.toString() === "INSTRUCTOR" ?
+          <div className="relative flex p-2 rounded-full w-fit h-fit hover:bg-slate-50 hover:bg-opacity-30 ">
+            <Link href="/instructor" legacyBehavior passHref className="justify-center align-middle ">
+              <span className="items-center justify-center hidden text-center md:flex ">Instructor</span>
+            </Link>
+            {/* <Link href="/instructor" legacyBehavior passHref className="md:hidden">
+                <BiSolidGraduation />
+              </Link> */}
+          </div>
+          : session.status == "authenticated" ? <RegisterInsModal /> : <div></div>
+        }
 
-    
+
         <div className="flex justify-end space-x-2 cursor-pointer ">
           {session.status == "authenticated" &&
             <DropdownMenu modal={false}>
