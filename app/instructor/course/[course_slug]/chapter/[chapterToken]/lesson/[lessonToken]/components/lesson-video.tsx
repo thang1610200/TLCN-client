@@ -130,7 +130,7 @@ export const LessonVideoForm = ({
                 <ReactPlayer
                     width='100%'
                     controls
-                    url={initialData?.videoUrl} 
+                    url={initialData?.videoUrl}
                 />
             </div>
             )

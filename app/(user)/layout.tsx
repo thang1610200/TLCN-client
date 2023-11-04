@@ -30,10 +30,6 @@ const sidebarNavItems = [
         title: "Display",
         href: "/examples/forms/display",
     },
-    {
-        title: "Instructor",
-        href:  "/instructor",
-    },
 ]
 
 interface SettingsLayoutProps {

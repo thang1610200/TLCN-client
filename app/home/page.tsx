@@ -2,10 +2,18 @@
 
 import React from "react";
 import Courses from "./Courses";
+import useAllCoursePublish from "../hook/useAllCoursePublish";
+import LoadingModal from "@/components/loading-modal";
 
 
 
 export default function page() {
+  const { data, isLoading } = useAllCoursePublish();
+
+  if(isLoading){
+    <LoadingModal />
+  }
+
   return (
     <>
       <div className="relative w-screen h-screen border-gray-100">
