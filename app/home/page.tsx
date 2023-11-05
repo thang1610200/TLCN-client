@@ -4,13 +4,20 @@ import React from "react";
 import Courses from "./Courses";
 import useAllCoursePublish from "../hook/useAllCoursePublish";
 import LoadingModal from "@/components/loading-modal";
+import { course } from "@/types";
+
 
 
 
 export default function page() {
   const { data, isLoading } = useAllCoursePublish();
 
-  if(isLoading){
+  if (data) {
+    console.log(data);
+    // const id = data.map((course: course) => course.id)
+    // console.log(id);
+  }
+  if (isLoading) {
     <LoadingModal />
   }
 
@@ -36,11 +43,11 @@ export default function page() {
           className="object-cover w-full h-full bg-bottom bg-no-repeat"
         /> */}
         <div className="flex w-screen h-screen p-8 bg-gradient-to-t from-bg-color-1 to-bg-color-2 ">
-          <Courses />
+          {data && <Courses data={data} />}
         </div>
-        <div className="w-screen h-screen bg-slate-500"></div>
+        <div className="w-screen h-screen bg-slate-500">
+        </div>
       </div>
-
     </>
   )
 }

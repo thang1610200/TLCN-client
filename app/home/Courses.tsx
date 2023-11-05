@@ -8,9 +8,14 @@ import {
   TabsList,
   TabsTrigger,
 } from "@/components/ui/tabs"
+import { course } from "@/types";
 
-export default function Courses() {
+interface courseProps {
+  data: course[];
+}
 
+export default function Courses(props: courseProps) {
+  const data = props.data;
   return (
 
     <div className="p-4 w-screen h-screen relative flex flex-col items-center justify-center  text-slate-600 bg-white bg-opacity-25 backdrop-blur-sm shadow-[0_8px_32px_0_rgba(_31,38,135,0.37_)] border rounded-[10px] border-solid border-[rgba(_255,255,255,0.18_)]" >
@@ -40,10 +45,10 @@ export default function Courses() {
           machine learning. You’ll learn how to build everything from
         </h3>
         <div className="hidden p-4 md:block">
-          <div className="border-t">
+          <div className="">
             <div className="bg-white bg-opacity-25 backdrop-blur-sm shadow-[0_8px_32px_0_rgba(_31,38,135,0.37_)] border rounded-[10px] border-solid border-[rgba(_255,255,255,0.18_)]">
               <div className="grid lg:grid-cols-5">
-                <div className="col-span-3 lg:col-span-5 lg:border-l">
+                <div className="col-span-3 lg:col-span-5">
                   <div className="h-full px-4 py-6 lg:px-8">
                     <Tabs defaultValue="music" className="h-full space-y-6">
                       <TabsContent

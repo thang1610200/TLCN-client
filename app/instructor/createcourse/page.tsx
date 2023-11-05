@@ -15,7 +15,7 @@ import {
     TabsTrigger,
 } from "@/components/ui/tabs"
 import * as z from "zod";
-import Processing from "../components/processing"
+import Processing from "../../course/component/processing"
 import {
     Form,
     FormControl,

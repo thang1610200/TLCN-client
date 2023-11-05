@@ -125,25 +125,10 @@ export default function Navbar() {
             placeholder="Search..."
             className="flex w-full h-full text-sm bg-transparent rounded-full border-slate-300 focus-visible:border-transparent focus-visible:ring-transparent "
           />
-        </div>
-        {/* <form className=' bg-[#f8fafb] flex border border-black rounded-3xl max-w-lg flex-1 h-12 items-center p-2'>
-          <BiSearch className="w-5 h-5 mx-4 text-gray-400" />
-          <input type="text" placeholder='Search for anything' className='w-full h-full text-sm bg-transparent focus:outline-none' />
-        </form> */}
-        {/* <div className="flex justify-end pr-4 space-x-4 cursor-pointer">
-          {role.toString() === "LEARNER" ?
-            <RegisterInsModal />
-            : <Link href="/instructor" legacyBehavior passHref className="justify-center align-middle ">
-              <span className="pt-2 text-base hover:underline">Instructor</span>
-            </Link>
-          <Link href="/instructor" legacyBehavior passHref className="md:hidden">
-                <BiSolidGraduation />
-            </Link>
-      }
-      </div> */}
+        </div>ks
         {role.toString() === "INSTRUCTOR" ?
           <div className="relative flex p-2 rounded-full w-fit h-fit hover:bg-slate-50 hover:bg-opacity-30 ">
-            <Link href="/instructor" legacyBehavior passHref className="justify-center align-middle ">
+            <Link href="/instructor/course" legacyBehavior passHref className="justify-center align-middle ">
               <span className="items-center justify-center hidden text-center md:flex ">Instructor</span>
             </Link>
             {/* <Link href="/instructor" legacyBehavior passHref className="md:hidden">

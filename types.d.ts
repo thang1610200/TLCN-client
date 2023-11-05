@@ -1,11 +1,16 @@
 export type course = {
-  id: number
+  id: string
+  topic_id: string
+  owner_id: string
   title: string
-  username: string
-  vote: string
-  students: string
-  price: string
-  oldPrice: string
+  description: string
+  learning_outcome: string
+  picture: string
+  slug: string
+  isPublished: boolean
+  create_at: Date
+  update_at: Date
+
 };
 
 export type IUser = {
