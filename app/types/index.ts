@@ -32,6 +32,7 @@ export interface Chapter {
 export interface Topic {
     id: string;
     title: string;
+    slug: string;
 }
 
 export interface Lesson {

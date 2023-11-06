@@ -6,7 +6,7 @@ import {
 } from "@/components/ui/tabs";
 import { useSession } from "next-auth/react";
 import { redirect } from "next/navigation";
-import LoadingModal from "@/components/loading-modal";
+import LoadingModal from "@/components/modal/loading-modal";
 import { IconBadge } from "@/components/icon-badge";
 import { ArrowLeft, LayoutDashboard, ListChecks, Video } from "lucide-react";
 import Link from "next/link";
@@ -76,6 +76,7 @@ const LessonToken = ({
                         chapter_token={params.chapterToken}
                         lesson_token={params.lessonToken}
                         isPublished={data?.isPublished}
+                        mutate={mutate}
                     />
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-16">

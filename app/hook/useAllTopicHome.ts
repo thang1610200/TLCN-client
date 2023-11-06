@@ -2,10 +2,11 @@ import useSwr from 'swr';
 import { AxiosError } from 'axios';
 import { BACKEND_URL } from '@/lib/constant';
 import fetcher from '@/lib/fetcher';
+import { Topic } from '../types';
 
 
-const useAllCoursePublish = (title?: string, topic?:string) => {
-    const { data, error, isLoading, mutate} = useSwr<any[], AxiosError>(`${BACKEND_URL}/course/all-course-publish?topic_slug=${topic ? topic : ""}&title=${title ? title : ""}`, fetcher, {
+const useAllTopicHome = () => {
+    const { data, error, isLoading, mutate} = useSwr<Topic[], AxiosError>(`${BACKEND_URL}/course/all-topic-home`, fetcher, {
         revalidateIfStale: false,
         revalidateOnFocus: false,
         revalidateOnReconnect: false,
@@ -20,4 +21,4 @@ const useAllCoursePublish = (title?: string, topic?:string) => {
     }
 }
 
-export default useAllCoursePublish;
+export default useAllTopicHome;

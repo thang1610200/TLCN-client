@@ -8,7 +8,7 @@ import { ChapterActions } from "./components/chapter-action";
 import useChapterDetail from "@/app/hook/useChapterDetail";
 import { useSession } from "next-auth/react";
 import { redirect } from "next/navigation";
-import LoadingModal from "@/components/loading-modal";
+import LoadingModal from "@/components/modal/loading-modal";
 import { IconBadge } from "@/components/icon-badge";
 import { ArrowLeft, LayoutDashboard, ListChecks } from "lucide-react";
 import Link from "next/link";
@@ -75,6 +75,7 @@ const ChapterToken = ({
                         course_slug={params.course_slug}
                         chapter_token={params.chapterToken}
                         isPublished={data?.isPublished}
+                        mutate={mutate}
                     />
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-16">

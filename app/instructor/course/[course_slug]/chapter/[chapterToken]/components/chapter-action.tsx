@@ -10,19 +10,22 @@ import { Button } from "@/components/ui/button";
 import { ConfirmModal } from "@/components/modal/confirm-modal";
 import { BACKEND_URL } from "@/lib/constant";
 import { useSession } from "next-auth/react";
+import { KeyedMutator } from "swr";
 
 interface ChapterActionsProps {
     disabled: boolean;
     course_slug: string;
     chapter_token: string;
     isPublished: boolean;
+    mutate: KeyedMutator<any>
 };
 
 export const ChapterActions = ({
     disabled,
     course_slug,
     chapter_token,
-    isPublished
+    isPublished,
+    mutate
 }: ChapterActionsProps) => {
     const router = useRouter();
     const session = useSession();
@@ -47,7 +50,7 @@ export const ChapterActions = ({
             } else {
                 toast.success("Chapter published");
             }
-        
+            mutate();
             router.refresh();
         } catch {
             toast.error("Something went wrong");

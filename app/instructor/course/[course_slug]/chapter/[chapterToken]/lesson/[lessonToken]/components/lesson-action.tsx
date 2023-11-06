@@ -1,15 +1,16 @@
-"use client";
+'use client';
 
-import axios from "axios";
-import { Trash } from "lucide-react";
-import { useState } from "react";
-import toast from "react-hot-toast";
-import { useRouter } from "next/navigation";
+import axios from 'axios';
+import { Trash } from 'lucide-react';
+import { useState } from 'react';
+import toast from 'react-hot-toast';
+import { useRouter } from 'next/navigation';
 
-import { Button } from "@/components/ui/button";
-import { ConfirmModal } from "@/components/modal/confirm-modal";
-import { BACKEND_URL } from "@/lib/constant";
-import { useSession } from "next-auth/react";
+import { Button } from '@/components/ui/button';
+import { ConfirmModal } from '@/components/modal/confirm-modal';
+import { BACKEND_URL } from '@/lib/constant';
+import { useSession } from 'next-auth/react';
+import { KeyedMutator } from 'swr';
 
 interface LessonActionsProps {
     disabled: boolean;
@@ -17,14 +18,16 @@ interface LessonActionsProps {
     chapter_token: string;
     lesson_token: string;
     isPublished: boolean;
-};
+    mutate: KeyedMutator<any>
+}
 
 export const LessonActions = ({
     disabled,
     course_slug,
     chapter_token,
     lesson_token,
-    isPublished
+    isPublished,
+    mutate
 }: LessonActionsProps) => {
     const router = useRouter();
     const session = useSession();
@@ -33,68 +36,77 @@ export const LessonActions = ({
     const onClick = async () => {
         try {
             setIsLoading(true);
-            await axios.patch(`${BACKEND_URL}/lesson/update-status`,{
-                status: isPublished,
-                course_slug: course_slug,
-                chapter_token,
-                lesson_token,
-                email: session.data?.user.email
-            },{
-                headers: {
-                    Authorization: `Bearer ${session.data?.backendTokens.accessToken}`,
-                    "Content-Type": "application/json"
+            await axios.patch(
+                `${BACKEND_URL}/lesson/update-status`,
+                {
+                    status: isPublished,
+                    course_slug: course_slug,
+                    chapter_token,
+                    lesson_token,
+                    email: session.data?.user.email,
+                },
+                {
+                    headers: {
+                        Authorization: `Bearer ${session.data?.backendTokens.accessToken}`,
+                        'Content-Type': 'application/json',
+                    },
                 }
-            });
+            );
             if (isPublished) {
-                toast.success("Lesson unpublished");
+                toast.success('Lesson unpublished');
             } else {
-                toast.success("Lesson published");
+                toast.success('Lesson published');
             }
-        
+            mutate();
             router.refresh();
         } catch {
-            toast.error("Something went wrong");
+            toast.error('Something went wrong');
         } finally {
             setIsLoading(false);
         }
-    }
-  
+    };
+
     const onDelete = async () => {
         try {
             setIsLoading(true);
-        
-            await axios.delete(`${BACKEND_URL}/lesson/delete-lesson?course_slug=${course_slug}&chapter_token=${chapter_token}&email=${session.data?.user.email}&lesson_token=${lesson_token}`,{
-                headers: {
-                    Authorization: `Bearer ${session.data?.backendTokens.accessToken}`,
-                    "Content-Type": "application/json"
+
+            await axios.delete(
+                `${BACKEND_URL}/lesson/delete-lesson?course_slug=${course_slug}&chapter_token=${chapter_token}&email=${session.data?.user.email}&lesson_token=${lesson_token}`,
+                {
+                    headers: {
+                        Authorization: `Bearer ${session.data?.backendTokens.accessToken}`,
+                        'Content-Type': 'application/json',
+                    },
                 }
-            });
-        
-            toast.success("Lesson deleted");
+            );
+
+            toast.success('Lesson deleted');
             router.refresh();
-            router.push(`/instructor/course/${course_slug}/chapter/${chapter_token}`);
+            router.push(
+                `/instructor/course/${course_slug}/chapter/${chapter_token}`
+            );
         } catch {
-            toast.error("Something went wrong");
+            toast.error('Something went wrong');
         } finally {
             setIsLoading(false);
         }
-    }
+    };
 
     return (
         <div className="flex items-center gap-x-2">
-        <Button
-            onClick={onClick}
-            disabled={disabled || isLoading}
-            variant="outline"
-            size="sm"
-        >
-            {isPublished ? "Unpublish" : "Publish"}
-        </Button>
-        <ConfirmModal onConfirm={onDelete}>
-            <Button size="sm" disabled={isLoading}>
-            <Trash className="h-4 w-4" />
+            <Button
+                onClick={onClick}
+                disabled={disabled || isLoading}
+                variant="outline"
+                size="sm"
+            >
+                {isPublished ? 'Unpublish' : 'Publish'}
             </Button>
-        </ConfirmModal>
+            <ConfirmModal onConfirm={onDelete}>
+                <Button size="sm" disabled={isLoading}>
+                    <Trash className="h-4 w-4" />
+                </Button>
+            </ConfirmModal>
         </div>
-    )
-}
+    );
+};

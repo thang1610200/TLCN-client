@@ -10,7 +10,7 @@ import { DataTable } from "./component/data-table";
 import {columns} from './component/columns';
 
 export const metadata: Metadata = {
-    title: "Music App",
+    title: "Course Instructor",
     description: "Example music app using the components.",
 }
 

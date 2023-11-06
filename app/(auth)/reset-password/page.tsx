@@ -21,7 +21,7 @@ import { useRouter } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useSearchParams } from 'next/navigation';
 import useVerifyResetPassword from "../../hook/useVerifyResetPassword";
-import LoadingModal from "@/components/loading-modal";
+import LoadingModal from "@/components/modal/loading-modal";
 import ErrorModal from "@/components/error";
 import { BACKEND_URL } from "@/lib/constant";
 import axios, { AxiosError } from "axios";
