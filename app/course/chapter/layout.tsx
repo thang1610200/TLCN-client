@@ -1,7 +1,7 @@
 import React from "react";
 
 
-export default function DetailCourseLayout({
+export default function DetailChapterLayout({
     children,
 }: {
     children: React.ReactNode;

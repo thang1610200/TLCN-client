@@ -34,20 +34,20 @@ export default function DetailCourse() {
     const data_chapter1: course = data ? data[0] : null;
     const [videoCourse, setVideoCourse] = useState('');
 
-    const handleOnChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        const file = event.target.files?.[0];
-        if (file) {
-            const reader = new FileReader();
-            // setFileInput(file);
-            reader.onload = (e) => {
-                if (e.target) {
-                    setVideoCourse(e.target.result as string);
-                }
-            };
+    // const handleOnChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    //     const file = event.target.files?.[0];
+    //     if (file) {
+    //         const reader = new FileReader();
+    //         // setFileInput(file);
+    //         reader.onload = (e) => {
+    //             if (e.target) {
+    //                 setVideoCourse(e.target.result as string);
+    //             }
+    //         };
 
-            reader.readAsDataURL(file);
-        }
-    };
+    //         reader.readAsDataURL(file);
+    //     }
+    // };
     return (
         <>
             <div className="hidden md:block">
