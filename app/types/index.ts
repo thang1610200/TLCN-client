@@ -14,7 +14,7 @@ export interface Course {
     isPublished: boolean,
     slug: string;
     description:string;
-    learning_outcome: string;
+    learning_outcome: string[];
     picture: string;
     topic_id: string;
 }
