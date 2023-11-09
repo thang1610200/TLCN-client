@@ -1,36 +1,37 @@
 'use client';
-import { motion } from "framer-motion"
+import { motion, stagger } from "framer-motion"
 import React from 'react';
 
 
 export default function HomePage() {
     const variants = {
-        blink_caret: {
-            borderColor: ["blue","orange"],
-            transition:{
-                duration: 0.25,
-                repeat:10,
-                },
+        initial: {
+            width: 0, 
+            borderRightWidth: 2 
         },
-        typing: {
-            width: [0, 250],
-            transition:{
-                duration: 5,
-                ease: "linear"
-                },
+        animate: {
+            width: 250, 
+            borderRightWidth: 0,
+            transition: {
+                staggerChildren: 2,
+                duration: 2
+              }
         },
-      }
 
+    }
     return (
         <>
             <div className='relative w-screen h-screen bg-gradient-to-l from-blue-950 to-sky-800'>
                 <div className="auto-rows-auto grid grid-row-3 absolute right-[10%] top-[20%] h-3/5 w-1/4 bg-black bg-opacity-25 backdrop-blur-sm shadow-[0_8px_32px_0_rgba(_31,38,135,0.37_)] border rounded-[10px] border-solid border-[rgba(_255,255,255,0.18_)]">
                     <div className='flex p-4 '>
                         <div className='p-2 rounded-lg   bg-slate-600 bg-opacity-75 backdrop-blur-sm shadow-[0_8px_32px_0_rgba(_31,38,135,0.37_)] border  border-solid border-[rgba(_255,255,255,0.18_)]'>
-                            <motion.div className="w-0 mx-auto my-0 overflow-hidden border-r-2 whitespace-nowrap" variants={variants} initial={["blink_caret","typing"]} animate={["blink_caret","typing"]} >
-                                <motion.h1 className="text-white " >
-                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam risus sapien, semper eget neque eu, aliquet eleifend lectus.
-                                </motion.h1>
+                            <motion.div className="mx-auto my-0 overflow-hidden whitespace-nowrap" variants={variants} >
+                                <motion.div className="text-white " variants={variants}  >
+                                    Lorem ipsum dolor sit amet, cons
+                                </motion.div>
+                            </motion.div>
+                            <motion.div className="text-white " >
+                                ectetur adipiscing elit. Etiam risus sapien, semper eget neque eu, aliquet eleifend lectus.
                             </motion.div>
                         </div>
                     </div>
