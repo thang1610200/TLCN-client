@@ -19,7 +19,6 @@ export default function HomePage() {
     if (isLoading) {
         return <LoadingModal />;
     }
-
     return (
         <>
             <div className="p-6 space-y-4">
