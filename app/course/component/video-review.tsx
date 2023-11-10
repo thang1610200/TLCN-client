@@ -2,20 +2,21 @@
 
 import { Chapter } from '@/app/types';
 import ReactPlayer from 'react-player';
+import { find, map, flatten } from 'lodash';
 
 interface VideoListProps {
     data?: Chapter[];
-    indexChapter: number;
-    indexLesson: number;
+    tokenLesson?: string;
 }
 
-const VideoReview: React.FC<VideoListProps> = ({ data, indexChapter, indexLesson }) => {
+const VideoReview: React.FC<VideoListProps> = ({ data, tokenLesson }) => {
+    const lesson = find(flatten(map(data, 'lessons')), {token: tokenLesson});
 
     return (
         <div>
             <div className="pt-[50%] relative overflow-hidden">
                 <div className="absolute top-0 left-0 w-full h-full border-0 rounded-lg">
-                    <ReactPlayer width="100%" url="sdsd" controls />
+                    <ReactPlayer width="100%" light={lesson?.thumbnail} url={lesson?.videoUrl} controls />
                 </div>
             </div>
             {/* <div className="flex items-center justify-center">

@@ -9,11 +9,11 @@ import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { Disclosure } from '@headlessui/react';
 import VideoReview from '../component/video-review';
+import { cn } from '@/lib/utils';
 
 const DetailCourse = ({ params }: { params: { slug: string } }) => {
     const { data, isLoading, error } = useCourseDetailHome(params.slug);
-    const [indexChapter, setIndexChapter] = useState(0);
-    const [indexLesson, setIndexLesson] = useState(0);
+    const [tokenLesson, setTokenLesson] = useState<string>("");
 
     const router = useRouter();
 
@@ -98,7 +98,7 @@ const DetailCourse = ({ params }: { params: { slug: string } }) => {
                                 <div className="w-full 800px:w-[35%] relative">
                                     <div className="sticky top-[100px] left-0 z-50 w-full">
                                         {/* Video Course */}
-                                        <VideoReview data={data?.chapters} />
+                                        <VideoReview data={data?.chapters} tokenLesson={tokenLesson === "" ? data?.chapters[0].lessons[0].token : tokenLesson} />
                                     </div>
                                 </div>
                             </div>
@@ -114,14 +114,14 @@ const DetailCourse = ({ params }: { params: { slug: string } }) => {
                                     </p>
                                 </div>
                             </div>
-                            <div className="pt-4 ml-8 ">
+                            <div className="pt-4 ml-8">
                                 <h1 className=" text-3xl font-Poppins font-[600] dark:text-white bg-purple-200 rounded-lg p-2 text-violet-700 ">
                                     Course Overview
                                 </h1>
                                 <div className="w-full">
                                     <div className="w-full mt-[20px] mx-auto bg-white rounded-2xl">
                                         {data?.chapters.map((item, index) => (
-                                            <Disclosure key={index}>
+                                            <Disclosure key={index} as="div" className="mb-3">
                                                 {({ open }) => (
                                                     <>
                                                         <Disclosure.Button className="w-full px-4 py-2 text-left text-purple-900 bg-purple-100 rounded-lg hover:bg-purple-200 focus:outline-none focus-visible:ring focus-visible:ring-purple-500/75">
@@ -153,10 +153,11 @@ const DetailCourse = ({ params }: { params: { slug: string } }) => {
                                                                 lesson_index
                                                             ) => (
                                                                 <Disclosure.Panel
+                                                                    onClick={() => setTokenLesson(lesson.token)}
                                                                     key={
                                                                         lesson_index
                                                                     }
-                                                                    className="w-full px-4 pt-4 pb-2 cursor-pointer transition-all"
+                                                                    className={cn("w-full px-4 pt-4 pb-2 cursor-pointer transition-all rounded-lg",(lesson.token === tokenLesson || (tokenLesson === "" && lesson.position === 1)) && "bg-slate-300")}
                                                                 >
                                                                     <div className="flex justify-between items-center">
                                                                         <div className="flex items-start">

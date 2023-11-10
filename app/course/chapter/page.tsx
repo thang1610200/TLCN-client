@@ -9,7 +9,7 @@ import Loader from '@/components/loader';
 import { Textarea } from '@/components/ui/textarea';
 import useAllCoursePublish from '@/app/hook/useAllCoursePublish';
 import { course } from '@/types';
-import LessonList from '../component/lesson-list';
+// import LessonList from '../component/lesson-list';
 import useCourseDetailHome from '@/app/hook/useCourseDetailHome';
 import OverviewNavigation from "../component/overview-navigation"
 
@@ -39,7 +39,7 @@ export default function DetailChapter({ params }: { params: { slug: string } }) 
                                     Course Overview
                                 </h1>
                                 <div className="w-full">
-                                    <LessonList data={data?.chapters} />
+                                    {/* <LessonList data={data?.chapters} /> */}
                                 </div>
                             </div>
                             <div className='h-full col-span-2 p-4'>
