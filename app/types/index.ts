@@ -20,9 +20,7 @@ export interface Course {
     topic_id: string;
     toptic: Topic;
     owner: User;
-    chapter: Chapter & {
-        lesson: Lesson
-    }
+    chapters: Chapter[]
 }
 
 export interface Chapter {
@@ -33,6 +31,7 @@ export interface Chapter {
     position: number;
     isPublished: boolean;
     courseId: string;
+    lessons: Lesson[]
 }
 
 export interface Topic {

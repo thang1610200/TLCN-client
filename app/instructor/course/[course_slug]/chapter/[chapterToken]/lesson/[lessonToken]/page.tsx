@@ -49,13 +49,13 @@ const LessonToken = ({
         <>
             <Tabs defaultValue="music" className="h-full space-y-6">
                 <div className="flex items-center bg-black space-between"></div>
-                <Link
+                <a
                     href={`/instructor/course/${params.course_slug}/chapter/${params.chapterToken}`}
                     className="flex items-center text-sm hover:opacity-75 transition mb-6"
                 >
                     <ArrowLeft className="h-4 w-4 mr-2" />
                     Back to chapter setup
-                </Link>
+                </a>
                 <TabsContent
                     value="music"
                     className="p-0 border-none outline-none"
