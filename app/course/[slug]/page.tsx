@@ -30,7 +30,7 @@ const DetailCourse = ({ params }: { params: { slug: string } }) => {
             <div className="py-5 m-auto">
                 <div className="flex w-full md:flex-row">
                     <div className="w-full">
-                        <div className="grid grid-cols-2 grid-rows-3">
+                        <div className="grid grid-cols-2 grid-rows-2">
                             <div className="relative flex flex-col p-4">
                                 <div className="p-2 bg-purple-200 rounded-lg text-violet-700">
                                     <h1 className="text-3xl font-Poppins font-[600] dark:text-white ">
@@ -48,7 +48,7 @@ const DetailCourse = ({ params }: { params: { slug: string } }) => {
                                     </div>
                                 </div>
 
-                                <div className="p-4 border-2 mt-3">
+                                <div className="p-4 mt-3 border-2">
                                     <h1 className="text-[25px] font-Poppins font-[600] text-black dark:text-white">
                                         What you will learn from this course?
                                     </h1>
@@ -114,7 +114,7 @@ const DetailCourse = ({ params }: { params: { slug: string } }) => {
                                     </p>
                                 </div>
                             </div>
-                            <div className="row-span-2 pt-4 ml-8">
+                            <div className="pt-4 ml-8 ">
                                 <h1 className=" text-3xl font-Poppins font-[600] dark:text-white bg-purple-200 rounded-lg p-2 text-violet-700 ">
                                     Course Overview
                                 </h1>
