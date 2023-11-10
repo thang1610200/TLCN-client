@@ -1,38 +1,17 @@
 'use client';
-import { motion, stagger } from "framer-motion"
+import { delay, motion, stagger } from "framer-motion"
 import React from 'react';
 
 
 export default function HomePage() {
-    const variants = {
-        initial: {
-            width: 0, 
-            borderRightWidth: 2 
-        },
-        animate: {
-            width: 250, 
-            borderRightWidth: 0,
-            transition: {
-                staggerChildren: 2,
-                duration: 2
-              }
-        },
 
-    }
     return (
         <>
             <div className='relative w-screen h-screen bg-gradient-to-l from-blue-950 to-sky-800'>
                 <div className="auto-rows-auto grid grid-row-3 absolute right-[10%] top-[20%] h-3/5 w-1/4 bg-black bg-opacity-25 backdrop-blur-sm shadow-[0_8px_32px_0_rgba(_31,38,135,0.37_)] border rounded-[10px] border-solid border-[rgba(_255,255,255,0.18_)]">
                     <div className='flex p-4 '>
-                        <div className='p-2 rounded-lg   bg-slate-600 bg-opacity-75 backdrop-blur-sm shadow-[0_8px_32px_0_rgba(_31,38,135,0.37_)] border  border-solid border-[rgba(_255,255,255,0.18_)]'>
-                            <motion.div className="mx-auto my-0 overflow-hidden whitespace-nowrap" variants={variants} >
-                                <motion.div className="text-white " variants={variants}  >
-                                    Lorem ipsum dolor sit amet, cons
-                                </motion.div>
-                            </motion.div>
-                            <motion.div className="text-white " >
-                                ectetur adipiscing elit. Etiam risus sapien, semper eget neque eu, aliquet eleifend lectus.
-                            </motion.div>
+                        <div className='p-2 rounded-lg  bg-slate-600 bg-opacity-75 backdrop-blur-sm shadow-[0_8px_32px_0_rgba(_31,38,135,0.37_)] border  border-solid border-[rgba(_255,255,255,0.18_)]'>
+                            <AnimatedText text="Lorem ipsum dolor sit amet, consectetur adipiscing elit" className="text-white" />
                         </div>
                     </div>
                     <div className='flex p-4 '>
@@ -63,4 +42,39 @@ export default function HomePage() {
             </div>
         </>
     );
+}
+
+const defaultAnimations = {
+    hidden: {
+        opacity: 0,
+        y: 50,
+    },
+    visible:{
+        opacity: 1,
+        y: -50,
+        transition: {
+            duration: 0.1
+        }
+    }
+}
+
+type AnimatedTextProps = {
+    text: string,
+    el?: keyof JSX.IntrinsicElements,
+    className?: string
+}
+
+export const AnimatedText = ({
+    text,
+    el: Wrapper = "p",
+    className,
+}: AnimatedTextProps) => {
+    return <Wrapper className={className}>
+        <span className="sr-only">{text}</span>
+        <motion.span className="inline-block" initial="hidden" animate="visible" transition={{staggerChildren: 0.1}} aria-hidden>
+            {text.split("").map((char)=>(
+                <motion.span variants={defaultAnimations}>{char}</motion.span>
+            ))}
+        </motion.span>
+    </Wrapper>
 }

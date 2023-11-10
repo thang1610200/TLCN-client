@@ -5,86 +5,47 @@ import Image from 'next/image';
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 
-import { Input } from '@/components/ui/input';
-import { Separator } from '@/components/ui/separator';
-
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-
-import Processing from '../component/processing';
-import {
-    Form,
-    FormControl,
-    FormField,
-    FormItem,
-    FormMessage,
-    FormLabel,
-} from '@/components/ui/form';
 import Loader from '@/components/loader';
 import { Textarea } from '@/components/ui/textarea';
 import useAllCoursePublish from '@/app/hook/useAllCoursePublish';
 import { course } from '@/types';
+import LessonList from '../component/lesson-list';
+import useCourseDetailHome from '@/app/hook/useCourseDetailHome';
+import OverviewNavigation from "../component/overview-navigation"
 
 export const metadata: Metadata = {
     title: 'Music App',
     description: 'Example music app using the components.',
 };
 
-export default function DetailChapter() {
-    const { data, isLoading } = useAllCoursePublish();
-    const data_chapter1: course = data ? data[0] : null;
-    const [videoCourse, setVideoCourse] = useState('');
+export default function DetailChapter({ params }: { params: { slug: string } }) {
+    const { data, isLoading, error } = useCourseDetailHome(params.slug);
 
-    // const handleOnChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    //     const file = event.target.files?.[0];
-    //     if (file) {
-    //         const reader = new FileReader();
-    //         // setFileInput(file);
-    //         reader.onload = (e) => {
-    //             if (e.target) {
-    //                 setVideoCourse(e.target.result as string);
-    //             }
-    //         };
-
-    //         reader.readAsDataURL(file);
-    //     }
-    // };
     return (
         <>
             <div className="hidden md:block">
                 <div className="border-t">
                     <div className="bg-background">
-                        <div className="grid lg:grid-cols-5">
-                            <Processing
-                                data={data_chapter1 && data_chapter1.id}
-                            />
-                            {data_chapter1 && (
-                                <div className="col-span-3 lg:col-span-4 lg:border-l">
-                                    <div className="h-full px-4 py-6 lg:px-8">
-                                        <Tabs
-                                            defaultValue="music"
-                                            className="h-full space-y-6"
-                                        >
-                                            <div className="flex items-center bg-black space-between"></div>
-                                            <TabsContent
-                                                value="music"
-                                                className="p-0 border-none outline-none"
-                                            >
-                                                
-                                            </TabsContent>
-                                            <div className="h-[40%] aspect-video space-y-2">
-                                                <div className="w-full h-full border-2 rounded-lg"></div>
-                                            </div>
-                                            <div className='flex justify-between'>
-                                                <Button>Previous Lesson</Button>
-                                                <Button>Next Lesson</Button>
-                                            </div>
-                                            <div className='w-screen h-screen border-2'>
-                                                content
-                                            </div>
-                                        </Tabs>
-                                    </div>
+                        <div className="grid grid-cols-3 grid-rows-2">
+                            <div className="col-span-2 p-4 aspect-video">
+                                <div className="w-full h-full mb-4 border-2 rounded-lg"></div>
+                                <div className='flex justify-between'>
+                                    <Button>Previous Lesson</Button>
+                                    <Button>Next Lesson</Button>
                                 </div>
-                            )}
+                            </div>
+                            <div className="row-span-2 p-4 pt-4 ml-8 border-2">
+                                <h1 className=" text-3xl font-Poppins font-[600] dark:text-white bg-purple-200 rounded-lg p-2 text-violet-700 ">
+                                    Course Overview
+                                </h1>
+                                <div className="w-full">
+                                    <LessonList data={data?.chapters} />
+                                </div>
+                            </div>
+                            <div className='h-full col-span-2 p-4'>
+                                <OverviewNavigation/>
+                                
+                            </div>
                         </div>
                     </div>
                 </div>
