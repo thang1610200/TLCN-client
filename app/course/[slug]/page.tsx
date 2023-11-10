@@ -2,14 +2,19 @@
 
 import useCourseDetailHome from '@/app/hook/useCourseDetailHome';
 import LoadingModal from '@/components/modal/loading-modal';
-import { CheckIcon } from 'lucide-react';
+import { CheckIcon, ChevronUpIcon, PlaySquare } from 'lucide-react';
 import { useSession } from 'next-auth/react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import LessonList from '../component/lesson-list';
+import { useState } from 'react';
+import { Disclosure } from '@headlessui/react';
+import VideoReview from '../component/video-review';
 
 const DetailCourse = ({ params }: { params: { slug: string } }) => {
     const { data, isLoading, error } = useCourseDetailHome(params.slug);
+    const [indexChapter, setIndexChapter] = useState(0);
+    const [indexLesson, setIndexLesson] = useState(0);
+
     const router = useRouter();
 
     if (isLoading) {
@@ -93,18 +98,7 @@ const DetailCourse = ({ params }: { params: { slug: string } }) => {
                                 <div className="w-full 800px:w-[35%] relative">
                                     <div className="sticky top-[100px] left-0 z-50 w-full">
                                         {/* Video Course */}
-                                        <div className="pt-[50%] relative overflow-hidden">
-                                            <iframe
-                                                src="https://www.youtube.com/embed/w1fkGHGZs1Q&t=23479s"
-                                                className="absolute top-0 left-0 w-full h-full border-0 rounded-lg"
-                                                allowFullScreen
-                                            ></iframe>
-                                        </div>
-                                        {/* <div className="flex items-center justify-center">
-                                            <Link href="/" className="px-4 py-2 my-3 font-bold text-white bg-red-500 rounded-full hover:bg-red-700">
-                                                Enter to course
-                                            </Link>
-                                        </div> */}
+                                        <VideoReview data={data?.chapters} />
                                     </div>
                                 </div>
                             </div>
@@ -125,7 +119,73 @@ const DetailCourse = ({ params }: { params: { slug: string } }) => {
                                     Course Overview
                                 </h1>
                                 <div className="w-full">
-                                    <LessonList data={data?.chapters} />
+                                    <div className="w-full mt-[20px] mx-auto bg-white rounded-2xl">
+                                        {data?.chapters.map((item, index) => (
+                                            <Disclosure key={index}>
+                                                {({ open }) => (
+                                                    <>
+                                                        <Disclosure.Button className="w-full px-4 py-2 text-left text-purple-900 bg-purple-100 rounded-lg hover:bg-purple-200 focus:outline-none focus-visible:ring focus-visible:ring-purple-500/75">
+                                                            <div className="flex justify-between items-center font-medium">
+                                                                <h2 className="text-[22px] text-black dark:text-white">
+                                                                    {item.title}
+                                                                </h2>
+                                                                <ChevronUpIcon
+                                                                    size={25}
+                                                                    className={`${
+                                                                        open
+                                                                            ? 'rotate-180 transform'
+                                                                            : ''
+                                                                    } text-purple-500`}
+                                                                />
+                                                            </div>
+                                                            <h5 className="text-black">
+                                                                {
+                                                                    item.lessons
+                                                                        .length
+                                                                }{' '}
+                                                                lesson • 18
+                                                                minutes
+                                                            </h5>
+                                                        </Disclosure.Button>
+                                                        {item.lessons.map(
+                                                            (
+                                                                lesson,
+                                                                lesson_index
+                                                            ) => (
+                                                                <Disclosure.Panel
+                                                                    key={
+                                                                        lesson_index
+                                                                    }
+                                                                    className="w-full px-4 pt-4 pb-2 cursor-pointer transition-all"
+                                                                >
+                                                                    <div className="flex justify-between items-center">
+                                                                        <div className="flex items-start">
+                                                                            <PlaySquare
+                                                                                size={
+                                                                                    25
+                                                                                }
+                                                                                className="mr-2"
+                                                                                color="#1cdada"
+                                                                            />
+                                                                            <h1 className="text-[18px] inline-block break-words text-black">
+                                                                                {
+                                                                                    lesson.title
+                                                                                }
+                                                                            </h1>
+                                                                        </div>
+                                                                        <h5 className="text-black">
+                                                                            18
+                                                                            minutes
+                                                                        </h5>
+                                                                    </div>
+                                                                </Disclosure.Panel>
+                                                            )
+                                                        )}
+                                                    </>
+                                                )}
+                                            </Disclosure>
+                                        ))}
+                                    </div>
                                 </div>
                             </div>
                             {/* <div className="w-full col-span-1 p-4 ">
