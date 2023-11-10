@@ -17,24 +17,19 @@ import {
     FormMessage,
 } from '@/components/ui/form';
 import { Button } from '@/components/ui/button';
-import { cn } from '@/lib/utils';
-import { Textarea } from '@/components/ui/textarea';
 import { Course } from '@/app/types';
 import { BACKEND_URL } from '@/lib/constant';
 import { useSession } from 'next-auth/react';
 import { KeyedMutator } from 'swr';
 import { Input } from '@/components/ui/input';
 
-interface LearningOutcomeFormFormProps {
+interface RequirementFormFormProps {
     initialData?: Course;
     course_slug?: string;
     mutate: KeyedMutator<any>;
 }
 
 const formSchema = z.object({
-    // description: z.string().min(1, {
-    //     message: "Description is required",
-    // }),
     description: z
         .array(
             z.object({
@@ -45,18 +40,18 @@ const formSchema = z.object({
         .default([]),
 });
 
-export const LearningOutcomeForm = ({
+export const RequirementForm = ({
     initialData,
     course_slug,
     mutate,
-}: LearningOutcomeFormFormProps) => {
+}: RequirementFormFormProps) => {
     const [isEditing, setIsEditing] = useState(false);
 
     const toggleEdit = () => setIsEditing((current) => !current);
 
     const router = useRouter();
     const session = useSession();
-    let learning_outcome = initialData?.learning_outcome?.map((item) => {
+    let requirement = initialData?.requirement?.map((item) => {
         return {
             'value': item
         }
@@ -65,7 +60,7 @@ export const LearningOutcomeForm = ({
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
-            description: initialData?.learning_outcome.length === 0 ? [{ value: '' }] : learning_outcome
+            description: initialData?.requirement.length === 0 ? [{ value: '' }] : requirement
         },
     });
 
@@ -84,7 +79,7 @@ export const LearningOutcomeForm = ({
                 {
                     slug: course_slug,
                     value: {
-                        learning_outcome: outcome,
+                        requirement: outcome,
                     },
                     email: session.data?.user.email,
                 },
@@ -107,7 +102,7 @@ export const LearningOutcomeForm = ({
     return (
         <div className="mt-6 border bg-slate-100 rounded-md p-4">
             <div className="font-medium flex items-center justify-between">
-                Course Learning Outcome
+                Course Requirement
                 <Button onClick={toggleEdit} variant="ghost">
                     {isEditing ? (
                         <>Cancel</>
@@ -120,22 +115,13 @@ export const LearningOutcomeForm = ({
                 </Button>
             </div>
             {!isEditing &&
-                // <p
-                //     className={cn(
-                //         'text-sm mt-2',
-                //         !initialData?.learning_outcome &&
-                //             'text-slate-500 italic'
-                //     )}
-                // >
-                //     {initialData?.learning_outcome || 'No learning outcome'}
-                // </p>
-                (initialData?.learning_outcome.length === 0 ? (
+                (initialData?.requirement.length === 0 ? (
                     <p className="text-sm mt-2 text-slate-500 italic">
-                        No learning outcome
+                        No requirement
                     </p>
                 ) : (
                     <ul className="space-y-4 text-left text-gray-500 dark:text-gray-400">
-                        {initialData?.learning_outcome.map((item, index) => (
+                        {initialData?.requirement.map((item, index) => (
                             <li key={index} className="flex items-center space-x-3">
                                 <Check
                                     className="flex-shrink-0 w-3.5 h-3.5 text-green-500 dark:text-green-400"
@@ -174,8 +160,8 @@ export const LearningOutcomeForm = ({
                                             </FormControl>
                                             {index > 0 && (
                                                 <Button
-                                                    disabled={isSubmitting}
                                                     key={index}
+                                                    disabled={isSubmitting}
                                                     onClick={() =>
                                                         remove(index)
                                                     }
@@ -191,8 +177,8 @@ export const LearningOutcomeForm = ({
                         ))}
                         <div className="flex items-center gap-x-2">
                             <Button
-                                disabled={isSubmitting}
                                 type="button"
+                                disabled={isSubmitting}
                                 onClick={() => append({ value: '' })}
                             >
                                 Add

@@ -7,7 +7,7 @@ import { Actions } from '../component/action';
 import useCourseDetail from '@/app/hook/useCourseDetail';
 import LoadingModal from '@/components/modal/loading-modal';
 import { useSession } from 'next-auth/react';
-import { redirect } from 'next/navigation';
+import { redirect, useRouter } from 'next/navigation';
 import { IconBadge } from '@/components/icon-badge';
 import { LayoutDashboard, ListChecks } from 'lucide-react';
 import { TitleForm } from '../component/title-form';
@@ -17,6 +17,7 @@ import { ImageForm } from '../component/image-form';
 import { CategoryForm } from '../component/category-form';
 import useTopic from '@/app/hook/useTopic';
 import { ChaptersForm } from '../component/chapter-form';
+import { RequirementForm } from '../component/requirement-form';
 
 export const metadata: Metadata = {
     title: 'Course',
@@ -24,6 +25,7 @@ export const metadata: Metadata = {
 
 const CourseDetail = ({ params }: { params: { course_slug: string } }) => {
     const session = useSession();
+    const router = useRouter();
     const { data, isLoading, error, mutate } = useCourseDetail(
         params.course_slug,
         session.data?.user.email,
@@ -36,7 +38,8 @@ const CourseDetail = ({ params }: { params: { course_slug: string } }) => {
         data?.title,
         data?.description,
         data?.picture,
-        data?.learning_outcome,
+        data?.learning_outcome.length > 0,
+        data?.requirement.length > 0,
         data?.topic_id,
     ];
 
@@ -52,7 +55,7 @@ const CourseDetail = ({ params }: { params: { course_slug: string } }) => {
     }
 
     if (error) {
-        redirect('/home');
+        return router.back();
     }
 
     return (
@@ -98,6 +101,11 @@ const CourseDetail = ({ params }: { params: { course_slug: string } }) => {
                                 mutate={mutate}
                             />
                             <LearningOutcomeForm
+                                initialData={data}
+                                course_slug={data?.slug}
+                                mutate={mutate}
+                            />
+                            <RequirementForm
                                 initialData={data}
                                 course_slug={data?.slug}
                                 mutate={mutate}

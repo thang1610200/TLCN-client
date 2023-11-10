@@ -1,4 +1,4 @@
-export interface ProfileUser {
+export interface User {
     name: string,
     email: string,
     image: string,
@@ -15,8 +15,14 @@ export interface Course {
     slug: string;
     description:string;
     learning_outcome: string[];
+    requirement: string[];
     picture: string;
     topic_id: string;
+    toptic: Topic;
+    owner: User;
+    chapter: Chapter & {
+        lesson: Lesson
+    }
 }
 
 export interface Chapter {
@@ -44,4 +50,6 @@ export interface Lesson {
     isPublished: boolean;
     videoUrl: string;
     chapterId: string;
+    isCompleteVideo: boolean;
+    thumbnail: string;
 }

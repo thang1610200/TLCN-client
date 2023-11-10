@@ -42,7 +42,7 @@ const ChapterToken = ({
     }
 
     if(error){
-        redirect('/home');
+        return redirect('/');
     }
 
     return (

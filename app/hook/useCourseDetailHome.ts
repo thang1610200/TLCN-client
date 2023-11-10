@@ -2,9 +2,10 @@ import useSwr from 'swr';
 import { AxiosError } from 'axios';
 import { BACKEND_URL } from '@/lib/constant';
 import fetcher from '@/lib/fetcher';
+import { Course } from '../types';
 
 const useCourseDetailHome = (slug?: string) => {
-    const { data, error, isLoading, mutate} = useSwr<any, AxiosError>(`${BACKEND_URL}/course/detail-course?slug=${slug}`, fetcher, {
+    const { data, error, isLoading, mutate} = useSwr<Course, AxiosError>(`${BACKEND_URL}/course/detail-course?slug=${slug}`, fetcher, {
         revalidateIfStale: false,
         revalidateOnFocus: false,
         revalidateOnReconnect: false,
