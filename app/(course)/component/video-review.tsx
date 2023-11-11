@@ -1,22 +1,22 @@
 'use client';
 
-import { Chapter } from '@/app/types';
+import { Lesson } from '@/app/types';
 import ReactPlayer from 'react-player';
-import { find, map, flatten } from 'lodash';
+import { find } from 'lodash';
 
 interface VideoListProps {
-    data?: Chapter[];
+    data?: Lesson[];
     tokenLesson?: string;
 }
 
 const VideoReview: React.FC<VideoListProps> = ({ data, tokenLesson }) => {
-    const lesson = find(flatten(map(data, 'lessons')), {token: tokenLesson});
+    const lesson = find(data, {token: tokenLesson});
 
     return (
         <div>
             <div className="pt-[50%] relative overflow-hidden">
-                <div className="absolute top-0 left-0 w-full h-full border-0 rounded-lg">
-                    <ReactPlayer width="100%" light={lesson?.thumbnail} url={lesson?.videoUrl} controls />
+                <div className="absolute top-0 left-0 w-full h-full rounded-lg">
+                    <ReactPlayer width="100%" height="100%" light={lesson?.thumbnail} url={lesson?.videoUrl} controls />
                 </div>
             </div>
             {/* <div className="flex items-center justify-center">

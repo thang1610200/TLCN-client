@@ -10,7 +10,7 @@ export async function middleware(req: NextRequest) {
         return NextResponse.redirect(new URL('/home', req.url));
     }
 
-    if(!isAuthenticated && (req.nextUrl.pathname.startsWith("/profile") || req.nextUrl.pathname.startsWith("/instructor"))){
+    if(!isAuthenticated && (req.nextUrl.pathname.startsWith("/profile") || req.nextUrl.pathname.startsWith("/instructor") || req.nextUrl.pathname.startsWith("/course-access"))){
       return NextResponse.redirect(new URL('/login', req.url));
     }
 
@@ -18,5 +18,5 @@ export async function middleware(req: NextRequest) {
 }
 
 export const config = {
-  matcher: ['/login', '/signup', '/forgotpassword', '/reset-password', '/profile', '/instructor/:path*'],
+  matcher: ['/login', '/signup', '/forgotpassword', '/reset-password', '/profile', '/instructor/:path*', '/course-access/:path*'],
 }
