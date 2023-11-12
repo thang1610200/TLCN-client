@@ -5,7 +5,7 @@ import { useSession } from 'next-auth/react';
 import { redirect } from 'next/navigation';
 import LoadingModal from '@/components/modal/loading-modal';
 import { IconBadge } from '@/components/icon-badge';
-import { ArrowLeft, Image, LayoutDashboard, Video } from 'lucide-react';
+import { ArrowLeft, Image, LayoutDashboard, Video, ClipboardCheck } from 'lucide-react';
 import Link from 'next/link';
 import useLessonDetail from '@/app/hook/useLessonDetail';
 import { LessonTitleForm } from './components/lesson-title-form';
@@ -13,6 +13,7 @@ import { LessonDescriptionForm } from './components/lesson-description-form';
 import { LessonVideoForm } from './components/lesson-video';
 import { LessonActions } from './components/lesson-action';
 import { ThumbnailForm } from './components/thumbnail-video';
+import { LessonQuizzForm } from './components/lesson-quizz';
 
 const LessonToken = ({
     params,
@@ -51,9 +52,9 @@ const LessonToken = ({
                 <div className="flex items-center bg-black space-between"></div>
                 <a
                     href={`/instructor/course/${params.course_slug}/chapter/${params.chapterToken}`}
-                    className="flex items-center text-sm hover:opacity-75 transition mb-6"
+                    className="flex items-center mb-6 text-sm transition hover:opacity-75"
                 >
-                    <ArrowLeft className="h-4 w-4 mr-2" />
+                    <ArrowLeft className="w-4 h-4 mr-2" />
                     Back to chapter setup
                 </a>
                 <TabsContent
@@ -78,30 +79,33 @@ const LessonToken = ({
                             mutate={mutate}
                         />
                     </div>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-16">
-                        <div>
-                            <div className="flex items-center gap-x-2">
-                                <IconBadge icon={LayoutDashboard} />
-                                <h2 className="text-xl">
-                                    Customize your lesson
-                                </h2>
-                            </div>
-                            <LessonTitleForm
-                                initialData={data}
-                                course_slug={params.course_slug}
-                                chapter_token={params.chapterToken}
-                                lesson_token={params.lessonToken}
-                                mutate={mutate}
-                            />
-                            <LessonDescriptionForm
-                                initialData={data}
-                                course_slug={params.course_slug}
-                                chapter_token={params.chapterToken}
-                                lesson_token={params.lessonToken}
-                                mutate={mutate}
-                            />
 
-                            <div className="mt-8">
+                    <div className="grid grid-cols-1 gap-6 mt-10 ">
+                        <div className="grid grid-cols-2 grid-rows-1 gap-6 border-2">
+                            <div className='border-2'>
+                                <div className="flex items-center gap-x-2">
+                                    <IconBadge icon={LayoutDashboard} />
+                                    <h2 className="text-xl">
+                                        Customize your lesson
+                                    </h2>
+                                </div>
+                                <LessonTitleForm
+                                    initialData={data}
+                                    course_slug={params.course_slug}
+                                    chapter_token={params.chapterToken}
+                                    lesson_token={params.lessonToken}
+                                    mutate={mutate}
+                                />
+                                <LessonDescriptionForm
+                                    initialData={data}
+                                    course_slug={params.course_slug}
+                                    chapter_token={params.chapterToken}
+                                    lesson_token={params.lessonToken}
+                                    mutate={mutate}
+                                />
+
+                            </div>
+                            <div className="border-2">
                                 <div className="flex items-center gap-x-2">
                                     <IconBadge icon={Image} />
                                     <h2 className="text-xl">Thumbnail</h2>
@@ -115,7 +119,8 @@ const LessonToken = ({
                                 />
                             </div>
                         </div>
-                        <div className="space-y-6">
+
+                        <div className="col-span-2 space-y-6 border-2 aspect-video">
                             <div className="flex items-center gap-x-2">
                                 <IconBadge icon={Video} />
                                 <h2 className="text-xl">Add a video</h2>
@@ -127,6 +132,26 @@ const LessonToken = ({
                                 lesson_token={params.lessonToken}
                                 mutate={mutate}
                             />
+                        </div>
+                        <div className="col-span-2 space-y-6 border-2">
+                            <div className="flex items-center gap-x-2">
+                                <IconBadge icon={ClipboardCheck} />
+                                <h2 className="text-xl">Add Quizz</h2>
+                            </div>
+                            {/* <LessonVideoForm
+                                initialData={data}
+                                course_slug={params.course_slug}
+                                chapter_token={params.chapterToken}
+                                lesson_token={params.lessonToken}
+                                mutate={mutate}
+                            /> */}
+                            {/* <LessonQuizzForm
+                                    initialData={data}
+                                    course_slug={params.course_slug}
+                                    chapter_token={params.chapterToken}
+                                    lesson_token={params.lessonToken}
+                                    mutate={mutate}
+                                /> */}
                         </div>
                     </div>
                 </TabsContent>
