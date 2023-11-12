@@ -9,7 +9,7 @@ import { useState } from 'react';
 import { Disclosure } from '@headlessui/react';
 import VideoReview from '../../component/video-review';
 import { cn } from '@/lib/utils';
-import { map, flatten } from 'lodash';
+import { map, flatten, sumBy, floor } from 'lodash';
 
 const DetailCourse = ({ params }: { params: { slug: string } }) => {
     const { data, isLoading, error } = useCourseDetailHome(params.slug);
@@ -23,6 +23,22 @@ const DetailCourse = ({ params }: { params: { slug: string } }) => {
 
     if (error) {
         return router.back();
+    }
+
+    const lesson = flatten(map(data?.chapters, 'lessons'));
+
+    function convertTime(second: number): string{
+        let hour: number = Math.floor(second / 3600);
+
+        if (hour > 0) {
+            let minute: number = Math.floor((second % 3600) / 60);
+
+            return `${hour} hour ${minute} minute`;
+        } else {
+            let minute: number = Math.floor(second / 60);
+
+            return `${minute} minute`;
+        }
     }
 
     return (
@@ -99,9 +115,7 @@ const DetailCourse = ({ params }: { params: { slug: string } }) => {
                                     <div className="sticky top-[100px] left-0 z-50 w-full">
                                         {/* Video Course */}
                                         <VideoReview
-                                            data={flatten(
-                                                map(data?.chapters, 'lessons')
-                                            )}
+                                            data={lesson}
                                             tokenLesson={
                                                 tokenLesson === ''
                                                     ? data?.chapters[0]
@@ -144,7 +158,10 @@ const DetailCourse = ({ params }: { params: { slug: string } }) => {
                                             (
                                                 item,
                                                 index // 3 chapter được hiển thị
-                                            ) => (
+                                            ) => {
+                                                const sumTimeChapter = sumBy(item.lessons,'duration');
+
+                                                return (
                                                 <Disclosure
                                                     key={index}
                                                     as="div"
@@ -176,8 +193,7 @@ const DetailCourse = ({ params }: { params: { slug: string } }) => {
                                                                             .lessons
                                                                             .length
                                                                     }{' '}
-                                                                    lesson • 18
-                                                                    minutes
+                                                                    lesson • { convertTime(sumTimeChapter) }{' '}
                                                                 </h5>
                                                             </Disclosure.Button>
                                                             {item.lessons.map(
@@ -223,8 +239,7 @@ const DetailCourse = ({ params }: { params: { slug: string } }) => {
                                                                                 </h1>
                                                                             </div>
                                                                             <h5 className="text-black">
-                                                                                18
-                                                                                minutes
+                                                                                { convertTime(lesson.duration) }
                                                                             </h5>
                                                                         </div>
                                                                     </Disclosure.Panel>
@@ -233,7 +248,7 @@ const DetailCourse = ({ params }: { params: { slug: string } }) => {
                                                         </>
                                                     )}
                                                 </Disclosure>
-                                            )
+                                            )}
                                         )}
                                     </div>
                                 </div>

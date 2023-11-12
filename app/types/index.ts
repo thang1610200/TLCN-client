@@ -51,4 +51,5 @@ export interface Lesson {
     chapterId: string;
     isCompleteVideo: boolean;
     thumbnail: string;
+    duration: number;
 }
