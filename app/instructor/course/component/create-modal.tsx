@@ -69,7 +69,6 @@ export default function CreateCourseModal() {
             router.refresh();
         })
             .catch((e) => {
-                console.log(e);
                 toast.error('Create failed!');
             })
             .finally(() => setIsLoading(false));
@@ -90,7 +89,7 @@ export default function CreateCourseModal() {
     return (
         <div>
             <div className="ml-auto" onClick={() => setIsOpen(true)}>
-                <Button>
+                <Button variant={"default"}>
                     <BiPlusCircle className="w-4 h-4 mr-2" />
                     New Course
                 </Button>
@@ -127,7 +126,7 @@ export default function CreateCourseModal() {
                                     >
                                         Create New Course
                                     </Dialog.Title>
-                                    <div className="w-full p-10 border-4 rounded-lg ">
+                                    <div className="w-full p-10 border-2 rounded-lg ">
                                         <Form {...form}>
 
                                             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">

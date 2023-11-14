@@ -1,7 +1,6 @@
 'use client';
 
-import { BarChart, Compass, Layout, List } from 'lucide-react';
-import { usePathname } from 'next/navigation';
+import { BarChart, List, Book } from 'lucide-react';
 
 import { SidebarItem } from './sidebar-item';
 
@@ -12,6 +11,11 @@ const routes = [
         href: '/instructor/course',
     },
     {
+        icon: Book,
+        label: 'Exercises',
+        href: '/instructor/exercise',
+    },
+    {
         icon: BarChart,
         label: 'Analytics',
         href: '#',
@@ -19,8 +23,6 @@ const routes = [
 ];
 
 export const SidebarRoutes = () => {
-    const pathname = usePathname();
-
     return (
         <div className="flex flex-col w-full">
             {routes.map((route) => (

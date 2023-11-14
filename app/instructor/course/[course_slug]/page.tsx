@@ -1,13 +1,13 @@
 'use client';
 
 import { Metadata } from 'next';
-import React, { useState } from 'react';
+import React from 'react';
 import { Tabs, TabsContent } from '@/components/ui/tabs';
 import { Actions } from '../component/action';
 import useCourseDetail from '@/app/hook/useCourseDetail';
 import LoadingModal from '@/components/modal/loading-modal';
 import { useSession } from 'next-auth/react';
-import { redirect, useRouter } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import { IconBadge } from '@/components/icon-badge';
 import { LayoutDashboard, ListChecks } from 'lucide-react';
 import { TitleForm } from '../component/title-form';

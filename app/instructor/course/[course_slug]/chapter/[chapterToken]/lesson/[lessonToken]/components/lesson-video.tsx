@@ -102,7 +102,7 @@ export const LessonVideoForm = ({
     const { isSubmitting, isValid } = form.formState;
 
     return (
-        <div className="p-4 mt-6 border rounded-md bg-slate-100 aspect-video">
+        <div className="p-4 mt-6 border rounded-md bg-slate-100">
             <div className="flex items-center justify-between font-medium">
                 Lesson video
                 <Button onClick={toggleEdit} variant="ghost">
@@ -123,7 +123,7 @@ export const LessonVideoForm = ({
             </div>
             {!isEditing &&
                 (!initialData?.videoUrl ? (
-                    <div className="flex items-center justify-center rounded-md bg-slate-200 aspect-video">
+                    <div className="flex items-center justify-center h-60 bg-slate-200 rounded-md">
                         <Video className="w-10 h-10 text-slate-500" />
                     </div>
                 ) : (

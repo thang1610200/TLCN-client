@@ -53,3 +53,28 @@ export interface Lesson {
     thumbnail: string;
     duration: number;
 }
+
+export interface Exercise {
+    token: string;
+    title: string;
+    type: string;
+    isOpen: boolean;
+    lessonId: string;
+    quizz: object[];
+    create_at: Date;
+}
+
+export interface Quizz {
+    token: string;
+    question: string;
+    answer: string;
+    option: JSON;
+    position: number;
+    isPublished: boolean;
+}
+
+export enum TypeExercise {
+    Quizz = 'QUIZZ',
+    Image = 'IMAGE',
+    Code = 'CODE'
+}
