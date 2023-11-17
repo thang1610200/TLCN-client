@@ -4,19 +4,23 @@ import useCourseDetailHome from '@/app/hook/useCourseDetailHome';
 import { Button } from '@/components/ui/button';
 import LoadingModal from '@/components/modal/loading-modal';
 import { useRouter } from 'next/navigation';
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import VideoReview from '../../component/video-review';
 import { Disclosure } from '@headlessui/react';
-import { ChevronUpIcon, PlaySquare, ArrowRight, ArrowLeft } from 'lucide-react';
+import { ChevronUpIcon, PlaySquare, ArrowRight, ArrowLeft, Eye } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { map, flatten, findIndex, sumBy } from 'lodash';
 import { OverviewNavigation } from '../../component/overview-navigation';
+import QuizzEndModal from '../../component/quizz-end-modal';
+
+
 
 const CourseAccessDetail = ({ params }: { params: { slug: string } }) => {
+
     const { data, isLoading, error } = useCourseDetailHome(params.slug);
     const [tokenLesson, setTokenLesson] = useState<string>('');
     const router = useRouter();
-
+    const videoRef = useRef();
     if (isLoading) {
         return <LoadingModal />;
     }
@@ -76,7 +80,7 @@ const CourseAccessDetail = ({ params }: { params: { slug: string } }) => {
                                         tokenLesson={
                                             tokenLesson === ''
                                                 ? data?.chapters[0].lessons[0]
-                                                      .token
+                                                    .token
                                                 : tokenLesson
                                         }
                                     />
@@ -86,13 +90,16 @@ const CourseAccessDetail = ({ params }: { params: { slug: string } }) => {
                                         <ArrowLeft className="mr-2" /> Prev
                                         Lesson
                                     </Button>
+                                    <div>
+                                        <QuizzEndModal />
+                                    </div>
                                     <Button onClick={onNextLesson}>
                                         Next Lesson{' '}
                                         <ArrowRight className="ml-2" />
                                     </Button>
                                 </div>
                             </div>
-                            <div className="row-span-2 p-4 pt-4 ml-8 mt-4 border-2 rounded-lg">
+                            <div className="row-span-2 p-4 pt-4 mt-4 ml-8 border-2 rounded-lg">
                                 <h1 className=" text-3xl font-Poppins font-[600] dark:text-white bg-purple-200 rounded-lg p-2 text-violet-700 ">
                                     Course Overview
                                 </h1>
@@ -113,7 +120,7 @@ const CourseAccessDetail = ({ params }: { params: { slug: string } }) => {
                                                     {({ open }) => (
                                                         <>
                                                             <Disclosure.Button className="w-full px-4 py-2 text-left text-purple-900 bg-purple-100 rounded-lg hover:bg-purple-200 focus:outline-none focus-visible:ring focus-visible:ring-purple-500/75">
-                                                                <div className="flex justify-between items-center font-medium">
+                                                                <div className="flex items-center justify-between font-medium">
                                                                     <h2 className="text-[22px] text-black dark:text-white">
                                                                         {
                                                                             item.title
@@ -123,11 +130,10 @@ const CourseAccessDetail = ({ params }: { params: { slug: string } }) => {
                                                                         size={
                                                                             25
                                                                         }
-                                                                        className={`${
-                                                                            open
-                                                                                ? 'rotate-180 transform'
-                                                                                : ''
-                                                                        } text-purple-500`}
+                                                                        className={`${open
+                                                                            ? 'rotate-180 transform'
+                                                                            : ''
+                                                                            } text-purple-500`}
                                                                     />
                                                                 </div>
                                                                 <h5 className="text-black">
@@ -163,13 +169,13 @@ const CourseAccessDetail = ({ params }: { params: { slug: string } }) => {
                                                                                 (tokenLesson ===
                                                                                     '' &&
                                                                                     lesson.position ===
-                                                                                        1 &&
+                                                                                    1 &&
                                                                                     item.position ===
-                                                                                        1)) &&
-                                                                                'bg-slate-300'
+                                                                                    1)) &&
+                                                                            'bg-slate-300'
                                                                         )}
                                                                     >
-                                                                        <div className="flex justify-between items-center">
+                                                                        <div className="flex items-center justify-between">
                                                                             <div className="flex items-start">
                                                                                 <PlaySquare
                                                                                     size={
@@ -215,6 +221,7 @@ const CourseAccessDetail = ({ params }: { params: { slug: string } }) => {
                     </div>
                 </div>
             </div>
+
         </div>
     );
 };
