@@ -1,6 +1,6 @@
 import React from 'react';
 import Image from "next/image"
-import { ProfileUser } from "@/app/types";
+import { User } from "@/app/types";
 import * as z from "zod";
 import { Fragment, useState } from "react";
 import { Button } from "@/components/ui/button";
@@ -23,7 +23,7 @@ import { useSession } from 'next-auth/react';
 import Loader from '@/components/loader';
 
 interface UserProps {
-    data: ProfileUser,
+    data: User,
     token?: string
 }
 

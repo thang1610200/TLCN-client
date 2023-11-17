@@ -68,13 +68,25 @@ export interface Quizz {
     token: string;
     question: string;
     answer: string;
-    option: JSON;
+    option: string[];
     position: number;
     isPublished: boolean;
+    explain: string;
 }
 
 export enum TypeExercise {
     Quizz = 'QUIZZ',
     Image = 'IMAGE',
     Code = 'CODE'
+}
+
+export enum TypeQuizz {
+    TF = "True Or False",
+    MC = "Multiple Choice"
+}
+
+export enum LevelQuizz {
+    Easy = "Easy",
+    Medium = "Medium",
+    Hard = "Hard"
 }

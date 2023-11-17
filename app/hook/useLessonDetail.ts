@@ -13,7 +13,7 @@ const fetcher = async ([url, token]: [string, string]) => {
 
 const useLessonDetail = (slug?: string, email?: string, token?: string, chapterToken?: string, lessonToken?: string) => {
     const { data, error, isLoading, mutate} = useSwr<any, AxiosError>(token ? [`${BACKEND_URL}/lesson/get-lesson?course_slug=${slug}&email=${email}&chapter_token=${chapterToken}&lesson_token=${lessonToken}`,token]: null, fetcher, {
-        revalidateIfStale: false,
+        revalidateIfStale: true,
         revalidateOnFocus: false,
         revalidateOnReconnect: false,
         shouldRetryOnError: false,       // nếu khi gọi dữ liệu bị lỗi thì sẽ gọi lại (true)
