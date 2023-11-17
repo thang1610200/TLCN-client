@@ -16,7 +16,7 @@ import {
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { BiLogoFacebookCircle, BiLogoTiktok, BiLogoYoutube } from "react-icons/bi";
-import { ProfileUser } from "@/app/types"
+import { User } from "@/app/types"
 import { useState } from "react";
 import axios, { AxiosError } from "axios";
 import { BACKEND_URL } from "@/lib/constant";
@@ -57,7 +57,7 @@ const profileFormSchema = z.object({
 type ProfileFormValues = z.infer<typeof profileFormSchema>
 
 interface ProfileUserProps {
-    user: ProfileUser,
+    user: User,
     token?: string
 }
 

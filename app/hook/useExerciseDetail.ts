@@ -13,7 +13,7 @@ const fetcher = async ([url, token]: [string, string]) => {
 
 const useExerciseDetail = (email?: string, token?: string, exercise_token?:string) => {
     const { data, error, isLoading, mutate} = useSwr<any, AxiosError>(token ? [`${BACKEND_URL}/exercise/detail-exercise?email=${email}&token=${exercise_token}`,token]: null, fetcher, {
-        revalidateIfStale: false,
+        revalidateIfStale: true,
         revalidateOnFocus: false,
         revalidateOnReconnect: false,
         shouldRetryOnError: false,       // nếu khi gọi dữ liệu bị lỗi thì sẽ gọi lại (true)

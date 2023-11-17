@@ -2,32 +2,31 @@
 
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
-import useExerciseDetail from '@/app/hook/useExerciseDetail';
 import LoadingModal from '@/components/modal/loading-modal';
 import { Tabs, TabsContent } from '@/components/ui/tabs';
 import { IconBadge } from '@/components/icon-badge';
-import { LayoutDashboard, ListChecks, Zap } from 'lucide-react';
-import { TitleForm } from './components/title-form';
-import { Actions } from './components/action';
-import { ExerciseTypeForm } from './components/exercise-type';
-import { QuizzForm } from './components/quizz-form';
-import QuizzAiModal from './components/quiz-ai-form';
+import { ArrowLeft, Eye, LayoutDashboard } from 'lucide-react';
+import useQuizzDetail from '@/app/hook/useQuizzDetail';
+import { QuestionForm } from '../components/question-form';
+import { OptionForm } from '../components/option-form';
+import { ExplainForm } from '../components/explain-form';
+import { ActionQuestion } from '../components/action-question';
 
-const ExerciseDetail = ({ params }: { params: { token: string } }) => {
+const QuizzDetail = ({
+    params,
+}: {
+    params: { token: string; quizz_token: string };
+}) => {
     const session = useSession();
     const router = useRouter();
-    const { data, isLoading, error, mutate } = useExerciseDetail(
+    const { data, isLoading, error, mutate } = useQuizzDetail(
         session.data?.user.email,
         session.data?.backendTokens.accessToken,
-        params.token
+        params.token,
+        params.quizz_token
     );
 
-    const requiredFields = [
-        data?.title,
-        data?.type,
-        data?.lessonId,
-        data?.quizz.length > 0,
-    ];
+    const requiredFields = [data?.question, data?.answer, data?.option];
 
     const totalFields = requiredFields.length;
     const completedFields = requiredFields.filter(Boolean).length;
@@ -48,6 +47,13 @@ const ExerciseDetail = ({ params }: { params: { token: string } }) => {
         <>
             <Tabs defaultValue="music" className="h-full space-y-6">
                 <div className="flex items-center bg-black space-between"></div>
+                <a
+                    href={`/instructor/exercise/${params.token}`}
+                    className="flex items-center text-sm hover:opacity-75 transition mb-6"
+                >
+                    <ArrowLeft className="h-4 w-4 mr-2" />
+                    Back to exercise setup
+                </a>
                 <TabsContent
                     value="music"
                     className="p-0 border-none outline-none"
@@ -55,16 +61,17 @@ const ExerciseDetail = ({ params }: { params: { token: string } }) => {
                     <div className="flex items-center justify-between">
                         <div className="flex flex-col gap-y-2">
                             <h1 className="text-2xl font-medium">
-                                Exercise setup
+                                Question setup
                             </h1>
                             <span className="text-sm text-slate-700">
                                 Complete all fields {completionText}
                             </span>
                         </div>
-                        <Actions
+                        <ActionQuestion
                             disabled={!isComplete}
-                            token={params.token}
-                            isOpen={data?.isOpen}
+                            token={params.quizz_token}
+                            exercise_token={params.token}
+                            isPublished={data?.isPublished}
                             mutate={mutate}
                         />
                     </div>
@@ -73,33 +80,39 @@ const ExerciseDetail = ({ params }: { params: { token: string } }) => {
                             <div className="flex items-center gap-x-2">
                                 <IconBadge icon={LayoutDashboard} />
                                 <h2 className="text-xl">
-                                    Customize your exercise
+                                    Customize your question
                                 </h2>
                             </div>
-                            <TitleForm
+                            <QuestionForm
                                 initialData={data}
+                                exercise_token={params.token}
                                 token={data?.token}
                                 mutate={mutate}
                             />
-                            <ExerciseTypeForm initialData={data} />
+                            <OptionForm
+                                initialData={data}
+                                exercise_token={params.token}
+                                token={data?.token}
+                                mutate={mutate}
+                            />
+                            <ExplainForm
+                                initialData={data}
+                                exercise_token={params.token}
+                                token={data?.token}
+                                mutate={mutate}
+                            />
                         </div>
                         <div className="space-y-6">
                             <div>
                                 <div className="flex items-center gap-x-2">
-                                    <IconBadge icon={ListChecks} />
-                                    <h2 className="text-xl">Question list</h2>
-                                    <div className="ml-auto">
-                                        <QuizzAiModal
-                                            exercise_token={data?.token}
-                                            mutate={mutate}
-                                        />
-                                    </div>
+                                    <IconBadge icon={Eye} />
+                                    <h2 className="text-xl">Preview</h2>
                                 </div>
-                                <QuizzForm
+                                {/* <QuizzForm
                                     initialData={data}
                                     exercise_token={data?.token}
                                     mutate={mutate}
-                                />
+                                /> */}
                             </div>
                         </div>
                     </div>
@@ -109,4 +122,4 @@ const ExerciseDetail = ({ params }: { params: { token: string } }) => {
     );
 };
 
-export default ExerciseDetail;
+export default QuizzDetail;

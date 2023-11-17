@@ -11,13 +11,12 @@ const fetcher = async ([url, token]: [string, string]) => {
     return res.data;
 }
 
-const useCourseDetail = (slug?: string, email?: string, token?: string) => {
-    const { data, error, isLoading, mutate} = useSwr<any, AxiosError>(token ? [`${BACKEND_URL}/course/course-slug?slug=${slug}&email=${email}`,token]: null, fetcher, {
-        revalidateIfStale: true,
+const useQuizzDetail = (email?: string, token?: string, exerciseToken?: string, quizzToken?:string) => {
+    const { data, error, isLoading, mutate} = useSwr<any, AxiosError>(token ? [`${BACKEND_URL}/quizz/detail-quizz?email=${email}&token=${quizzToken}&exercise_token=${exerciseToken}`,token]: null, fetcher, {
+        revalidateIfStale: false,
         revalidateOnFocus: false,
         revalidateOnReconnect: false,
         shouldRetryOnError: false,       // nếu khi gọi dữ liệu bị lỗi thì sẽ gọi lại (true)
-        //refreshInterval: 500
     })
 
     return {
@@ -28,4 +27,4 @@ const useCourseDetail = (slug?: string, email?: string, token?: string) => {
     }
 }
 
-export default useCourseDetail;
+export default useQuizzDetail;

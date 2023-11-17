@@ -4,7 +4,7 @@ import * as z from 'zod';
 import axios from 'axios';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useFieldArray, useForm } from 'react-hook-form';
-import { Check, Pencil, X, XCircle } from 'lucide-react';
+import { Check, Pencil, X } from 'lucide-react';
 import { useState } from 'react';
 import toast from 'react-hot-toast';
 import { useRouter } from 'next/navigation';
@@ -14,77 +14,90 @@ import {
     FormControl,
     FormField,
     FormItem,
+    FormLabel,
     FormMessage,
 } from '@/components/ui/form';
+import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import { cn } from '@/lib/utils';
-import { Textarea } from '@/components/ui/textarea';
-import { Course } from '@/app/types';
 import { BACKEND_URL } from '@/lib/constant';
 import { useSession } from 'next-auth/react';
 import { KeyedMutator } from 'swr';
-import { Input } from '@/components/ui/input';
 
-interface LearningOutcomeFormFormProps {
-    initialData?: Course;
-    course_slug?: string;
+interface OptionFormProps {
+    initialData?: {
+        answer: string;
+        option: string[];
+    };
+    exercise_token: string;
+    token?: string;
     mutate: KeyedMutator<any>;
 }
 
 const formSchema = z.object({
-    // description: z.string().min(1, {
-    //     message: "Description is required",
-    // }),
-    description: z
+    answer: z.string().min(1, {
+        message: 'Option is required',
+    }),
+    option: z
         .array(
             z.object({
-                value: z.string().min(5),
+                value: z.string().min(5,{
+                    message: 'Option is required',
+                }),
             })
         )
         .optional()
         .default([]),
 });
 
-export const LearningOutcomeForm = ({
+export const OptionForm = ({
     initialData,
-    course_slug,
+    exercise_token,
+    token,
     mutate,
-}: LearningOutcomeFormFormProps) => {
+}: OptionFormProps) => {
     const [isEditing, setIsEditing] = useState(false);
 
     const toggleEdit = () => setIsEditing((current) => !current);
 
     const router = useRouter();
     const session = useSession();
-    let learning_outcome = initialData?.learning_outcome?.map((item) => {
-        return {
-            'value': item
+
+    let options: any = initialData?.option.map((item) => {
+        if (item !== initialData.answer) {
+            return {
+                value: item,
+            };
         }
     });
 
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
-            description: initialData?.learning_outcome.length === 0 ? [{ value: '' }] : learning_outcome
-        },
-    });
-
-    const { fields, append, remove } = useFieldArray({
-        name: 'description',
-        control: form.control,
+            answer: initialData?.answer || '',
+            option:
+                initialData?.option.length === 0 ? [{ value: '' }] : options,
+        }
     });
 
     const { isSubmitting, isValid } = form.formState;
 
+    const { fields, append, remove } = useFieldArray({
+        name: 'option',
+        control: form.control,
+    });
+
     const onSubmit = async (values: z.infer<typeof formSchema>) => {
         try {
-            const outcome = values.description.map((item) => item.value);
+            const optionValue = values.option.map((item) => item.value);
+            optionValue.push(values.answer);
             await axios.patch(
-                `${BACKEND_URL}/course/update-course`,
+                `${BACKEND_URL}/quizz/update-quizz`,
                 {
-                    slug: course_slug,
+                    token,
+                    exercise_token,
                     value: {
-                        learning_outcome: outcome,
+                        answer: values.answer,
+                        option: optionValue,
                     },
                     email: session.data?.user.email,
                 },
@@ -95,7 +108,7 @@ export const LearningOutcomeForm = ({
                     },
                 }
             );
-            toast.success('Course updated');
+            toast.success('Question updated');
             toggleEdit();
             mutate();
             router.refresh();
@@ -107,40 +120,38 @@ export const LearningOutcomeForm = ({
     return (
         <div className="mt-6 border bg-slate-100 rounded-md p-4">
             <div className="font-medium flex items-center justify-between">
-                Course Learning Outcome
+                Option
                 <Button onClick={toggleEdit} variant="ghost">
                     {isEditing ? (
                         <>Cancel</>
                     ) : (
                         <>
                             <Pencil className="h-4 w-4 mr-2" />
-                            Edit content
+                            Edit option
                         </>
                     )}
                 </Button>
             </div>
             {!isEditing &&
-                // <p
-                //     className={cn(
-                //         'text-sm mt-2',
-                //         !initialData?.learning_outcome &&
-                //             'text-slate-500 italic'
-                //     )}
-                // >
-                //     {initialData?.learning_outcome || 'No learning outcome'}
-                // </p>
-                (initialData?.learning_outcome.length === 0 ? (
+                (initialData?.option.length === 0 ? (
                     <p className="text-sm mt-2 text-slate-500 italic">
-                        No learning outcome
+                        No option
                     </p>
                 ) : (
                     <ul className="space-y-4 text-left text-gray-500 dark:text-gray-400">
-                        {initialData?.learning_outcome.map((item, index) => (
-                            <li key={index} className="flex items-center space-x-3">
-                                <Check
-                                    className="flex-shrink-0 w-3.5 h-3.5 text-green-500 dark:text-green-400"
-                                />
-                                <span>{item}</span>
+                        {initialData?.option.map((item, index) => (
+                            <li
+                                key={index}
+                                className="flex items-center space-x-3"
+                            >
+                                <Check className="flex-shrink-0 w-3.5 h-3.5 text-green-500 dark:text-green-400" />
+                                {item === initialData.answer ? (
+                                    <span className="font-semibold">
+                                        {item}
+                                    </span>
+                                ) : (
+                                    <span>{item}</span>
+                                )}
                             </li>
                         ))}
                     </ul>
@@ -151,29 +162,49 @@ export const LearningOutcomeForm = ({
                         onSubmit={form.handleSubmit(onSubmit)}
                         className="space-y-4 mt-4"
                     >
-                        {fields.map((field, index) => (
+                        <FormField
+                            control={form.control}
+                            name="answer"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>Correct Answer</FormLabel>
+                                    <FormControl>
+                                        <Input
+                                            disabled={isSubmitting}
+                                            placeholder="e.g. 'Optional'"
+                                            {...field}
+                                        />
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+                        {fields.map((fieldValue, index) => (
                             <FormField
                                 key={index}
                                 control={form.control}
-                                name="description"
+                                name="option"
                                 render={({ field }) => (
                                     <FormItem>
+                                        {index === 0 && (
+                                            <FormLabel>False Answer</FormLabel>
+                                        )}
                                         <div
                                             className="flex items-center space-x-2 rounded-md"
                                         >
                                             <FormControl>
                                                 <Input
                                                     disabled={isSubmitting}
-                                                    placeholder="e.g. 'This course is about...'"
+                                                    placeholder="e.g. 'Optional'"
                                                     {...form.register(
-                                                        `description.${index}.value`
+                                                        `option.${index}.value`
                                                     )}
                                                 />
                                             </FormControl>
                                             {index > 0 && (
                                                 <Button
-                                                    disabled={isSubmitting}
                                                     type='button'
+                                                    disabled={isSubmitting}
                                                     onClick={() =>
                                                         remove(index)
                                                     }
@@ -189,8 +220,8 @@ export const LearningOutcomeForm = ({
                         ))}
                         <div className="flex items-center gap-x-2">
                             <Button
-                                disabled={isSubmitting}
                                 type="button"
+                                disabled={isSubmitting || fields.length >= 3}
                                 onClick={() => append({ value: '' })}
                             >
                                 Add

@@ -145,12 +145,10 @@ export const RequirementForm = ({
                                 render={({ field }) => (
                                     <FormItem>
                                         <div
-                                            key={index}
                                             className="flex items-center space-x-2 rounded-md"
                                         >
                                             <FormControl>
                                                 <Input
-                                                    key={index}
                                                     disabled={isSubmitting}
                                                     placeholder="e.g. 'This course is about...'"
                                                     {...form.register(
@@ -160,7 +158,7 @@ export const RequirementForm = ({
                                             </FormControl>
                                             {index > 0 && (
                                                 <Button
-                                                    key={index}
+                                                    type='button'
                                                     disabled={isSubmitting}
                                                     onClick={() =>
                                                         remove(index)
