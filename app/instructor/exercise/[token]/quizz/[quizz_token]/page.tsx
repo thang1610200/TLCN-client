@@ -11,6 +11,8 @@ import { QuestionForm } from '../components/question-form';
 import { OptionForm } from '../components/option-form';
 import { ExplainForm } from '../components/explain-form';
 import { ActionQuestion } from '../components/action-question';
+import { Label } from "@/components/ui/label"
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 
 const QuizzDetail = ({
     params,
@@ -43,15 +45,17 @@ const QuizzDetail = ({
         return router.back();
     }
 
+    console.log(data)
+
     return (
         <>
             <Tabs defaultValue="music" className="h-full space-y-6">
                 <div className="flex items-center bg-black space-between"></div>
                 <a
                     href={`/instructor/exercise/${params.token}`}
-                    className="flex items-center text-sm hover:opacity-75 transition mb-6"
+                    className="flex items-center mb-6 text-sm transition hover:opacity-75"
                 >
-                    <ArrowLeft className="h-4 w-4 mr-2" />
+                    <ArrowLeft className="w-4 h-4 mr-2" />
                     Back to exercise setup
                 </a>
                 <TabsContent
@@ -75,7 +79,7 @@ const QuizzDetail = ({
                             mutate={mutate}
                         />
                     </div>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-16">
+                    <div className="grid grid-cols-1 gap-6 mt-16 md:grid-cols-2">
                         <div>
                             <div className="flex items-center gap-x-2">
                                 <IconBadge icon={LayoutDashboard} />
@@ -103,17 +107,38 @@ const QuizzDetail = ({
                             />
                         </div>
                         <div className="space-y-6">
-                            <div>
-                                <div className="flex items-center gap-x-2">
-                                    <IconBadge icon={Eye} />
-                                    <h2 className="text-xl">Preview</h2>
-                                </div>
-                                {/* <QuizzForm
+                            <div className="flex items-center gap-x-2 ">
+                                <IconBadge icon={Eye} />
+                                <h2 className="text-xl">Preview</h2>
+                            </div>
+                            <div className='p-4 rounded-lg gird bg-slate-100'>
+
+                                <div className="text-lg font-bold text-left indent-4">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque ac est consequat, eleifend nulla eu, lacinia turpis. Praesent cursus interdum felis, eu porta diam rutrum eu.</div>
+                                <RadioGroup defaultValue="comfortable" className='relative grid justify-center mt-4 space-y-4'>
+                                    <div className="flex items-center space-x-2 ">
+                                        <RadioGroupItem value="default" id="r1" />
+                                        <Label htmlFor="r1">A. Answer A</Label>
+                                    </div>
+                                    <div className="flex space-x-2 items- center">
+                                        <RadioGroupItem value="comfortable" id="r2" />
+                                        <Label htmlFor="r2">B. Answer B</Label>
+                                    </div>
+                                    <div className="flex items-center space-x-2">
+                                        <RadioGroupItem value="compact" id="r3" />
+                                        <Label htmlFor="r3">C. Answer C</Label>
+                                    </div>
+                                    <div className="flex items-center space-x-2">
+                                        <RadioGroupItem value="compress" id="r4" />
+                                        <Label htmlFor="r4">D. Answer D</Label>
+                                    </div>
+                                </RadioGroup>
+
+                            </div>
+                            {/* <QuizzForm
                                     initialData={data}
                                     exercise_token={data?.token}
                                     mutate={mutate}
                                 /> */}
-                            </div>
                         </div>
                     </div>
                 </TabsContent>
