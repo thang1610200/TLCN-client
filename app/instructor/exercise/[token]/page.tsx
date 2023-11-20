@@ -25,7 +25,6 @@ const ExerciseDetail = ({ params }: { params: { token: string } }) => {
     const requiredFields = [
         data?.title,
         data?.type,
-        data?.lessonId,
         data?.quizz.length > 0,
     ];
 

@@ -4,30 +4,69 @@ import useCourseDetailHome from '@/app/hook/useCourseDetailHome';
 import LoadingModal from '@/components/modal/loading-modal';
 import { CheckIcon, ChevronUpIcon, PlaySquare } from 'lucide-react';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import { useRouter, redirect } from 'next/navigation';
 import { useState } from 'react';
 import { Disclosure } from '@headlessui/react';
 import VideoReview from '../../component/video-review';
 import { cn } from '@/lib/utils';
-import { map, flatten, sumBy, floor } from 'lodash';
+import { map, flatten, sumBy, find } from 'lodash';
+import { useSession } from 'next-auth/react';
+import useUserProgressCourse from '@/app/hook/useGetUserProgressCourse';
+import axios from 'axios';
+import toast from 'react-hot-toast';
+import { BACKEND_URL } from '@/lib/constant';
 
 const DetailCourse = ({ params }: { params: { slug: string } }) => {
+    const session = useSession();
+    const [ isSubmit, setIsSubmit ] = useState(false);
     const { data, isLoading, error } = useCourseDetailHome(params.slug);
+    const { progress, loadingProgress, errorProgress } = useUserProgressCourse(
+        params.slug,
+        session.data?.backendTokens.accessToken,
+        session.data?.user.email
+    );
     const [tokenLesson, setTokenLesson] = useState<string>('');
 
     const router = useRouter();
 
-    if (isLoading) {
+    if (isLoading || loadingProgress) {
         return <LoadingModal />;
     }
 
-    if (error) {
+    if (error || errorProgress) {
         return router.back();
     }
 
     const lesson = flatten(map(data?.chapters, 'lessons'));
+    const user_progress = flatten(map(progress?.chapters, 'lessons'));
 
-    function convertTime(second: number): string{
+    function onClick (){
+        if(session.status === "unauthenticated"){
+            return router.push('/login');
+        }else{
+            setIsSubmit(true);
+            axios.put(`${BACKEND_URL}/user-progress/add-user-progress`,{
+                email: session.data?.user.email,
+                lesson_token: lesson[0].token,
+                isCompleted: false
+            },{
+                headers: {
+                    Authorization: `Bearer ${session.data?.backendTokens.accessToken}`,
+                    "Content-Type": "application/json"
+                }
+            })
+            .then(() => {
+                toast.success('Welcome');
+                router.push(`/course/${params.slug}/lesson/${data?.chapters[0].lessons[0].token}`);
+            })
+            .catch(() => {
+                toast.error('Something went wrong');
+            })
+            .finally(() => setIsSubmit(false));
+        }
+    }
+
+    function convertTime(second: number): string {
         let hour: number = Math.floor(second / 3600);
 
         if (hour > 0) {
@@ -115,26 +154,42 @@ const DetailCourse = ({ params }: { params: { slug: string } }) => {
                                     <div className="sticky top-[100px] left-0 z-50 w-full">
                                         {/* Video Course */}
                                         <VideoReview
-                                            data={lesson}
-                                            tokenLesson={
-                                                tokenLesson === ''
-                                                    ? data?.chapters[0]
-                                                          .lessons[0].token
-                                                    : tokenLesson
-                                            }
+                                            data={find(lesson, {
+                                                token:
+                                                    tokenLesson === ''
+                                                        ? data?.chapters[0]
+                                                              .lessons[0].token
+                                                        : tokenLesson,
+                                            })}
                                         />
                                     </div>
                                 </div>
-                                <Link
-                                    href={`/course-access/${params.slug}`}
-                                    className="relative mt-3 inline-flex items-center justify-center p-4 px-5 py-3 overflow-hidden font-medium text-indigo-600 transition duration-300 ease-out rounded-full shadow-xl group hover:ring-1 hover:ring-purple-500"
-                                >
-                                    <span className="absolute inset-0 w-full h-full bg-gradient-to-br from-blue-600 via-purple-600 to-pink-700"></span>
-                                    <span className="absolute bottom-0 right-0 block w-64 h-64 mb-32 mr-4 transition duration-500 origin-bottom-left transform rotate-45 translate-x-24 bg-pink-500 rounded-full opacity-30 group-hover:rotate-90 ease"></span>
-                                    <span className="relative text-white">
-                                        Enter to course
-                                    </span>
-                                </Link>
+                                {(session.status === 'authenticated' &&
+                                user_progress[0].userProgress.length > 0) ? (
+                                    <Link
+                                        href={`/course/${params.slug}/lesson/${data?.chapters[0].lessons[0].token}`}
+                                        className="relative mt-3 inline-flex items-center justify-center p-4 px-5 py-3 overflow-hidden font-medium text-indigo-600 transition duration-300 ease-out rounded-full shadow-xl group hover:ring-1 hover:ring-purple-500"
+                                    >
+                                        <span className="absolute inset-0 w-full h-full bg-gradient-to-br from-blue-600 via-purple-600 to-pink-700"></span>
+                                        <span className="absolute bottom-0 right-0 block w-64 h-64 mb-32 mr-4 transition duration-500 origin-bottom-left transform rotate-45 translate-x-24 bg-pink-500 rounded-full opacity-30 group-hover:rotate-90 ease"></span>
+                                        <span className="relative text-white">
+                                            Continue watching
+                                        </span>
+                                    </Link>
+                                ) : (
+                                    <button
+                                        type="button"
+                                        disabled={isSubmit}
+                                        onClick={onClick}
+                                        className="relative mt-3 inline-flex items-center justify-center p-4 px-5 py-3 overflow-hidden font-medium text-indigo-600 transition duration-300 ease-out rounded-full shadow-xl group hover:ring-1 hover:ring-purple-500"
+                                    >
+                                        <span className="absolute inset-0 w-full h-full bg-gradient-to-br from-blue-600 via-purple-600 to-pink-700"></span>
+                                        <span className="absolute bottom-0 right-0 block w-64 h-64 mb-32 mr-4 transition duration-500 origin-bottom-left transform rotate-45 translate-x-24 bg-pink-500 rounded-full opacity-30 group-hover:rotate-90 ease"></span>
+                                        <span className="relative text-white">
+                                            Enter to course
+                                        </span>
+                                    </button>
+                                )}
                             </div>
                             <div className="p-4">
                                 <div>
@@ -159,96 +214,105 @@ const DetailCourse = ({ params }: { params: { slug: string } }) => {
                                                 item,
                                                 index // 3 chapter được hiển thị
                                             ) => {
-                                                const sumTimeChapter = sumBy(item.lessons,'duration');
+                                                const sumTimeChapter = sumBy(
+                                                    item.lessons,
+                                                    'duration'
+                                                );
 
                                                 return (
-                                                <Disclosure
-                                                    key={index}
-                                                    as="div"
-                                                    className="mb-3"
-                                                >
-                                                    {({ open }) => (
-                                                        <>
-                                                            <Disclosure.Button className="w-full px-4 py-2 text-left text-purple-900 bg-purple-100 rounded-lg hover:bg-purple-200 focus:outline-none focus-visible:ring focus-visible:ring-purple-500/75">
-                                                                <div className="flex justify-between items-center font-medium">
-                                                                    <h2 className="text-[22px] text-black dark:text-white">
+                                                    <Disclosure
+                                                        key={index}
+                                                        as="div"
+                                                        className="mb-3"
+                                                    >
+                                                        {({ open }) => (
+                                                            <>
+                                                                <Disclosure.Button className="w-full px-4 py-2 text-left text-purple-900 bg-purple-100 rounded-lg hover:bg-purple-200 focus:outline-none focus-visible:ring focus-visible:ring-purple-500/75">
+                                                                    <div className="flex justify-between items-center font-medium">
+                                                                        <h2 className="text-[22px] text-black dark:text-white">
+                                                                            {
+                                                                                item.title
+                                                                            }
+                                                                        </h2>
+                                                                        <ChevronUpIcon
+                                                                            size={
+                                                                                25
+                                                                            }
+                                                                            className={`${
+                                                                                open
+                                                                                    ? 'rotate-180 transform'
+                                                                                    : ''
+                                                                            } text-purple-500`}
+                                                                        />
+                                                                    </div>
+                                                                    <h5 className="text-black">
                                                                         {
-                                                                            item.title
-                                                                        }
-                                                                    </h2>
-                                                                    <ChevronUpIcon
-                                                                        size={
-                                                                            25
-                                                                        }
-                                                                        className={`${
-                                                                            open
-                                                                                ? 'rotate-180 transform'
-                                                                                : ''
-                                                                        } text-purple-500`}
-                                                                    />
-                                                                </div>
-                                                                <h5 className="text-black">
-                                                                    {
-                                                                        item
-                                                                            .lessons
-                                                                            .length
-                                                                    }{' '}
-                                                                    lesson • { convertTime(sumTimeChapter) }{' '}
-                                                                </h5>
-                                                            </Disclosure.Button>
-                                                            {item.lessons.map(
-                                                                (
-                                                                    lesson,
-                                                                    lesson_index
-                                                                ) => (
-                                                                    <Disclosure.Panel
-                                                                        onClick={() =>
-                                                                            setTokenLesson(
-                                                                                lesson.token
-                                                                            )
-                                                                        }
-                                                                        key={
-                                                                            lesson_index
-                                                                        }
-                                                                        className={cn(
-                                                                            'w-full px-4 pt-4 pb-2 cursor-pointer transition-all rounded-lg',
-                                                                            (lesson.token ===
-                                                                                tokenLesson ||
-                                                                                (tokenLesson ===
-                                                                                    '' &&
-                                                                                    lesson.position ===
-                                                                                        1 &&
-                                                                                    item.position ===
-                                                                                        1)) &&
-                                                                                'bg-slate-300'
-                                                                        )}
-                                                                    >
-                                                                        <div className="flex justify-between items-center">
-                                                                            <div className="flex items-start">
-                                                                                <PlaySquare
-                                                                                    size={
-                                                                                        25
-                                                                                    }
-                                                                                    className="mr-2"
-                                                                                    color="#1cdada"
-                                                                                />
-                                                                                <h1 className="text-[18px] inline-block break-words text-black">
-                                                                                    {
-                                                                                        lesson.title
-                                                                                    }
-                                                                                </h1>
+                                                                            item
+                                                                                .lessons
+                                                                                .length
+                                                                        }{' '}
+                                                                        lesson •{' '}
+                                                                        {convertTime(
+                                                                            sumTimeChapter
+                                                                        )}{' '}
+                                                                    </h5>
+                                                                </Disclosure.Button>
+                                                                {item.lessons.map(
+                                                                    (
+                                                                        lesson,
+                                                                        lesson_index
+                                                                    ) => (
+                                                                        <Disclosure.Panel
+                                                                            onClick={() =>
+                                                                                setTokenLesson(
+                                                                                    lesson.token
+                                                                                )
+                                                                            }
+                                                                            key={
+                                                                                lesson_index
+                                                                            }
+                                                                            className={cn(
+                                                                                'w-full px-4 pt-4 pb-2 cursor-pointer transition-all rounded-lg',
+                                                                                (lesson.token ===
+                                                                                    tokenLesson ||
+                                                                                    (tokenLesson ===
+                                                                                        '' &&
+                                                                                        lesson.position ===
+                                                                                            1 &&
+                                                                                        item.position ===
+                                                                                            1)) &&
+                                                                                    'bg-slate-300'
+                                                                            )}
+                                                                        >
+                                                                            <div className="flex justify-between items-center">
+                                                                                <div className="flex items-start">
+                                                                                    <PlaySquare
+                                                                                        size={
+                                                                                            25
+                                                                                        }
+                                                                                        className="mr-2"
+                                                                                        color="#1cdada"
+                                                                                    />
+                                                                                    <h1 className="text-[18px] inline-block break-words text-black">
+                                                                                        {
+                                                                                            lesson.title
+                                                                                        }
+                                                                                    </h1>
+                                                                                </div>
+                                                                                <h5 className="text-black">
+                                                                                    {convertTime(
+                                                                                        lesson.duration
+                                                                                    )}
+                                                                                </h5>
                                                                             </div>
-                                                                            <h5 className="text-black">
-                                                                                { convertTime(lesson.duration) }
-                                                                            </h5>
-                                                                        </div>
-                                                                    </Disclosure.Panel>
-                                                                )
-                                                            )}
-                                                        </>
-                                                    )}
-                                                </Disclosure>
-                                            )}
+                                                                        </Disclosure.Panel>
+                                                                    )
+                                                                )}
+                                                            </>
+                                                        )}
+                                                    </Disclosure>
+                                                );
+                                            }
                                         )}
                                     </div>
                                 </div>

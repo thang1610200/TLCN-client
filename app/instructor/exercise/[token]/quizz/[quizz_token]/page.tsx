@@ -45,8 +45,6 @@ const QuizzDetail = ({
         return router.back();
     }
 
-    console.log(data)
-
     return (
         <>
             <Tabs defaultValue="music" className="h-full space-y-6">

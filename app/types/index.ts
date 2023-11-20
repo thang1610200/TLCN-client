@@ -52,19 +52,25 @@ export interface Lesson {
     isCompleteVideo: boolean;
     thumbnail: string;
     duration: number;
+    exerciseId: string;
+    exercise: Exercise;
+    userProgress: UserProgress[];
 }
 
 export interface Exercise {
+    id: string;
     token: string;
     title: string;
     type: string;
     isOpen: boolean;
     lessonId: string;
-    quizz: object[];
+    quizz: Quizz[];
+    lesson: Lesson[];
     create_at: Date;
 }
 
 export interface Quizz {
+    id: string;
     token: string;
     question: string;
     answer: string;
@@ -89,4 +95,19 @@ export enum LevelQuizz {
     Easy = "Easy",
     Medium = "Medium",
     Hard = "Hard"
+}
+
+export interface UserProgress {
+    user: User,
+    isCompleted: boolean;
+    userProgressQuiz: UserProgressQuiz[]
+}
+
+export interface UserProgressQuiz {
+    quizzId : string,
+    answer: string,
+    userProgressId: string
+    userProgress: UserProgress,
+    isCorrect: boolean
+    createdAt: Date
 }

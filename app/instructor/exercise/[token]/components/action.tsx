@@ -33,10 +33,10 @@ export const Actions = ({
         try {
             setIsLoading(true);
             await axios.patch(
-                `${BACKEND_URL}/exercise/update-exercise`,
+                `${BACKEND_URL}/exercise/status-exercise`,
                 {
-                    isOpen,
-                    token,
+                    status: isOpen,
+                    exercise_token: token,
                     email: session.data?.user.email,
                 },
                 {
@@ -66,7 +66,7 @@ export const Actions = ({
             setIsLoading(true);
 
             await axios.delete(
-                `${BACKEND_URL}/course/delete-course?slug=${token}&email=${session.data?.user.email}`,
+                `${BACKEND_URL}/exercise/delete-exercise?email=${session.data?.user.email}&token=${token}`,
                 {
                     headers: {
                         Authorization: `Bearer ${session.data?.backendTokens.accessToken}`,

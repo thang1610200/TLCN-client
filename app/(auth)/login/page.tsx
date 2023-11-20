@@ -68,7 +68,7 @@ export default function LoginPage() {
 
         if (callback?.ok && !callback?.error) {
           toast.success("Logged in!");
-          router.push('/home');
+          router.push('/');
         }
       })
       .finally(() => {

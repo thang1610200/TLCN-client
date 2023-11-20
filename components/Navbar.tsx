@@ -189,7 +189,7 @@ export default function Navbar() {
                                 <DropdownMenuItem
                                     className="hover:bg-inherit"
                                     onClick={() => {
-                                        signOut({ callbackUrl: '/home' });
+                                        signOut({ callbackUrl: '/' });
                                     }}
                                 >
                                     Log out
