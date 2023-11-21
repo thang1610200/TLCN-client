@@ -98,6 +98,7 @@ export enum LevelQuizz {
 }
 
 export interface UserProgress {
+    id: string;
     user: User,
     isCompleted: boolean;
     userProgressQuiz: UserProgressQuiz[]

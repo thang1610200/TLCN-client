@@ -20,23 +20,33 @@ import axios from 'axios';
 import { BACKEND_URL } from '@/lib/constant';
 import { useSession } from 'next-auth/react';
 import toast from 'react-hot-toast';
+import QuizReview from './quiz-review';
+import { useReviewQuizStore } from '@/app/hook/useReviewQuizStore';
+import { KeyedMutator, mutate } from 'swr';
+import { useRouter } from 'next/navigation';
 
 interface QuizzEndModalProps {
     initdata?: Exercise;
     lesson?: Lesson;
+    mutate: KeyedMutator<any>
 }
 
 export default function QuizzEndModal({
     initdata,
     lesson,
+    mutate
 }: QuizzEndModalProps) {
     const index = lesson?.userProgress[0].userProgressQuiz.length || 0;
-    const end = lesson?.userProgress[0].userProgressQuiz.length === initdata?.quizz.length;
+    const end =
+        lesson?.userProgress[0].userProgressQuiz.length ===
+        initdata?.quizz.length;
     const [isOpen, setIsOpen] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
-    const [questionIndex, setQuestionIndex] = React.useState(index);
-    const [hasEnded, setHasEnded] = React.useState(end);
+    const [questionIndex, setQuestionIndex] = useState(index);
+    const [hasEnded, setHasEnded] = useState(end);
+    const review = useReviewQuizStore();
     const session = useSession();
+    const router = useRouter();
     const [selectedChoice, setSelectedChoice] = React.useState<number>(0);
 
     const currentQuestion = useMemo(() => {
@@ -59,7 +69,7 @@ export default function QuizzEndModal({
                     email: session.data?.user.email,
                     lesson_token: lesson?.token,
                     quizzId: initdata?.quizz[questionIndex].id,
-                    answer: initdata?.quizz[questionIndex].answer,
+                    answer: result,
                     isCorrect: initdata?.quizz[questionIndex].answer === result,
                 },
                 {
@@ -75,6 +85,32 @@ export default function QuizzEndModal({
                     return;
                 }
                 setQuestionIndex((questionIndex) => questionIndex + 1);
+                setSelectedChoice(0);
+            })
+            .catch(() => {
+                toast.error('Something went wrong');
+            })
+            .finally(() => setIsLoading(false));
+    }
+
+    function restartQuiz() {
+        setIsLoading(true);
+        axios
+            .delete(
+                `${BACKEND_URL}/user-progress/delete-progress-quiz?id=${lesson?.userProgress[0].id}`,
+                {
+                    headers: {
+                        Authorization: `Bearer ${session.data?.backendTokens.accessToken}`,
+                        'Content-Type': 'application/json',
+                    },
+                }
+            )
+            .then(() => {
+                mutate();
+                router.refresh();
+                setQuestionIndex(0);
+                setHasEnded(false);
+                setSelectedChoice(0);
             })
             .catch(() => {
                 toast.error('Something went wrong');
@@ -84,8 +120,6 @@ export default function QuizzEndModal({
 
     const handleNext = useCallback(() => {
         checkAnswer(initdata?.quizz[questionIndex].option[selectedChoice]);
-
-        setSelectedChoice(0);
     }, [questionIndex, initdata?.quizz.length, checkAnswer]);
 
     useEffect(() => {
@@ -154,110 +188,141 @@ export default function QuizzEndModal({
                         <div className="fixed inset-0 bg-black/25" />
                     </Transition.Child>
 
-                    <div className="fixed inset-0 overflow-y-auto">
-                        <div className="flex items-center justify-center min-h-full p-4 text-center">
-                            <Transition.Child
-                                as={Fragment}
-                                enter="ease-out duration-300"
-                                enterFrom="opacity-0 scale-95"
-                                enterTo="opacity-100 scale-100"
-                                leave="ease-in duration-200"
-                                leaveFrom="opacity-100 scale-100"
-                                leaveTo="opacity-0 scale-95"
-                            >
-                                <Dialog.Panel className="md:w-[80vw] max-w-4xl w-[90vw] p-6 overflow-hidden text-left align-middle transition-all transform bg-white shadow-xl rounded-2xl">
-                                    <Dialog.Title>
-                                        {hasEnded ? (
-                                            <div className="pb-20 flex flex-col items-center">
-                                                <h1 className="mb-8 text-center text-lg font-medium">
-                                                    You got 2 out of { initdata?.quizz.length }
-                                                    questions right.
-                                                </h1>
-                                                <Button className='md:text-lg'>
-                                                    <div className="flex items-center">
-                                                        <span className="mr-3">Restart quiz</span>
-                                                        <RefreshCcw size={24} />
-                                                    </div>
-                                                </Button>
-                                                <Button className='md:text-lg mt-5'>
-                                                    <div className="flex items-center">
-                                                        <span className="mr-3">Review quiz</span>
-                                                        <RefreshCcw size={24} />
-                                                    </div>
-                                                </Button>
-                                            </div>
-                                        ) : (
-                                            <Card className="w-full mt-4">
-                                                <CardHeader className="flex flex-row items-center">
-                                                    <CardTitle className="mr-5 text-center divide-y divide-zinc-600/50">
-                                                        <div>
-                                                            {questionIndex + 1}
+                    {review.isOpen ? (
+                        <QuizReview
+                            quiz={lesson?.userProgress[0].id}
+                            initdata={initdata}
+                            fragment={Fragment}
+                        />
+                    ) : (
+                        <div className="fixed inset-0 overflow-y-auto">
+                            <div className="flex items-center justify-center min-h-full p-4 text-center">
+                                <Transition.Child
+                                    as={Fragment}
+                                    enter="ease-out duration-300"
+                                    enterFrom="opacity-0 scale-95"
+                                    enterTo="opacity-100 scale-100"
+                                    leave="ease-in duration-200"
+                                    leaveFrom="opacity-100 scale-100"
+                                    leaveTo="opacity-0 scale-95"
+                                >
+                                    <Dialog.Panel className="md:w-[80vw] max-w-4xl w-[90vw] p-6 overflow-hidden text-left align-middle transition-all transform bg-white shadow-xl rounded-2xl">
+                                        <Dialog.Title>
+                                            {hasEnded ? (
+                                                <div className="pb-20 flex flex-col items-center">
+                                                    <h1 className="mb-8 text-center text-lg font-medium">
+                                                        You got 2 out of{' '}
+                                                        {initdata?.quizz.length}
+                                                        questions right.
+                                                    </h1>
+                                                    <Button className="md:text-lg" disabled={isLoading} onClick={restartQuiz}>
+                                                        <div className="flex items-center">
+                                                            <span className="mr-3">
+                                                                Restart quiz
+                                                            </span>
+                                                            <RefreshCcw
+                                                                size={24}
+                                                            />
                                                         </div>
-                                                        <div className="text-base text-slate-400">
-                                                            {
-                                                                initdata?.quizz
-                                                                    ?.length
-                                                            }
-                                                        </div>
-                                                    </CardTitle>
-                                                    <CardDescription className="flex-grow text-lg">
-                                                        {
-                                                            currentQuestion?.question
+                                                    </Button>
+                                                    <Button
+                                                        className="md:text-lg mt-5"
+                                                        disabled={isLoading}
+                                                        onClick={() =>
+                                                            review.onOpen()
                                                         }
-                                                    </CardDescription>
-                                                </CardHeader>
-                                            </Card>
-                                        )}
-                                    </Dialog.Title>
-                                    {!hasEnded && (
-                                    <div className="flex flex-col items-center justify-center w-full mt-4">
-                                        {options.map((option, index) => {
-                                            return (
-                                                <Button
-                                                    key={option}
-                                                    variant={
-                                                        selectedChoice === index
-                                                            ? 'default'
-                                                            : 'outline'
-                                                    }
-                                                    className="justify-start w-full py-8 mb-4"
-                                                    onClick={() =>
-                                                        setSelectedChoice(index)
-                                                    }
-                                                >
-                                                    <div className="flex items-center justify-start">
-                                                        <div className="p-2 px-3 mr-5 border rounded-md">
-                                                            {index + 1}
+                                                    >
+                                                        <div className="flex items-center">
+                                                            <span className="mr-3">
+                                                                Review quiz
+                                                            </span>
+                                                            <RefreshCcw
+                                                                size={24}
+                                                            />
                                                         </div>
-                                                        <div className="text-start">
-                                                            {option}
-                                                        </div>
-                                                    </div>
-                                                </Button>
-                                            );
-                                        })}
-                                        <div className="mt-2 flex justify-between">
-                                            <Button
-                                                variant="default"
-                                                size="lg"
-                                                disabled={isLoading}
-                                                onClick={() => {
-                                                    handleNext();
-                                                }}
-                                            >
-                                                {isLoading && (
-                                                    <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                                                    </Button>
+                                                </div>
+                                            ) : (
+                                                <Card className="w-full mt-4">
+                                                    <CardHeader className="flex flex-row items-center">
+                                                        <CardTitle className="mr-5 text-center divide-y divide-zinc-600/50">
+                                                            <div>
+                                                                {questionIndex +
+                                                                    1}
+                                                            </div>
+                                                            <div className="text-base text-slate-400">
+                                                                {
+                                                                    initdata
+                                                                        ?.quizz
+                                                                        ?.length
+                                                                }
+                                                            </div>
+                                                        </CardTitle>
+                                                        <CardDescription className="flex-grow text-lg">
+                                                            {
+                                                                currentQuestion?.question
+                                                            }
+                                                        </CardDescription>
+                                                    </CardHeader>
+                                                </Card>
+                                            )}
+                                        </Dialog.Title>
+                                        {!hasEnded && (
+                                            <div className="flex flex-col items-center justify-center w-full mt-4">
+                                                {options.map(
+                                                    (option, index) => {
+                                                        return (
+                                                            <Button
+                                                                key={index}
+                                                                variant={
+                                                                    selectedChoice ===
+                                                                    index
+                                                                        ? 'default'
+                                                                        : 'outline'
+                                                                }
+                                                                className="justify-start w-full py-8 mb-4"
+                                                                onClick={() =>
+                                                                    setSelectedChoice(
+                                                                        index
+                                                                    )
+                                                                }
+                                                            >
+                                                                <div className="flex items-center justify-start">
+                                                                    <div className="p-2 px-3 mr-5 border rounded-md">
+                                                                        {index +
+                                                                            1}
+                                                                    </div>
+                                                                    <div className="text-start">
+                                                                        {option}
+                                                                    </div>
+                                                                </div>
+                                                            </Button>
+                                                        );
+                                                    }
                                                 )}
-                                                Next{' '}
-                                                <ChevronRight className="ml-2 h-4 w-4" />
-                                            </Button>
-                                        </div>
-                                    </div>
-                                    )}
-                                </Dialog.Panel>
-                            </Transition.Child>
+                                                <div className="mt-2 flex justify-between">
+                                                    <Button
+                                                        variant="default"
+                                                        size="lg"
+                                                        disabled={isLoading}
+                                                        onClick={() => {
+                                                            handleNext();
+                                                        }}
+                                                    >
+                                                        {isLoading && (
+                                                            <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                                                        )}
+                                                        Next{' '}
+                                                        <ChevronRight className="ml-2 h-4 w-4" />
+                                                    </Button>
+                                                </div>
+                                            </div>
+                                        )}
+                                    </Dialog.Panel>
+                                </Transition.Child>
+                            </div>
                         </div>
-                    </div>
+                    )}
                 </Dialog>
             </Transition>
         </>

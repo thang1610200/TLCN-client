@@ -102,6 +102,7 @@ const CourseAccessDetail = ({
                                                 <QuizzEndModal
                                                     initdata={lesson.exercise}
                                                     lesson={lesson}
+                                                    mutate={mutate}
                                                 />
                                             )}
                                             <CourseProgressButton
