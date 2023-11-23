@@ -6,7 +6,7 @@ import { Course } from '../types';
 
 const useCourseDetailHome = (slug?: string) => {
     const { data, error, isLoading, mutate} = useSwr<Course, AxiosError>(`${BACKEND_URL}/course/detail-course?slug=${slug}`, fetcher, {
-        revalidateIfStale: false,
+        revalidateIfStale: true,
         revalidateOnFocus: false,
         revalidateOnReconnect: false,
         shouldRetryOnError: false,       // nếu khi gọi dữ liệu bị lỗi thì sẽ gọi lại (true)

@@ -1,3 +1,5 @@
+"use client";
+
 import { Lesson } from '@/app/types';
 import { Button } from '@/components/ui/button';
 import { BACKEND_URL } from '@/lib/constant';

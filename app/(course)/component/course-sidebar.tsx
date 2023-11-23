@@ -1,7 +1,7 @@
 "use client";
 
 import { Disclosure } from "@headlessui/react";
-import { ChevronUpIcon, PlaySquare } from "lucide-react";
+import { ChevronUpIcon, PlaySquare, LockIcon } from "lucide-react";
 import { sumBy } from 'lodash';
 import { useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
@@ -104,13 +104,25 @@ const CourseSidebar: React.FC<CourseSidebarProp> = ({
                                             >
                                                 <div className="flex items-center justify-between">
                                                     <div className="flex items-start">
-                                                        <PlaySquare
-                                                            size={
-                                                                25
-                                                            }
-                                                            className="mr-2"
-                                                            color="#1cdada"
-                                                        />
+                                                        {
+                                                            lesson?.userProgress.length === 0 ? (
+                                                                <LockIcon
+                                                                    size={
+                                                                        25
+                                                                    }
+                                                                    className="mr-2"
+                                                                    color="#1cdada" 
+                                                                />
+                                                            ): (
+                                                                <PlaySquare
+                                                                    size={
+                                                                        25
+                                                                    }
+                                                                    className="mr-2"
+                                                                    color="#1cdada"
+                                                                />
+                                                            )
+                                                        }
                                                         <h1 className="text-[18px] inline-block break-words text-black">
                                                             {
                                                                 lesson.title

@@ -1,9 +1,6 @@
-'use client';
-
 import { Lesson } from '@/app/types';
-import ReactPlayer from 'react-player';
+import ReactPlayer from 'react-player/lazy';
 import { Lock } from 'lucide-react';
-import { Banner } from '@/components/banner';
 
 interface VideoListProps {
     data?: Lesson;
@@ -21,21 +18,18 @@ const VideoReview: React.FC<VideoListProps> = ({ data, isLocked }) => {
             ) : (
                 <div className="aspect-video relative overflow-hidden border-2">
                     <div className="absolute top-0 left-0 w-full h-full rounded-lg">
-                        <ReactPlayer
-                            width="100%"
-                            height="100%"
-                            light={data?.thumbnail}
-                            url={data?.videoUrl}
-                            controls
-                        />
+                        {data?.videoUrl && (
+                            <ReactPlayer
+                                width="100%"
+                                height="100%"
+                                light={data?.thumbnail}
+                                url={data?.videoUrl}
+                                controls
+                            />
+                        )}
                     </div>
                 </div>
             )}
-            {/* <div className="flex items-center justify-center">
-        <Link href="/" className="px-4 py-2 my-3 font-bold text-white bg-red-500 rounded-full hover:bg-red-700">
-            Enter to course
-        </Link>
-    </div> */}
         </div>
     );
 };

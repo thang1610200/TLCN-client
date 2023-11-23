@@ -101,6 +101,7 @@ export interface UserProgress {
     id: string;
     user: User,
     isCompleted: boolean;
+    isPassed: boolean;
     userProgressQuiz: UserProgressQuiz[]
 }
 

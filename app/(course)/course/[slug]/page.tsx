@@ -85,7 +85,7 @@ const DetailCourse = ({ params }: { params: { slug: string } }) => {
             <div className="py-5 m-auto">
                 <div className="flex w-full md:flex-row">
                     <div className="w-full">
-                        <div className="grid grid-cols-2 grid-rows-2">
+                        <div className="grid grid-cols-2">
                             <div className="relative flex flex-col p-4">
                                 <div className="p-2 bg-purple-200 rounded-lg text-violet-700">
                                     <h1 className="text-3xl font-Poppins font-[600] dark:text-white ">
@@ -151,7 +151,7 @@ const DetailCourse = ({ params }: { params: { slug: string } }) => {
                             </div>
                             <div className="pt-4 ml-8">
                                 <div className="w-full 800px:w-[35%] relative">
-                                    <div className="sticky top-[100px] left-0 z-50 w-full">
+                                    <div className="top-[100px] left-0 z-50 w-full">
                                         {/* Video Course */}
                                         <VideoReview
                                             data={find(lesson, {
