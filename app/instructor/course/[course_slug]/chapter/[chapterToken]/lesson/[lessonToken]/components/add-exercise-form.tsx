@@ -39,7 +39,7 @@ interface ExerciseLessonProps {
     course_slug: string;
     chapter_token: string;
     lesson_token: string;
-    options: { label: string; value: string, type: string }[];
+    options: { label: string; value: string; type: string }[];
     mutate: KeyedMutator<any>;
 }
 
@@ -88,7 +88,7 @@ export const ExerciseLessonForm = ({
                     },
                 }
             );
-            toast.success('Course updated');
+            toast.success('Lesson updated');
             toggleEdit();
             mutate();
             router.refresh();
@@ -154,12 +154,15 @@ export const ExerciseLessonForm = ({
                                                               (language) =>
                                                                   language.value ===
                                                                   field.value
-                                                          )?.label 
-                                                        : 'Select option...'} {options.find(
+                                                          )?.label
+                                                        : 'Select option...'}{' '}
+                                                    {
+                                                        options.find(
                                                             (language) =>
                                                                 language.value ===
                                                                 field.value
-                                                        )?.type}
+                                                        )?.type
+                                                    }
                                                     <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                                                 </Button>
                                             </FormControl>
@@ -197,7 +200,8 @@ export const ExerciseLessonForm = ({
                                                                         : 'opacity-0'
                                                                 )}
                                                             />
-                                                            {language.label} ({language.type})
+                                                            {language.label} (
+                                                            {language.type})
                                                         </CommandItem>
                                                     ))}
                                                 </CommandGroup>

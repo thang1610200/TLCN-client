@@ -55,6 +55,7 @@ export interface Lesson {
     exerciseId: string;
     exercise: Exercise;
     userProgress: UserProgress[];
+    amountToPass: number;
 }
 
 export interface Exercise {
@@ -112,4 +113,11 @@ export interface UserProgressQuiz {
     userProgress: UserProgress,
     isCorrect: boolean
     createdAt: Date
+}
+
+export interface Review {
+    id: string,
+    user: User,
+    content: string,
+    create_at: Date
 }

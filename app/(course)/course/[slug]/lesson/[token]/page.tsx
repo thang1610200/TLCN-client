@@ -5,7 +5,6 @@ import LoadingModal from '@/components/modal/loading-modal';
 import { useRouter } from 'next/navigation';
 import { ArrowRight, ArrowLeft } from 'lucide-react';
 import { map, flatten, findIndex, shuffle } from 'lodash';
-import VideoReview from '@/app/(course)/component/video-review';
 import { OverviewNavigation } from '@/app/(course)/component/overview-navigation';
 import QuizzEndModal from '@/app/(course)/component/quizz-end-modal';
 import CourseSidebar from '@/app/(course)/component/course-sidebar';
@@ -15,6 +14,7 @@ import CourseProgressButton from '@/app/(course)/component/course-progress-butto
 import { Banner } from '@/components/banner';
 import useCourseDetailAuth from '@/app/hook/useCourseDetailAuth';
 import { useCallback, useMemo } from 'react';
+import VideoReview from '@/app/(course)/component/video-review';
 
 const CourseAccessDetail = ({
     params,
@@ -38,24 +38,24 @@ const CourseAccessDetail = ({
 
     const lessonlist = useMemo(() => {
         return flatten(map(data?.chapters, 'lessons'));
-    },[data?.chapters])
+    }, [data?.chapters]);
 
     const indexLesson = useMemo(() => {
         return findIndex(lessonlist, { token: params.token });
-    },[lessonlist, params.token]);
+    }, [lessonlist, params.token]);
 
     const isLocked = lesson?.userProgress.length === 0 ? true : false;
 
     const onNextLesson = useCallback(() => {
         let index =
-        findIndex(lessonlist, { token: params.token }) === -1
-            ? 0
-            : findIndex(lessonlist, { token: params.token });
+            findIndex(lessonlist, { token: params.token }) === -1
+                ? 0
+                : findIndex(lessonlist, { token: params.token });
 
         index = index === lessonlist.length - 1 ? 0 : index + 1;
 
         router.push(`/course/${params.slug}/lesson/${lessonlist[index].token}`);
-    },[params.slug, lessonlist, router]);
+    }, [params.slug, lessonlist, router]);
 
     const onPrevLesson = useCallback(() => {
         let index =
@@ -66,10 +66,10 @@ const CourseAccessDetail = ({
         index = index === 0 ? lessonlist.length - 1 : index - 1;
 
         router.push(`/course/${params.slug}/lesson/${lessonlist[index].token}`);
-    },[params.slug, lessonlist, router]);
+    }, [params.slug, lessonlist, router]);
 
     if (isLoading || loadingLesson) {
-        return (<LoadingModal />);
+        return <LoadingModal />;
     }
 
     if (error || errorLesson) {
@@ -129,6 +129,9 @@ const CourseAccessDetail = ({
                                                 initdata={lesson}
                                                 course_slug={params.slug}
                                                 mutate={mutate}
+                                                next_lesson={
+                                                    lessonlist[indexLesson + 1]
+                                                }
                                             />
                                         </div>
                                     )}
@@ -139,16 +142,11 @@ const CourseAccessDetail = ({
                                 course_slug={params.slug}
                                 lesson_token={params.token}
                             />
-                            {/* <div className="h-full col-span-2 p-4">
+                            <div className="h-full col-span-2 p-4">
                                 <OverviewNavigation
-                                    data={lesson}
-                                    tokenLesson={
-                                        tokenLesson === ''
-                                            ? data?.chapters[0].lessons[0].token
-                                            : tokenLesson
-                                    }
+                                    course_slug={params.slug}
                                 />
-                            </div> */}
+                            </div>
                         </div>
                     </div>
                 </div>

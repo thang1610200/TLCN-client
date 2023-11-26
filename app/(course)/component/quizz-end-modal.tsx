@@ -28,6 +28,7 @@ import { useRouter } from 'next/navigation';
 import { KeyedMutator } from 'swr';
 import LoadingModal from '@/components/modal/loading-modal';
 import useStateRef from 'react-usestateref';
+import { useConfettiStore } from '@/app/hook/useConfettiStore';
 
 interface QuizzEndModalProps {
     initdata?: Exercise;
@@ -49,6 +50,7 @@ export default function QuizzEndModal({
     const review = useReviewQuizStore();
     const session = useSession();
     const router = useRouter();
+    const confetti = useConfettiStore();
     const [isOpen, setIsOpen] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const [questionIndex, setQuestionIndex] = useState(0);
@@ -119,6 +121,15 @@ export default function QuizzEndModal({
             }
 
             if (questionIndex === (initdata?.quizz.length || 1) - 1) {
+                if(ref.current.correct_answers >= (lesson?.amountToPass || 0)){
+                    toast('Good Job!', {
+                        icon: '👏',
+                    });
+                }else{
+                    toast('Not Good!', {
+                        icon: '😔',
+                    });
+                }
                 setHasEnded(true);
                 return;
             }
@@ -189,14 +200,23 @@ export default function QuizzEndModal({
             initdata?.quizz[questionIndex].option[selectedChoice]
         );
         if (
-            ref.current.correct_answers >= 2 &&
+            ref.current.correct_answers >= (lesson?.amountToPass || 0) &&
             !lesson?.userProgress[0].isPassed &&
             questionIndex === (initdata?.quizz.length || 1) - 1 &&
-            !nextLesson
+            nextLesson
         ) {
             const toastId = toast.loading('Loading...');
             await next(toastId);
         }
+
+        if(ref.current.correct_answers >= (lesson?.amountToPass || 0) &&
+        !lesson?.userProgress[0].isPassed &&
+        questionIndex === (initdata?.quizz.length || 1) - 1 &&
+        nextLesson){
+            toast.success('You have completed the course');
+            confetti.onOpen();
+        }
+
     }, [questionIndex, initdata?.quizz.length, checkAnswer, lesson, ref]);
 
     useEffect(() => {

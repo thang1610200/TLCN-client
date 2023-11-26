@@ -1,146 +1,63 @@
 import React, { useState } from 'react';
 import { Tab } from '@headlessui/react';
-import { Lesson } from '@/app/types';
-import { find } from 'lodash';
+import ReviewCourse from './review-course';
 
 function classNames(...classes: any[]) {
     return classes.filter(Boolean).join(' ');
 }
 
 interface OverviewProps {
-    data?: Lesson[];
-    tokenLesson?: string;
+    course_slug?: string;
 }
 
 export const OverviewNavigation: React.FC<OverviewProps> = ({
-    data,
-    tokenLesson,
+    course_slug
 }) => {
-    const lesson = find(data, { token: tokenLesson });
-    let [categories] = useState({
-        Overview: [
-            {
-                id: 1,
-                title: 'Is tech making coffee better or worse?',
-                date: 'Jan 7',
-                commentCount: 29,
-                shareCount: 16,
-            },
-            {
-                id: 2,
-                title: 'The most innovative things happening in coffee',
-                date: 'Mar 19',
-                commentCount: 24,
-                shareCount: 12,
-            },
-        ],
-        Resources: [
-            {
-                id: 1,
-                title: 'Is tech making coffee better or worse?',
-                date: 'Jan 7',
-                commentCount: 29,
-                shareCount: 16,
-            },
-            {
-                id: 2,
-                title: 'The most innovative things happening in coffee',
-                date: 'Mar 19',
-                commentCount: 24,
-                shareCount: 12,
-            },
-        ],
-        QA: [
-            {
-                id: 1,
-                title: 'Ask Me Anything: 10 answers to your questions about coffee',
-                date: '2d ago',
-                commentCount: 9,
-                shareCount: 5,
-            },
-            {
-                id: 2,
-                title: "The worst advice we've ever heard about coffee",
-                date: '4d ago',
-                commentCount: 1,
-                shareCount: 2,
-            },
-        ],
-        Reviews: [
-            {
-                id: 1,
-                title: 'Ask Me Anything: 10 answers to your questions about coffee',
-                date: '2d ago',
-                commentCount: 9,
-                shareCount: 5,
-            },
-            {
-                id: 2,
-                title: "The worst advice we've ever heard about coffee",
-                date: '4d ago',
-                commentCount: 1,
-                shareCount: 2,
-            },
-        ],
-    });
+    const TabsData = [
+        {
+            label: 'Overview',
+            component: ''
+        },
+        {
+            label: 'Resources',
+            component: ''
+        },
+        {
+            label: 'Reviews',
+            component: <ReviewCourse course_slug={course_slug} />
+        }
+    ]
 
     return (
         <Tab.Group>
-            <Tab.List className="flex p-1 space-x-1 rounded-xl bg-blue-900/20">
-                {Object.keys(categories).map((category) => (
+            <Tab.List className="flex p-1 space-x-1 rounded-md border bg-gray-200">
+                {TabsData.map((data, index) => (
                     <Tab
-                        key={category}
+                        key={index}
                         className={({ selected }) =>
                             classNames(
-                                'w-full rounded-lg py-2.5 text-sm font-medium leading-5 text-blue-700',
-                                'ring-white/60 ring-offset-2 ring-offset-blue-400 focus:outline-none focus:ring-2',
+                                'w-full rounded-lg py-2.5 text-sm font-medium leading-5',
+                                'ring-white/60 ring-offset-2 focus:outline-none focus:ring-2',
                                 selected
-                                    ? 'bg-white shadow'
-                                    : 'text-blue-100 hover:bg-white/[0.12] hover:text-white'
+                                    ? 'bg-white text-gray-800 shadow'
+                                    : 'text-gray-500 hover:bg-white/[0.12] hover:text-gray-800'
                             )
                         }
                     >
-                        {category}
+                        {data.label}
                     </Tab>
                 ))}
             </Tab.List>
             <Tab.Panels className="mt-2">
-                {Object.values(categories).map((posts, idx) => (
+                {TabsData.map((data, index) => (
                     <Tab.Panel
-                        key={idx}
+                        key={index}
                         className={classNames(
                             'rounded-xl bg-white p-3',
-                            'ring-white/60 ring-offset-2 ring-offset-blue-400 focus:outline-none focus:ring-2'
+                            'ring-white/60 ring-offset-2 focus:outline-none focus:ring-2'
                         )}
                     >
-                        <ul>
-                            {posts.map((post) => (
-                                <li
-                                    key={post.id}
-                                    className="relative p-3 rounded-md hover:bg-gray-100"
-                                >
-                                    <h3 className="text-sm font-medium leading-5">
-                                        {post.title}
-                                    </h3>
-
-                                    <ul className="flex mt-1 space-x-1 text-xs font-normal leading-4 text-gray-500">
-                                        <li>{post.date}</li>
-                                        <li>&middot;</li>
-                                        <li>{post.commentCount} comments</li>
-                                        <li>&middot;</li>
-                                        <li>{post.shareCount} shares</li>
-                                    </ul>
-
-                                    <a
-                                        href="#"
-                                        className={classNames(
-                                            'absolute inset-0 rounded-md',
-                                            'ring-blue-400 focus:z-10 focus:outline-none focus:ring-2'
-                                        )}
-                                    />
-                                </li>
-                            ))}
-                        </ul>
+                        {data.component}
                     </Tab.Panel>
                 ))}
             </Tab.Panels>

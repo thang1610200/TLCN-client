@@ -20,6 +20,7 @@ import { LessonActions } from './components/lesson-action';
 import { ThumbnailForm } from './components/thumbnail-video';
 import { ExerciseLessonForm } from './components/add-exercise-form';
 import useAllExercise from '@/app/hook/useAllExerciseOpen';
+import { NumberQuestionPass } from './components/add-number-pass';
 //import { LessonQuizzForm } from './components/lesson-quizz';
 
 const LessonToken = ({
@@ -35,7 +36,11 @@ const LessonToken = ({
         params.chapterToken,
         params.lessonToken
     );
-    const { data: exercise = [], error_exercise } = useAllExercise(
+    const {
+        data: exercise = [],
+        error_exercise,
+        loading,
+    } = useAllExercise(
         session.data?.user.email,
         session.data?.backendTokens.accessToken
     );
@@ -44,7 +49,7 @@ const LessonToken = ({
     const completedFields = requiredFields.filter(Boolean).length;
     const completionText = `(${completedFields}/${totalFields})`;
     const isComplete = requiredFields.every(Boolean);
-    if (isLoading) {
+    if (isLoading || loading) {
         return <LoadingModal />;
     }
     if (error || error_exercise) {
@@ -120,8 +125,16 @@ const LessonToken = ({
                                 options={exercise.map((item) => ({
                                     label: item.title,
                                     value: item.id,
-                                    type: item.type
+                                    type: item.type,
                                 }))}
+                            />
+
+                            <NumberQuestionPass
+                                initialData={data}
+                                course_slug={params.course_slug}
+                                chapter_token={params.chapterToken}
+                                lesson_token={params.lessonToken}
+                                mutate={mutate}
                             />
                         </div>
                         <div className="space-y-6">

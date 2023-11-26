@@ -23,7 +23,7 @@ const useAllExercise = (email?: string, token?: string) => {
     return {
         data,
         error_exercise : error,
-        isLoading,
+        loading: isLoading,
         mutate
     }
 }

@@ -25,6 +25,7 @@ const VideoReview: React.FC<VideoListProps> = ({ data, isLocked }) => {
                                 light={data?.thumbnail}
                                 url={data?.videoUrl}
                                 controls
+                                playing={true}
                             />
                         )}
                     </div>
