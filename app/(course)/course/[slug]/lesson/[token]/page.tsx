@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation';
 import { ArrowRight, ArrowLeft } from 'lucide-react';
 import { map, flatten, findIndex, shuffle } from 'lodash';
 import { OverviewNavigation } from '@/app/(course)/component/overview-navigation';
-import QuizzEndModal from '@/app/(course)/component/quizz-end-modal';
+import QuizzEndModal from '@/app/(course)/component/quizz-modal';
 import CourseSidebar from '@/app/(course)/component/course-sidebar';
 import useLessonDetailUser from '@/app/hook/useLessonDetailUser';
 import { useSession } from 'next-auth/react';

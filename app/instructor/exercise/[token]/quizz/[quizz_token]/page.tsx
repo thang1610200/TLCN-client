@@ -11,8 +11,7 @@ import { QuestionForm } from '../components/question-form';
 import { OptionForm } from '../components/option-form';
 import { ExplainForm } from '../components/explain-form';
 import { ActionQuestion } from '../components/action-question';
-import { Label } from "@/components/ui/label"
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
+import PreviewQuiz from '../components/preview-quiz';
 
 const QuizzDetail = ({
     params,
@@ -109,34 +108,9 @@ const QuizzDetail = ({
                                 <IconBadge icon={Eye} />
                                 <h2 className="text-xl">Preview</h2>
                             </div>
-                            <div className='p-4 rounded-lg gird bg-slate-100'>
-
-                                <div className="text-lg font-bold text-left indent-4">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque ac est consequat, eleifend nulla eu, lacinia turpis. Praesent cursus interdum felis, eu porta diam rutrum eu.</div>
-                                <RadioGroup defaultValue="comfortable" className='relative grid justify-center mt-4 space-y-4'>
-                                    <div className="flex items-center space-x-2 ">
-                                        <RadioGroupItem value="default" id="r1" />
-                                        <Label htmlFor="r1">A. Answer A</Label>
-                                    </div>
-                                    <div className="flex space-x-2 items- center">
-                                        <RadioGroupItem value="comfortable" id="r2" />
-                                        <Label htmlFor="r2">B. Answer B</Label>
-                                    </div>
-                                    <div className="flex items-center space-x-2">
-                                        <RadioGroupItem value="compact" id="r3" />
-                                        <Label htmlFor="r3">C. Answer C</Label>
-                                    </div>
-                                    <div className="flex items-center space-x-2">
-                                        <RadioGroupItem value="compress" id="r4" />
-                                        <Label htmlFor="r4">D. Answer D</Label>
-                                    </div>
-                                </RadioGroup>
-
-                            </div>
-                            {/* <QuizzForm
-                                    initialData={data}
-                                    exercise_token={data?.token}
-                                    mutate={mutate}
-                                /> */}
+                            <PreviewQuiz
+                                initdata={data} 
+                            />
                         </div>
                     </div>
                 </TabsContent>
