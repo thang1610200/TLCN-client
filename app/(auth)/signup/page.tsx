@@ -118,7 +118,7 @@ export default function AuthenticationPage() {
     const socialAction = (action: string) => {
         signIn(action, {
             redirect: false,
-            callbackUrl: '/home',
+            callbackUrl: '/',
         });
     };
 

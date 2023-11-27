@@ -44,6 +44,7 @@ const DetailCourse = ({ params }: { params: { slug: string } }) => {
         if(session.status === "unauthenticated"){
             return router.push('/login');
         }else{
+            const toastId = toast.loading('Loading...');
             setIsSubmit(true);
             axios.put(`${BACKEND_URL}/user-progress/add-user-progress`,{
                 email: session.data?.user.email,
@@ -56,11 +57,11 @@ const DetailCourse = ({ params }: { params: { slug: string } }) => {
                 }
             })
             .then(() => {
-                toast.success('Welcome');
+                toast.success('Welcome',{id: toastId});
                 router.push(`/course/${params.slug}/lesson/${data?.chapters[0].lessons[0].token}`);
             })
             .catch(() => {
-                toast.error('Something went wrong');
+                toast.error('Something went wrong',{id: toastId});
             })
             .finally(() => setIsSubmit(false));
         }

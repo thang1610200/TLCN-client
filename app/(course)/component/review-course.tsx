@@ -22,11 +22,13 @@ import {
 } from '@/components/ui/form';
 import { BACKEND_URL } from '@/lib/constant';
 import axios from 'axios';
-import { cn } from '@/lib/utils';
 import ReviewItem from './review-item';
+import { Skeleton } from '@/components/ui/skeleton';
+import { Course, Lesson } from '@/app/types';
 
 interface ReviewCourseProp {
     course_slug?: string;
+    course?: Course
 }
 
 const formSchema = z.object({
@@ -35,12 +37,12 @@ const formSchema = z.object({
     }),
 });
 
-const ReviewCourse: React.FC<ReviewCourseProp> = ({ course_slug }) => {
+const ReviewCourse: React.FC<ReviewCourseProp> = ({ course_slug, course }) => {
     const session = useSession();
     const [showEmojiPicker, setShowEmojiPicker] = useState(false);
     const emojiPickerRef = useRef<any>(null);
     const router = useRouter();
-    const { data : review = [], isLoading, error } = useAllReviewCourse(
+    const { data : review = [], isLoading, error, mutate } = useAllReviewCourse(
         course_slug,
         session.data?.backendTokens.accessToken
     );
@@ -72,6 +74,7 @@ const ReviewCourse: React.FC<ReviewCourseProp> = ({ course_slug }) => {
                 }
             });
             setContent("");
+            mutate();
             router.refresh();
         } catch {
             toast.error('Something went wrong');
@@ -171,12 +174,22 @@ const ReviewCourse: React.FC<ReviewCourseProp> = ({ course_slug }) => {
             </div>
             <div className='w-full my-3'>
                 {
-                    review.map((item) => (
+                    isLoading ? (
+                        [...Array(3)].map((x,i) => (
+                            <div className="flex mt-3 pb-1 w-full" key={i}>
+                                <Skeleton className="relative w-12 h-12 rounded-full" />
+                                <Skeleton className='ml-4 w-full' />
+                            </div>
+                        ))
+                    ): 
+                    (review.map((item) => (
                         <ReviewItem
+                            course={course}
+                            mutate={mutate}
                             key={item.id}
                             review={item} 
                         />
-                    ))
+                    )))
                 }
             </div>                                           
         </div>

@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { Tab } from '@headlessui/react';
 import ReviewCourse from './review-course';
+import { Course, Lesson } from '@/app/types';
+import Overview from './overview';
 
 function classNames(...classes: any[]) {
     return classes.filter(Boolean).join(' ');
@@ -8,15 +10,21 @@ function classNames(...classes: any[]) {
 
 interface OverviewProps {
     course_slug?: string;
+    course?: Course;
+    lesson?: Lesson
 }
 
 export const OverviewNavigation: React.FC<OverviewProps> = ({
-    course_slug
+    course_slug,
+    course,
+    lesson
 }) => {
     const TabsData = [
         {
             label: 'Overview',
-            component: ''
+            component: <Overview
+                            lesson={lesson} 
+                        />
         },
         {
             label: 'Resources',
@@ -24,7 +32,10 @@ export const OverviewNavigation: React.FC<OverviewProps> = ({
         },
         {
             label: 'Reviews',
-            component: <ReviewCourse course_slug={course_slug} />
+            component: <ReviewCourse 
+                            course={course}
+                            course_slug={course_slug} 
+                        />
         }
     ]
 

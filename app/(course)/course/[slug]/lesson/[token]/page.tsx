@@ -144,6 +144,8 @@ const CourseAccessDetail = ({
                             />
                             <div className="h-full col-span-2 p-4">
                                 <OverviewNavigation
+                                    lesson={lesson}
+                                    course={data}
                                     course_slug={params.slug}
                                 />
                             </div>

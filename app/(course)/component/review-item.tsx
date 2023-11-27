@@ -1,10 +1,10 @@
 'use client';
 
-import { Review } from '@/app/types';
+import { Course, Lesson, Review } from '@/app/types';
 import { Avatar, AvatarImage } from '@/components/ui/avatar';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { format } from 'date-fns';
-import { MoreHorizontal, Trash2, MessageCircle } from 'lucide-react';
+import { MoreHorizontal, Trash2, MessageCircle, Copy } from 'lucide-react';
 import { useState } from 'react';
 import {
     Popover,
@@ -13,14 +13,54 @@ import {
 } from '@/components/ui/popover';
 import { Button } from '@/components/ui/button';
 import { useSession } from 'next-auth/react';
+import ReplyCourse from './reply';
+import { ConfirmModal } from '@/components/modal/confirm-modal';
+import axios from 'axios';
+import { BACKEND_URL } from '@/lib/constant';
+import toast from 'react-hot-toast';
+import { useRouter } from 'next/navigation';
+import { KeyedMutator } from 'swr';
+import ReplyItem from './reply-item';
+import { CopyToClipboard } from "react-copy-to-clipboard";
 
 interface ReviewItemProps {
     review: Review;
+    course?: Course;
+    mutate: KeyedMutator<any>;
 }
 
-const ReviewItem: React.FC<ReviewItemProps> = ({ review }) => {
+const ReviewItem: React.FC<ReviewItemProps> = ({ review, mutate, course }) => {
     const [openReply, setOpenReply] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
     const session = useSession();
+    const router = useRouter();
+
+    function handleOpenReply() {
+        setOpenReply((item) => !item);
+    }
+
+    const onDelete = async () => {
+        setIsLoading(true);
+        try {
+            await axios.delete(
+                `${BACKEND_URL}/review/delete-review?email=${session.data?.user.email}&reviewId=${review.id}`,
+                {
+                    headers: {
+                        Authorization: `Bearer ${session.data?.backendTokens.accessToken}`,
+                        'Content-Type': 'application/json',
+                    },
+                }
+            );
+
+            toast.success('Comment deleted');
+            mutate();
+            router.refresh();
+        } catch {
+            toast.error('Something went wrong');
+        } finally {
+            setIsLoading(false);
+        }
+    };
 
     return (
         <>
@@ -31,7 +71,7 @@ const ReviewItem: React.FC<ReviewItemProps> = ({ review }) => {
                     </Avatar>
                 </div>
                 <Card className="ml-4 w-full">
-                    <CardHeader className="flex-row">
+                    <CardHeader className="flex-row p-3">
                         <div className="basis-full items-center flex">
                             <CardTitle className="text-sm">
                                 {review.user.name}{' '}
@@ -55,18 +95,31 @@ const ReviewItem: React.FC<ReviewItemProps> = ({ review }) => {
                                 <PopoverContent className="w-30">
                                     <u className="list-none">
                                         <li>
-                                            <Button variant="ghost">
-                                                <Trash2
-                                                    size={20}
-                                                    className="mr-3"
-                                                />{' '}
-                                                Delete
-                                            </Button>
+                                            {review.user.email ===
+                                                session.data?.user.email && (
+                                                <ConfirmModal
+                                                    onConfirm={onDelete}
+                                                >
+                                                    <Button
+                                                        variant="ghost"
+                                                        disabled={isLoading}
+                                                    >
+                                                        <Trash2
+                                                            size={20}
+                                                            className="mr-3"
+                                                        />{' '}
+                                                        Delete
+                                                    </Button>
+                                                </ConfirmModal>
+                                            )}
                                         </li>
-                                        {session.data?.user.role ===
-                                            'INSTRUCTOR' && (
+                                        {session.data?.user.email ===
+                                            course?.owner.email && (
                                             <li>
-                                                <Button variant="ghost">
+                                                <Button
+                                                    onClick={handleOpenReply}
+                                                    variant="ghost"
+                                                >
                                                     <MessageCircle
                                                         size={20}
                                                         className="mr-3"
@@ -75,14 +128,45 @@ const ReviewItem: React.FC<ReviewItemProps> = ({ review }) => {
                                                 </Button>
                                             </li>
                                         )}
+                                        <li>
+                                            <CopyToClipboard text={review.content} onCopy={() => toast.success('Copied!')}>
+                                                <Button
+                                                    variant="ghost"
+                                                >
+                                                    <Copy
+                                                        size={20}
+                                                        className="mr-3"
+                                                    />{' '}
+                                                    Copy
+                                                </Button>
+                                            </CopyToClipboard>
+                                        </li>
                                     </u>
                                 </PopoverContent>
                             </Popover>
                         </div>
                     </CardHeader>
-                    <CardContent>{review.content}</CardContent>
+                    <CardContent className="pt-0 p-3">
+                        {review.content}
+                    </CardContent>
                 </Card>
             </div>
+            {openReply && (
+                <ReplyCourse
+                    mutate={mutate}
+                    reviewId={review.id}
+                    handleOpenReply={handleOpenReply}
+                />
+            )}
+            {review.reply.map((item, index) => (
+                <ReplyItem
+                    key={index}
+                    review={review}
+                    mutate={mutate}
+                    reply={item}
+                    course={course}
+                />
+            ))}
         </>
     );
 };

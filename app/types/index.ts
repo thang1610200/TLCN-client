@@ -119,5 +119,14 @@ export interface Review {
     id: string,
     user: User,
     content: string,
+    reply: ReviewReply[]
+    create_at: Date
+}
+
+export interface ReviewReply {
+    id: string,
+    user: User,
+    review: Review,
+    reply: string,
     create_at: Date
 }
