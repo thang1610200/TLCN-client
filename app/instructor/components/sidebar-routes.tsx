@@ -1,6 +1,6 @@
 'use client';
 
-import { BarChart, List, Book } from 'lucide-react';
+import { BarChart, List, Book, User } from 'lucide-react';
 
 import { SidebarItem } from './sidebar-item';
 
@@ -14,6 +14,11 @@ const routes = [
         icon: Book,
         label: 'Exercises',
         href: '/instructor/exercise',
+    },
+    {
+        icon: User,
+        label: 'Users',
+        href: '/instructor/user'
     },
     {
         icon: BarChart,

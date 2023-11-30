@@ -23,16 +23,24 @@ import {
 } from '@/components/ui/table';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import CreateExerciseModal from './create-modal';
+import { Course } from '@/app/types';
+import CourseSwitcher from './course-switcher';
+import { uniqBy } from 'lodash';
 
 interface DataTableProps<TData, TValue> {
     columns: ColumnDef<TData, TValue>[];
     data: TData[];
+    course?: Course[];
+    courseId?: string;
+    onSelectCourse: (slug: string) => void;
 }
 
 export function DataTable<TData, TValue>({
     columns,
     data,
+    course,
+    courseId,
+    onSelectCourse
 }: DataTableProps<TData, TValue>) {
     const [sorting, setSorting] = React.useState<SortingState>([]);
     const [columnFilters, setColumnFilters] =
@@ -57,22 +65,24 @@ export function DataTable<TData, TValue>({
         <div>
             <div className="flex items-center py-4 justify-between">
                 <Input
-                    placeholder="Filter exercises..."
+                    placeholder="Filter email..."
                     value={
                         (table
-                            .getColumn('title')
+                            .getColumn('email')
                             ?.getFilterValue() as string) ?? ''
                     }
                     onChange={(event) =>
                         table
-                            .getColumn('title')
+                            .getColumn('email')
                             ?.setFilterValue(event.target.value)
                     }
                     className="max-w-sm"
                 />
-                <div>
-                    <CreateExerciseModal />
-                </div>
+                <CourseSwitcher
+                    courseId={courseId}
+                    items={course} 
+                    onSelectCourse={onSelectCourse}
+                />
             </div>
             <div className="rounded-md border">
                 <Table>

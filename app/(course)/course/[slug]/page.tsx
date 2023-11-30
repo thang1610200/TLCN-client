@@ -49,7 +49,8 @@ const DetailCourse = ({ params }: { params: { slug: string } }) => {
             axios.put(`${BACKEND_URL}/user-progress/add-user-progress`,{
                 email: session.data?.user.email,
                 lesson_token: lesson[0].token,
-                isCompleted: false
+                isCompleted: false,
+                course_slug: params.slug
             },{
                 headers: {
                     Authorization: `Bearer ${session.data?.backendTokens.accessToken}`,

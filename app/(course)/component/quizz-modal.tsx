@@ -179,6 +179,7 @@ export default function QuizzEndModal({
                     email: session.data?.user.email,
                     lesson_next: nextLesson?.token,
                     lessontoken: lesson?.token,
+                    course_slug
                 },
                 {
                     headers: {
@@ -212,7 +213,7 @@ export default function QuizzEndModal({
         if(ref.current.correct_answers >= (lesson?.amountToPass || 0) &&
         !lesson?.userProgress[0].isPassed &&
         questionIndex === (initdata?.quizz.length || 1) - 1 &&
-        nextLesson){
+        !nextLesson){
             toast.success('You have completed the course');
             confetti.onOpen();
         }

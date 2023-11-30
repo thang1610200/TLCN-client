@@ -45,6 +45,7 @@ const CourseProgressButton = ({
                         email: session.data?.user.email,
                         lesson_token: initdata?.token,
                         isCompleted: true,
+                        course_slug
                     },
                     {
                         headers: {

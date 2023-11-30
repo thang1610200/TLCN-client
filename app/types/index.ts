@@ -10,6 +10,7 @@ export interface User {
 }
 
 export interface Course {
+    id: string,
     title: string,
     isPublished: boolean,
     slug: string;
@@ -20,7 +21,8 @@ export interface Course {
     topic_id: string;
     toptic: Topic;
     owner: User;
-    chapters: Chapter[]
+    chapters: Chapter[],
+    userProgress: UserProgress[]
 }
 
 export interface Chapter {
@@ -101,9 +103,12 @@ export enum LevelQuizz {
 export interface UserProgress {
     id: string;
     user: User,
+    course: Course,
+    courseId: string;
     isCompleted: boolean;
     isPassed: boolean;
-    userProgressQuiz: UserProgressQuiz[]
+    userProgressQuiz: UserProgressQuiz[];
+    createdAt: Date;
 }
 
 export interface UserProgressQuiz {
