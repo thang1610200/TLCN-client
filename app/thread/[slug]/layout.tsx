@@ -1,9 +1,8 @@
 "use client"
 
 import React from 'react';
-import Navbar from '../../components/navbar';
-import { Separator } from '@/components/ui/separator';
-import { SidebarNav } from '@/components/sidebar-nav';
+
+
 
 export default function HomeLayout({
     children,
@@ -12,7 +11,6 @@ export default function HomeLayout({
 }) {
     return (
         <>
-            <Navbar />
             <div className="flex space-y-6 ">
                 {/* <Separator className="my-6" /> */}
                 <div className="flex flex-col ">
