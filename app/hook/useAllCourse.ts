@@ -28,8 +28,24 @@ export const useAllCourse = (email?: string, token?: string) => {
     }
 }
 
+export const useUserOfInstructor = (email?: string, token?: string) => {
+    const { data, error, isLoading, mutate} = useSwr<UserProgress[], AxiosError>(token ? [`${BACKEND_URL}/course/user-instructor?&email=${email}`,token]: null, fetcher, {
+        revalidateIfStale: true,
+        revalidateOnFocus: false,
+        revalidateOnReconnect: false,
+        shouldRetryOnError: false,       // nếu khi gọi dữ liệu bị lỗi thì sẽ gọi lại (true)
+    })
+
+    return {
+        data,
+        errorUser: error,
+        isLoadingUser: isLoading,
+        mutate
+    }
+}
+
 export const useUserOfCourse = (email?: string, token?: string, course_slug?: string) => {
-    const { data, error, isLoading, mutate} = useSwr<Course, AxiosError>((token && course_slug) ? [`${BACKEND_URL}/course/user-course?&email=${email}&course_slug=${course_slug}`,token]: null, fetcher, {
+    const { data, error, isLoading, mutate} = useSwr<UserProgress[], AxiosError>(token ? [`${BACKEND_URL}/course/user-course?&email=${email}&course_slug=${course_slug}`,token]: null, fetcher, {
         revalidateIfStale: true,
         revalidateOnFocus: false,
         revalidateOnReconnect: false,

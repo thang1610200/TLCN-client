@@ -1,18 +1,22 @@
 "use client";
 
 import { Tabs, TabsContent } from '@/components/ui/tabs';
-import { DataTable } from './components/data-table';
-import { columns } from './components/columns';
 import { useSession } from 'next-auth/react';
-import { useUserOfInstructor, useAllCourse } from '@/app/hook/useAllCourse';
+import { useUserOfCourse, useAllCourse } from '@/app/hook/useAllCourse';
 import { useRouter } from 'next/navigation';
 import LoadingModal from '@/components/modal/loading-modal';
+import { DataTable } from '../components/data-table';
+import { columns } from '../components/columns';
 
-export default function UserProgressPage() {
+export default function UserCoursePage({
+    params,
+}: {
+    params: { course_slug: string;};
+}) {
     const session = useSession()
     const router = useRouter();
     const { data: course = [], isLoading, error } = useAllCourse(session.data?.user.email, session.data?.backendTokens.accessToken);
-    const { data = [], isLoadingUser, errorUser} = useUserOfInstructor(session.data?.user.email, session.data?.backendTokens.accessToken);
+    const { data = [], isLoadingUser, errorUser} = useUserOfCourse(session.data?.user.email, session.data?.backendTokens.accessToken, params.course_slug);
 
     if(isLoading || isLoadingUser){
         return (
@@ -32,6 +36,7 @@ export default function UserProgressPage() {
                     className="p-0 border-none outline-none"
                 >
                     <DataTable
+                        course_slug={params.course_slug}
                         columns={columns}
                         data={data}
                         course={course}

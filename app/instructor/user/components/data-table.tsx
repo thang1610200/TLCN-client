@@ -25,22 +25,19 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Course } from '@/app/types';
 import CourseSwitcher from './course-switcher';
-import { uniqBy } from 'lodash';
 
 interface DataTableProps<TData, TValue> {
     columns: ColumnDef<TData, TValue>[];
     data: TData[];
     course?: Course[];
-    courseId?: string;
-    onSelectCourse: (slug: string) => void;
+    course_slug?: string;
 }
 
 export function DataTable<TData, TValue>({
     columns,
     data,
     course,
-    courseId,
-    onSelectCourse
+    course_slug
 }: DataTableProps<TData, TValue>) {
     const [sorting, setSorting] = React.useState<SortingState>([]);
     const [columnFilters, setColumnFilters] =
@@ -79,9 +76,8 @@ export function DataTable<TData, TValue>({
                     className="max-w-sm"
                 />
                 <CourseSwitcher
-                    courseId={courseId}
+                    course_slug={course_slug}
                     items={course} 
-                    onSelectCourse={onSelectCourse}
                 />
             </div>
             <div className="rounded-md border">

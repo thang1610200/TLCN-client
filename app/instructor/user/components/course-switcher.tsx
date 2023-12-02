@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import { Course } from '@/app/types';
 import { Button } from '@/components/ui/button';
@@ -20,6 +20,7 @@ import { cn } from '@/lib/utils';
 import { Check, ChevronsUpDown, PlusCircle, Store } from 'lucide-react';
 import { useState } from 'react';
 import { find } from 'lodash';
+import { useRouter } from 'next/navigation';
 
 type PopoverTriggerProps = React.ComponentPropsWithoutRef<
     typeof PopoverTrigger
@@ -27,18 +28,26 @@ type PopoverTriggerProps = React.ComponentPropsWithoutRef<
 
 interface CourseSwitcherProps extends PopoverTriggerProps {
     items?: Course[];
-    courseId?: string;
-    onSelectCourse: (slug: string) => void;
+    course_slug?: string;
 }
 
 const CourseSwitcher = ({
     className,
     items = [],
-    courseId,
-    onSelectCourse
+    course_slug,
 }: CourseSwitcherProps) => {
     const [open, setOpen] = useState(false);
-    const course = find(items, {id: courseId});
+    const router = useRouter();
+    const course_find = find(items, { slug: course_slug });
+
+    const onSelectCourse = (course_slug?: string) => {
+        if(!course_slug){
+            router.push(`/instructor/user`)
+        }
+        else{
+            router.push(`/instructor/user/${course_slug}`);
+        }
+    };
 
     return (
         <Popover open={open} onOpenChange={setOpen}>
@@ -52,7 +61,7 @@ const CourseSwitcher = ({
                     className={cn('w-auto justify-between', className)}
                 >
                     <Store className="mr-2 h-4 w-4" />
-                    { course?.title }
+                    {course_find?.title || 'All course'}
                     <ChevronsUpDown className="ml-auto h-4 w-4 shrink-0 opacity-50" />
                 </Button>
             </PopoverTrigger>
@@ -62,6 +71,21 @@ const CourseSwitcher = ({
                         <CommandInput placeholder="Search course..." />
                         <CommandEmpty>No course found.</CommandEmpty>
                         <CommandGroup heading="Course">
+                            <CommandItem
+                                onSelect={() => onSelectCourse(undefined)}
+                                className="text-sm"
+                            >
+                                <Store className="mr-2 h-4 w-4" />
+                                All course
+                                <Check
+                                    className={cn(
+                                        'ml-auto h-4 w-4',
+                                        !course_slug
+                                            ? 'opacity-100'
+                                            : 'opacity-0'
+                                    )}
+                                />
+                            </CommandItem>
                             {items.map((course, index) => (
                                 <CommandItem
                                     key={index}
@@ -73,7 +97,7 @@ const CourseSwitcher = ({
                                     <Check
                                         className={cn(
                                             'ml-auto h-4 w-4',
-                                            courseId === course.id
+                                            course_slug === course.slug
                                                 ? 'opacity-100'
                                                 : 'opacity-0'
                                         )}
@@ -88,7 +112,6 @@ const CourseSwitcher = ({
                             <CommandItem
                                 onSelect={() => {
                                     setOpen(false);
-
                                 }}
                             >
                                 <PlusCircle className="mr-2 h-5 w-5" />
