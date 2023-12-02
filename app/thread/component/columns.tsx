@@ -1,7 +1,7 @@
 'use client';
 
 import { ColumnDef } from '@tanstack/react-table';
-import { ArrowUpDown, MoreHorizontal, Pencil } from 'lucide-react';
+import { ArrowUpDown, MoreHorizontal, Pencil, ArrowRightSquare } from 'lucide-react';
 import Link from 'next/link';
 
 import { Button } from '@/components/ui/button';
@@ -94,6 +94,12 @@ export const columns: ColumnDef<Course>[] = [
                         </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end">
+                        <Link href={`/thread/${slug}`}>
+                            <DropdownMenuItem>
+                                <ArrowRightSquare className="w-4 h-4 mr-2" />
+                                Open
+                            </DropdownMenuItem>
+                        </Link>
                         <Link href={`/instructor/course/${slug}`}>
                             <DropdownMenuItem>
                                 <Pencil className="w-4 h-4 mr-2" />
