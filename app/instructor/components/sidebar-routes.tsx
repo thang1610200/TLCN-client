@@ -23,7 +23,7 @@ const routes = [
     {
         icon: BarChart,
         label: 'Analytics',
-        href: '#',
+        href: '/instructor/analytic',
     },
 ];
 
