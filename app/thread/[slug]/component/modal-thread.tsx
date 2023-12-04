@@ -15,15 +15,22 @@ import Image from "next/image"
 
 import ModalComment from './modal-comment';
 
+type UserComment = {
+    username: string;
+    avatar: string;
+    comment: string;
+}
 
 interface ModalThreadProps {
-    data: string[];
+    UserComment: UserComment[];
     image: string;
+    caption: string;
 }
 
 export default function ModalThread(props: ModalThreadProps) {
-    const data = props.data;
+    const UserComment = props.UserComment;
     const image = props.image;
+    const caption = props.caption;
     return (
         <div className='flex items-center justify-center w-full h-full'>
             <Card>
@@ -42,8 +49,8 @@ export default function ModalThread(props: ModalThreadProps) {
                     </div>
                 </CardHeader>
                 <CardContent className="space-y-4 ">
-                    <p>I have a question for this chapter</p>
-                    <div className="rounded-lg w-fit">
+                    <div>{caption}</div>
+                    <div className="rounded-lg w-fit max-w-[500px] max-h-[500px]">
                         <Image
                             src={image}
                             alt="description image"
@@ -52,7 +59,7 @@ export default function ModalThread(props: ModalThreadProps) {
                             className="object-cover w-auto h-auto transition-all hover:scale-105 aspect-square"
                         />
                     </div>
-                    <ModalComment dataComment={data}/>
+                    <ModalComment UserComment={UserComment}/>
                 </CardContent>
             </Card>
         </div>
