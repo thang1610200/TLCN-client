@@ -121,7 +121,7 @@ export default function ModalComment(props: ModalThreadProps) {
                                         as="h3"
                                         className="flex justify-between text-lg font-medium leading-6 text-gray-900 "
                                     >
-                                        <div className="">Comment</div>
+                                        <div className="flex items-center justify-center w-full text-2xl font-bold">Comment</div>
                                         <X className='rounded-lg hover:bg-slate-300' size={32} onClick={() => { setIsOpen(false) }} />
                                     </Dialog.Title>
                                     <div className="flex items-center justify-center ">
@@ -132,10 +132,10 @@ export default function ModalComment(props: ModalThreadProps) {
                                                         <AvatarImage src="/avatars/01.png" />
                                                         <AvatarFallback>OM</AvatarFallback>
                                                     </Avatar>
-                                                    <Textarea
+                                                    <Input
                                                         readOnly={true}
                                                         placeholder={values.comment}
-                                                        className="resize-none focus-visible:ring-0 focus-visible:border-none"
+                                                        className="resize-none focus-visible:ring-0 focus-visible:border-none w-fit h-fit"
                                                     />
                                                 </div>
                                             ))}

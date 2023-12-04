@@ -104,7 +104,7 @@ export default function AuthenticationPage() {
 
                     if (callback?.ok && !callback?.error) {
                         toast.success('Logged in!');
-                        router.push('/home');
+                        router.push('/');
                     }
                 });
             }

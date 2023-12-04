@@ -83,17 +83,6 @@ export default function LoginPage() {
     });
   }
 
-  // const dispatch = useAppDispatch();
-
-  // const hanleLoginClick = () => {
-  //   dispatch(authActions.login({
-  //     sessionStatus: session.status
-  //   }))
-  // }
-  // const hanleLogoutClick = () => {
-  //   dispatch(authActions.logout());
-  // }
-
   return (
     <>
       <div className="relative">

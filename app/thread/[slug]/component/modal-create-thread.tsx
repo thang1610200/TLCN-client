@@ -50,6 +50,7 @@ const defaultValues: Partial<QuestionAnswerFormValues> = {
 
 export default function ModalCreateThread() {
 
+    const [imageThread, setImageThread] = useState("");
 
     const [isOpen, setIsOpen] = useState(false)
     const form = useForm<QuestionAnswerFormValues>({
@@ -58,6 +59,20 @@ export default function ModalCreateThread() {
         mode: "onChange",
     })
 
+
+    const handleOnChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const file = event.target.files?.[0]
+        if (file) {
+            const reader = new FileReader();
+            // setFileInput(file);
+            reader.onload = (e) => {
+                if (e.target) {
+                    setImageThread(e.target.result as string);
+                }
+            };
+            reader.readAsDataURL(file);
+        }
+    }
 
 
     function onSubmit(data: QuestionAnswerFormValues) {
@@ -124,7 +139,6 @@ export default function ModalCreateThread() {
                                                     <p className="text-sm text-muted-foreground">m@example.com</p>
                                                 </div>
                                             </div>
-
                                             <Form {...form}>
                                                 <form onSubmit={form.handleSubmit(onSubmit)} className="items-center justify-center w-full h-full pt-10 space-y-4">
                                                     <FormField
@@ -144,31 +158,17 @@ export default function ModalCreateThread() {
                                                         )}
                                                     />
 
-
-                                                    <Input  accept="image/*" type="file" />
-
-                                                    {/* Form input image 
-
-
-
-                                                    <FormField
-                                                        control={form.control}
-                                                        name="image"
-                                                        render={({ field }) => (
-                                                            <FormItem>
-                                                                <FormControl>
-                                                                    <Input disabled={isLoading} accept="image/*" type="file" {...form.register("image")} onChange={handleOnChange} />
-                                                                </FormControl>
-                                                                <FormMessage />
-                                                            </FormItem>
-                                                        )}
-                                                    />
-                                                    
-                                                    
-                                                    Form input image */}
-
-
-
+                                                    {imageThread &&
+                                                        <div className='flex items-center justify-center w-full'>
+                                                            <img
+                                                                src={imageThread}
+                                                                alt="Thread image"
+                                                                className="relative justify-center object-scale-down p-4 bg-no-repeat rounded-lg max-w-[300px] min-w-fit max-h-[300px] min-h-fit"
+                                                                width={400}
+                                                                height={400}
+                                                            />
+                                                        </div>}
+                                                    <Input accept="image/*" type="file" onChange={handleOnChange} />
 
                                                     <div className="flex items-center justify-center w-full mt-4">
                                                         <Button className='w-1/2 ' type="submit">Post</Button>
