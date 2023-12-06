@@ -99,16 +99,16 @@ export const CategoryForm = ({
     );
 
     return (
-        <div className="mt-6 border bg-slate-100 rounded-md p-4">
-            <div className="font-medium flex items-center justify-between">
-                Course category
+        <div className="p-4 mt-6 border rounded-md bg-slate-100">
+            <div className="flex items-center justify-between font-medium">
+                Danh mục khóa học
                 <Button onClick={toggleEdit} variant="ghost">
                     {isEditing ? (
-                        <>Cancel</>
+                        <>Hủy bỏ</>
                     ) : (
                         <>
-                            <Pencil className="h-4 w-4 mr-2" />
-                            Edit category
+                            <Pencil className="w-4 h-4 mr-2" />
+                            Chỉnh sửa danh mục
                         </>
                     )}
                 </Button>
@@ -127,7 +127,7 @@ export const CategoryForm = ({
                 <Form {...form}>
                     <form
                         onSubmit={form.handleSubmit(onSubmit)}
-                        className="space-y-4 mt-4"
+                        className="mt-4 space-y-4"
                     >
                         <FormField
                             control={form.control}
@@ -153,7 +153,7 @@ export const CategoryForm = ({
                                                                   field.value
                                                           )?.label
                                                         : 'Select option...'}
-                                                    <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                                                    <ChevronsUpDown className="w-4 h-4 ml-2 opacity-50 shrink-0" />
                                                 </Button>
                                             </FormControl>
                                         </PopoverTrigger>
@@ -161,7 +161,7 @@ export const CategoryForm = ({
                                             <Command>
                                                 <CommandInput placeholder="Search option..." />
                                                 <CommandEmpty>
-                                                    No option found.
+                                                    Không tìm thấy tùy chọn
                                                 </CommandEmpty>
                                                 <CommandGroup>
                                                     {options.map((language) => (
@@ -206,7 +206,7 @@ export const CategoryForm = ({
                                 disabled={!isValid || isSubmitting}
                                 type="submit"
                             >
-                                Save
+                                Lưu lại
                             </Button>
                         </div>
                     </form>

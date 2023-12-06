@@ -7,22 +7,22 @@ import { SidebarItem } from './sidebar-item';
 const routes = [
     {
         icon: List,
-        label: 'Courses',
+        label: 'Khóa học',
         href: '/instructor/course',
     },
     {
         icon: Book,
-        label: 'Exercises',
+        label: 'Bài tập',
         href: '/instructor/exercise',
     },
     {
         icon: User,
-        label: 'Users',
+        label: 'Người dùng',
         href: '/instructor/user'
     },
     {
         icon: BarChart,
-        label: 'Analytics',
+        label: 'Biểu đồ',
         href: '/instructor/analytic',
     },
 ];

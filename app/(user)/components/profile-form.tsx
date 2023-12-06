@@ -44,6 +44,18 @@ const profileFormSchema = z.object({
         })
         .email(),
     bio: z.string().max(160).optional(),
+    password: z
+        .string()
+        .min(8, { message: 'Password must be at least 8 characters' })
+        .regex(
+            new RegExp(
+                '^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*]).{8,}$'
+            ),
+            {
+                message:
+                    'Password must contain contain at least a capital letter, a small letter, a number, a special character',
+            }
+        ),
     urls: z
         .array(
             z.object({
@@ -82,6 +94,7 @@ const ProfileForm: React.FC<ProfileUserProps> = ({
             { value: user.titok_id || "" },
         ],
         email: user.email,
+        //password
     };
 
     const form = useForm<ProfileFormValues>({
@@ -143,7 +156,7 @@ const ProfileForm: React.FC<ProfileUserProps> = ({
                 "Content-Type": "application/json"
             }
         }).then(() => {
-            toast.success('Registration Instructor success');   
+            toast.success('Registration Instructor success');
             router.refresh();
         })
             .catch(() => {
@@ -212,6 +225,28 @@ const ProfileForm: React.FC<ProfileUserProps> = ({
                                         You can <span>@mention</span> other users and organizations to
                                         link to them.
                                     </FormDescription>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+                        <FormField
+                            control={form.control}
+                            name="password"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>
+                                        Password
+                                    </FormLabel>
+                                    <FormControl>
+                                        <Input
+                                            disabled={isLoading}
+                                            placeholder="••••••••"
+                                            type="password"
+                                            {...form.register(
+                                                'password'
+                                            )}
+                                        />
+                                    </FormControl>
                                     <FormMessage />
                                 </FormItem>
                             )}

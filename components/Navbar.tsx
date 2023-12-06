@@ -95,7 +95,7 @@ export default function Navbar() {
                     </NavigationMenuItem>
                     <NavigationMenuItem className="hidden md:flex">
                         <NavigationMenuTrigger className="text-lg bg-transparent hover:bg-transparent">
-                            Category
+                            Danh mục
                         </NavigationMenuTrigger>
                         <NavigationMenuContent>
                             <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px] ">
@@ -124,7 +124,7 @@ export default function Navbar() {
                             className="justify-center align-middle "
                         >
                             <button className="items-center justify-center hidden text-center md:flex ">
-                                Instructor
+                                Gia sư
                             </button>
                         </Link>
                         {/* <Link href="/instructor" legacyBehavior passHref className="md:hidden">
@@ -177,12 +177,12 @@ export default function Navbar() {
                                     >
                                         <DropdownMenuItem>
                                             <NavigationMenuLink>
-                                                Profile
+                                                Trang cá nhân
                                             </NavigationMenuLink>
                                         </DropdownMenuItem>
                                     </Link>
                                     <DropdownMenuItem>
-                                        Settings
+                                        Chỉnh sửa
                                     </DropdownMenuItem>
                                 </DropdownMenuGroup>
                                 <DropdownMenuSeparator />
@@ -192,7 +192,7 @@ export default function Navbar() {
                                         signOut({ callbackUrl: '/' });
                                     }}
                                 >
-                                    Log out
+                                    Đăng xuất
                                 </DropdownMenuItem>
                             </DropdownMenuContent>
                         </DropdownMenu>
@@ -201,7 +201,7 @@ export default function Navbar() {
                         <div className="flex p-3">
                             <Link rel="stylesheet" href="\login">
                                 <button className="border border-black text-sm font-bold w-20 h-10 hover:bg-[#F5F5F5] rounded-full">
-                                    Log In
+                                    Đăng nhập
                                 </button>
                             </Link>
                         </div>

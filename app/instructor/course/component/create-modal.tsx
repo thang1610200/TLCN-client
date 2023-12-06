@@ -91,7 +91,7 @@ export default function CreateCourseModal() {
             <div className="ml-auto" onClick={() => setIsOpen(true)}>
                 <Button variant={"default"}>
                     <BiPlusCircle className="w-4 h-4 mr-2" />
-                    New Course
+                    Tạo khóa học mới
                 </Button>
             </div>
             <Transition appear show={isOpen} as={Fragment}>
@@ -124,7 +124,7 @@ export default function CreateCourseModal() {
                                         as="h3"
                                         className="flex justify-center p-4 text-lg font-medium leading-6 text-gray-900"
                                     >
-                                        Create New Course
+                                        Tạo khóa học mới
                                     </Dialog.Title>
                                     <div className="w-full p-10 border-2 rounded-lg ">
                                         <Form {...form}>
@@ -140,16 +140,16 @@ export default function CreateCourseModal() {
                                                                 <Input disabled={isLoading} placeholder="e.g. 'Advanced Web Development'" {...form.register("title")} />
                                                             </FormControl>
                                                             <FormDescription>
-                                                                What will you teach in this course?
+                                                                Bạn sẽ dạy gì trong khóa học này
                                                             </FormDescription>
                                                             <FormMessage />
                                                         </FormItem>
                                                     )}
                                                 />
                                                 <div className="grid w-full grid-cols-2 px-10 gap-x-10 ">
-                                                    {/* <Button type="button" onClick={() => { setIsDisable(false) }}>Update Profile</Button> */}
-                                                    <Button type="submit" disabled={isLoading} className="flex disabled:bg-slate-200 disabled:cursor-not-allowed" >{isLoading ? <Loader /> : 'Continue'}</Button>
-                                                    <Button type="button" onClick={handleCancel} className="flex disabled:bg-slate-200 disabled:cursor-not-allowed">Cancel</Button>
+                                                    
+                                                    <Button type="submit" disabled={isLoading} className="flex disabled:bg-slate-200 disabled:cursor-not-allowed" >{isLoading ? <Loader /> : 'Tiếp tục'}</Button>
+                                                    <Button type="button" onClick={handleCancel} className="flex disabled:bg-slate-200 disabled:cursor-not-allowed">Hủy bỏ</Button>
                                                 </div>
                                             </form>
                                         </Form>

@@ -102,16 +102,16 @@ export const ExerciseLessonForm = ({
     );
 
     return (
-        <div className="mt-6 border bg-slate-100 rounded-md p-4">
-            <div className="font-medium flex items-center justify-between">
-                Lesson exercise
+        <div className="p-4 mt-6 border rounded-md bg-slate-100">
+            <div className="flex items-center justify-between font-medium">
+                Bài tập
                 <Button onClick={toggleEdit} variant="ghost">
                     {isEditing ? (
-                        <>Cancel</>
+                        <>Hủy bỏ</>
                     ) : (
                         <>
-                            <Pencil className="h-4 w-4 mr-2" />
-                            Edit exercise
+                            <Pencil className="w-4 h-4 mr-2" />
+                            Chỉnh sửa bài tập
                         </>
                     )}
                 </Button>
@@ -130,7 +130,7 @@ export const ExerciseLessonForm = ({
                 <Form {...form}>
                     <form
                         onSubmit={form.handleSubmit(onSubmit)}
-                        className="space-y-4 mt-4"
+                        className="mt-4 space-y-4"
                     >
                         <FormField
                             control={form.control}
@@ -163,7 +163,7 @@ export const ExerciseLessonForm = ({
                                                                 field.value
                                                         )?.type
                                                     }
-                                                    <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                                                    <ChevronsUpDown className="w-4 h-4 ml-2 opacity-50 shrink-0" />
                                                 </Button>
                                             </FormControl>
                                         </PopoverTrigger>
@@ -171,7 +171,7 @@ export const ExerciseLessonForm = ({
                                             <Command>
                                                 <CommandInput placeholder="Search option..." />
                                                 <CommandEmpty>
-                                                    No option found.
+                                                    Không tìm thấy lựa chọn
                                                 </CommandEmpty>
                                                 <CommandGroup>
                                                     {options.map((language) => (
@@ -217,7 +217,7 @@ export const ExerciseLessonForm = ({
                                 disabled={!isValid || isSubmitting}
                                 type="submit"
                             >
-                                Save
+                                Lưu lại
                             </Button>
                         </div>
                     </form>

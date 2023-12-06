@@ -55,9 +55,9 @@ export function DataTable<TData, TValue>({
 
     return (
         <div>
-            <div className="flex items-center py-4 justify-between">
+            <div className="flex items-center justify-between py-4">
                 <Input
-                    placeholder="Filter courses..."
+                    placeholder="Tìm kiếm khóa học..."
                     value={
                         (table
                             .getColumn('title')
@@ -74,7 +74,7 @@ export function DataTable<TData, TValue>({
                     <CreateCourseModal />
                 </div>
             </div>
-            <div className="rounded-md border">
+            <div className="border rounded-md">
                 <Table>
                     <TableHeader>
                         {table.getHeaderGroups().map((headerGroup) => (
@@ -120,21 +120,21 @@ export function DataTable<TData, TValue>({
                                     colSpan={columns.length}
                                     className="h-24 text-center"
                                 >
-                                    No results.
+                                    Không tìm thấy khóa học.
                                 </TableCell>
                             </TableRow>
                         )}
                     </TableBody>
                 </Table>
             </div>
-            <div className="flex items-center justify-end space-x-2 py-4">
+            <div className="flex items-center justify-end py-4 space-x-2">
                 <Button
                     variant="outline"
                     size="sm"
                     onClick={() => table.previousPage()}
                     disabled={!table.getCanPreviousPage()}
                 >
-                    Previous
+                    Trang trước
                 </Button>
                 <Button
                     variant="outline"
@@ -142,7 +142,7 @@ export function DataTable<TData, TValue>({
                     onClick={() => table.nextPage()}
                     disabled={!table.getCanNextPage()}
                 >
-                    Next
+                    Trang sau
                 </Button>
             </div>
         </div>

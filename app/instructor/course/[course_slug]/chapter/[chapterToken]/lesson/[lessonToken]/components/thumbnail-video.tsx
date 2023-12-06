@@ -107,32 +107,32 @@ export const ThumbnailForm = ({
 
     return (
         <>
-            <div className="mt-6 border bg-slate-100 rounded-md p-4">
-                <div className="font-medium flex items-center justify-between">
-                    Thumbnail Video
+            <div className="p-4 mt-6 border rounded-md bg-slate-100">
+                <div className="flex items-center justify-between font-medium">
+                    Thêm hình ảnh video
                     <Button onClick={toggleEdit} variant="ghost">
                         {isEditing && <>Cancel</>}
                         {!isEditing && !initialData?.thumbnail && (
                             <>
-                                <PlusCircle className="h-4 w-4 mr-2" />
-                                Add an image
+                                <PlusCircle className="w-4 h-4 mr-2" />
+                                Thêm ảnh
                             </>
                         )}
                         {!isEditing && initialData?.thumbnail && (
                             <>
-                                <Pencil className="h-4 w-4 mr-2" />
-                                Edit image
+                                <Pencil className="w-4 h-4 mr-2" />
+                                Chỉnh sửa ảnh
                             </>
                         )}
                     </Button>
                 </div>
                 {!isEditing &&
                     (!initialData?.thumbnail ? (
-                        <div className="flex items-center justify-center h-60 bg-slate-200 rounded-md">
-                            <ImageIcon className="h-10 w-10 text-slate-500" />
+                        <div className="flex items-center justify-center rounded-md h-60 bg-slate-200">
+                            <ImageIcon className="w-10 h-10 text-slate-500" />
                         </div>
                     ) : (
-                        <div className="relative aspect-video mt-2">
+                        <div className="relative mt-2 aspect-video">
                             <Image
                                 alt="Upload"
                                 fill
@@ -146,7 +146,7 @@ export const ThumbnailForm = ({
                         <Form {...form}>
                             <form
                                 onSubmit={form.handleSubmit(onSubmit)}
-                                className="space-y-4 mt-4"
+                                className="mt-4 space-y-4"
                             >
                                 <FormField
                                     control={form.control}
@@ -171,14 +171,13 @@ export const ThumbnailForm = ({
                                         disabled={!isValid || isSubmitting}
                                         type="submit"
                                     >
-                                        Save
+                                        Lưu lại
                                     </Button>
-                                    {/* <Button disabled={!isValid || isSubmitting} type="button">Cancel</Button> */}
                                 </div>
                             </form>
                         </Form>
-                        <div className="text-xs text-muted-foreground mt-4">
-                            16:9 aspect ratio recommended
+                        <div className="mt-4 text-xs text-muted-foreground">
+                            Khuyến khích nên thêm ảnh tỉ lệ 16:9
                         </div>
                     </div>
                 )}

@@ -18,7 +18,7 @@ export default function RegisterInsModal() {
         <div>
             <div className="relative flex justify-center align-middle rounded-full w-fit h-fit hover:bg-slate-50 hover:bg-opacity-30 " onClick={() => setIsOpen(true)}>
                 <p className="items-center justify-center hidden text-center md:flex">
-                    Become Instructor
+                    Trở thành gia sư
                 </p>
             </div>
             <Transition appear show={isOpen} as={Fragment}>
@@ -51,7 +51,7 @@ export default function RegisterInsModal() {
                                         as="h3"
                                         className="p-4 pb-0 text-lg font-medium leading-6 text-gray-900"
                                     >
-                                        Do you want to become Instructor
+                                        Bạn muốn trở thành gia sư
                                     </Dialog.Title>
                                     <div className='p-4'>
                                         <span>Lorem ipsum dolor sit amet, consectetur adipiscing elit.
@@ -60,8 +60,8 @@ export default function RegisterInsModal() {
                                         </span>
                                     </div>
                                     <div className='grid grid-cols-2 gap-10'>
-                                        <Button onClick={() => setLearnerToInstructor()}>Yes</Button>
-                                        <Button onClick={() => setIsOpen(false)}>Cancel</Button>
+                                        <Button onClick={() => setLearnerToInstructor()}>Chấp nhận</Button>
+                                        <Button onClick={() => setIsOpen(false)}>Hủy bỏ</Button>
                                     </div>
                                 </Dialog.Panel>
                             </Transition.Child>

@@ -82,16 +82,16 @@ export const ChapterDescriptionForm = ({
     }
 
     return (
-        <div className="mt-6 border bg-slate-100 rounded-md p-4">
-        <div className="font-medium flex items-center justify-between">
-            Chapter description
+        <div className="p-4 mt-6 border rounded-md bg-slate-100">
+        <div className="flex items-center justify-between font-medium">
+            Mô tả chương
             <Button onClick={toggleEdit} variant="ghost">
             {isEditing ? (
-                <>Cancel</>
+                <>Hủy bỏ</>
             ) : (
                 <>
-                <Pencil className="h-4 w-4 mr-2" />
-                Edit description
+                <Pencil className="w-4 h-4 mr-2" />
+                Chỉnh sửa mô tả
                 </>
             )}
             </Button>
@@ -101,7 +101,7 @@ export const ChapterDescriptionForm = ({
             "text-sm mt-2",
             !initialData?.description && "text-slate-500 italic"
             )}>
-            {!initialData?.description && "No description"}
+            {!initialData?.description && "Không có mô tả"}
             {initialData?.description && (
                 <Preview
                 value={initialData?.description}
@@ -113,7 +113,7 @@ export const ChapterDescriptionForm = ({
             <Form {...form}>
             <form
                 onSubmit={form.handleSubmit(onSubmit)}
-                className="space-y-4 mt-4"
+                className="mt-4 space-y-4"
             >
                 <FormField
                 control={form.control}
@@ -139,7 +139,7 @@ export const ChapterDescriptionForm = ({
                     disabled={!isValid || isSubmitting}
                     type="submit"
                 >
-                    Save
+                    Lưu lại
                 </Button>
                 </div>
             </form>
