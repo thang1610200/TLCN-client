@@ -4,7 +4,7 @@ import useCourseDetailHome from '@/app/hook/useCourseDetailHome';
 import LoadingModal from '@/components/modal/loading-modal';
 import { CheckIcon, ChevronUpIcon, PlaySquare } from 'lucide-react';
 import Link from 'next/link';
-import { useRouter, redirect } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { Disclosure } from '@headlessui/react';
 import VideoReview from '../../component/video-review';

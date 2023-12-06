@@ -15,6 +15,7 @@ import Link from "next/link";
 import { ChapterTitleForm } from "./components/chapter-title-form";
 import { ChapterDescriptionForm } from "./components/chapter-description-form";
 import { LessonsForm } from "./components/lesson-form";
+import { filter } from "lodash";
 
 
 const ChapterToken = ({
@@ -25,9 +26,14 @@ const ChapterToken = ({
     const session = useSession();
     const { data, isLoading, error, mutate } = useChapterDetail(params.course_slug, session.data?.user.email, session.data?.backendTokens.accessToken, params.chapterToken);
 
+    const lesson = filter(data?.lessons,{
+        isPublished: true
+    });
+
     const requiredFields = [
         data?.title,
         data?.description,
+        lesson?.length > 0
     ];
     
     const totalFields = requiredFields.length;
