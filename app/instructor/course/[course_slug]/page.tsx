@@ -18,6 +18,7 @@ import { CategoryForm } from '../component/category-form';
 import useTopic from '@/app/hook/useTopic';
 import { ChaptersForm } from '../component/chapter-form';
 import { RequirementForm } from '../component/requirement-form';
+import { filter } from 'lodash';
 
 export const metadata: Metadata = {
     title: 'Course',
@@ -31,9 +32,13 @@ const CourseDetail = ({ params }: { params: { course_slug: string } }) => {
         session.data?.user.email,
         session.data?.backendTokens.accessToken
     );
+
     const { data: topics = [] } = useTopic(
         session.data?.backendTokens.accessToken
     );
+
+    const chapters = filter(data?.chapters,{isPublished: true});
+
     const requiredFields = [
         data?.title,
         data?.description,
@@ -41,6 +46,7 @@ const CourseDetail = ({ params }: { params: { course_slug: string } }) => {
         data?.learning_outcome.length > 0,
         data?.requirement.length > 0,
         data?.topic_id,
+        chapters?.length > 0
     ];
 
     const totalFields = requiredFields.length;
