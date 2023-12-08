@@ -116,14 +116,14 @@ export const LessonsForm = ({
             </div>
         )}
         <div className="flex items-center justify-between font-medium">
-            Chapter lessons
+            Bài học trong chương
             <Button onClick={toggleCreating} variant="ghost">
             {isCreating ? (
-                <>Cancel</>
+                <>Hủy bỏ</>
             ) : (
                 <>
                 <PlusCircle className="w-4 h-4 mr-2" />
-                Add a lesson
+                Thêm bài học
                 </>
             )}
             </Button>
@@ -154,7 +154,7 @@ export const LessonsForm = ({
                 disabled={!isValid || isSubmitting}
                 type="submit"
                 >
-                Create
+                Tạo bài học mới
                 </Button>
             </form>
             </Form>
@@ -164,7 +164,7 @@ export const LessonsForm = ({
             "text-sm mt-2",
             !initialData?.lessons.length && "text-slate-500 italic"
             )}>
-            {!initialData?.lessons.length && "No lessons"}
+            {!initialData?.lessons.length && "Không có khóa học"}
             <LessonsList
                 onEdit={onEdit}
                 onReorder={onReorder}
@@ -174,7 +174,7 @@ export const LessonsForm = ({
         )}
         {!isCreating && (
             <p className="mt-4 text-xs text-muted-foreground">
-            Drag and drop to reorder the lessons
+                Kéo thả để sắp xếp thứ tự bài học
             </p>
         )}
         </div>

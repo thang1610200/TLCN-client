@@ -39,7 +39,7 @@ const formSchema = z.object({
     name: z
         .string()
         .min(6, {
-            message: 'Username must be at least 2 characters.',
+            message: 'Username must be at least 6 characters.',
         })
         .max(50, {
             message: 'Username must not be longer than 50 characters.',
@@ -124,7 +124,7 @@ export default function AuthenticationPage() {
 
     return (
         <>
-            <div className="container relative flex-col items-center justify-center hidden h-screen md:grid lg:max-w-none lg:grid-cols-2 lg:px-0">
+            <div className="container relative flex-col items-center justify-center hidden h-screen md:grid lg:max-w-none lg:grid-cols-2 lg:px-0 bg-slate-100">
                 <div className="relative flex-col hidden h-full p-10 text-white bg-muted dark:border-r lg:flex">
                     <Link href="/" legacyBehavior passHref>
                         <h2 className="z-10 text-4xl font-bold cursor-pointer">
@@ -147,7 +147,7 @@ export default function AuthenticationPage() {
                     <div className="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[350px] mt-12">
                         <div className="flex flex-col space-y-2 text-center">
                             <h1 className="text-2xl font-semibold tracking-tight">
-                                Create an account
+                                Tạo tài khoản
                             </h1>
                         </div>
                         <Card>
@@ -164,7 +164,7 @@ export default function AuthenticationPage() {
                                                 render={({ field }) => (
                                                     <FormItem>
                                                         <FormLabel className="after:content-['_*'] after:text-red-600 pb-1">
-                                                            Username
+                                                            Tên người dùng
                                                         </FormLabel>
                                                         <FormControl>
                                                             <Input
@@ -216,7 +216,7 @@ export default function AuthenticationPage() {
                                                 render={({ field }) => (
                                                     <FormItem>
                                                         <FormLabel className="after:content-['_*'] after:text-red-600 pb-1">
-                                                            Password
+                                                            Mật khẩu
                                                         </FormLabel>
                                                         <FormControl>
                                                             <Input
@@ -240,7 +240,7 @@ export default function AuthenticationPage() {
                                             className="w-full mt-5"
                                             type="submit"
                                         >
-                                            {isLoading ? <Loader /> : 'Sign In'}
+                                            {isLoading ? <Loader /> : 'Đăng kí'}
                                         </Button>
                                     </form>
                                 </Form>
@@ -250,7 +250,7 @@ export default function AuthenticationPage() {
                                     </div>
                                     <div className="relative flex justify-center text-xs uppercase">
                                         <span className="px-2 bg-background text-muted-foreground">
-                                            Or continue with
+                                            Hoặc tiếp tục với
                                         </span>
                                     </div>
                                 </div>
@@ -284,25 +284,25 @@ export default function AuthenticationPage() {
                                 >
                                     <Button type="button">
                                         <BiArrowBack className="w-4 h-4 mr-2" />
-                                        Back to login
+                                        Trở lại trang đăng nhập
                                     </Button>
                                 </Link>
                             </CardContent>
                         </Card>
                         <p className="px-8 text-sm text-center text-muted-foreground">
-                            By clicking continue, you agree to our{' '}
+                            Bằng việc tiếp tục, bạn đồng ý với{" "}
                             <Link
                                 href="/terms"
                                 className="underline underline-offset-4 hover:text-primary"
                             >
-                                Terms of Service
-                            </Link>{' '}
-                            and{' '}
+                                Điều khoản dịch vụ
+                            </Link>{" "}
+                            và{" "}
                             <Link
                                 href="/privacy"
                                 className="underline underline-offset-4 hover:text-primary"
                             >
-                                Privacy Policy
+                                Chính sách quyền riêng tư của chúng tôi
                             </Link>
                             .
                         </p>

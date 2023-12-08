@@ -108,21 +108,21 @@ export const ChaptersForm = ({
     }
 
     return (
-        <div className="relative mt-6 border bg-slate-100 rounded-md p-4">
+        <div className="relative p-4 mt-6 border rounded-md bg-slate-100">
         {isUpdating && (
-            <div className="absolute h-full w-full bg-slate-500/20 top-0 right-0 rounded-m flex items-center justify-center">
-            <Loader2 className="animate-spin h-6 w-6 text-sky-700" />
+            <div className="absolute top-0 right-0 flex items-center justify-center w-full h-full bg-slate-500/20 rounded-m">
+            <Loader2 className="w-6 h-6 animate-spin text-sky-700" />
             </div>
         )}
-        <div className="font-medium flex items-center justify-between">
-            Course chapters
+        <div className="flex items-center justify-between font-medium">
+            Các chương trong khóa học
             <Button onClick={toggleCreating} variant="ghost">
             {isCreating ? (
-                <>Cancel</>
+                <>Hủy bỏ</>
             ) : (
                 <>
-                <PlusCircle className="h-4 w-4 mr-2" />
-                Add a chapter
+                <PlusCircle className="w-4 h-4 mr-2" />
+                Tạo chương mới
                 </>
             )}
             </Button>
@@ -131,7 +131,7 @@ export const ChaptersForm = ({
             <Form {...form}>
             <form
                 onSubmit={form.handleSubmit(onSubmit)}
-                className="space-y-4 mt-4"
+                className="mt-4 space-y-4"
             >
                 <FormField
                 control={form.control}
@@ -172,8 +172,8 @@ export const ChaptersForm = ({
             </div>
         )}
         {!isCreating && (
-            <p className="text-xs text-muted-foreground mt-4">
-            Drag and drop to reorder the chapters
+            <p className="mt-4 text-xs text-muted-foreground">
+            Kéo thả để chỉnh sửa thứ tự chương
             </p>
         )}
         </div>

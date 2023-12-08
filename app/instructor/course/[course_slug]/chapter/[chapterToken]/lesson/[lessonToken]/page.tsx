@@ -64,7 +64,7 @@ const LessonToken = ({
                     className="flex items-center mb-6 text-sm transition hover:opacity-75"
                 >
                     <ArrowLeft className="w-4 h-4 mr-2" />
-                    Back to chapter setup
+                    Trở về trang thông tin chương
                 </a>
                 <TabsContent
                     value="music"
@@ -73,10 +73,10 @@ const LessonToken = ({
                     <div className="flex items-center justify-between">
                         <div className="flex flex-col gap-y-2">
                             <h1 className="text-2xl font-medium">
-                                Lesson Creation
+                                Thông tin bài học
                             </h1>
                             <span className="text-sm text-slate-700">
-                                Complete all fields {completionText}
+                                Thông tin đã hoàn thành {completionText}
                             </span>
                         </div>
                         <LessonActions
@@ -89,12 +89,12 @@ const LessonToken = ({
                         />
                     </div>
 
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-16">
+                    <div className="grid grid-cols-1 gap-6 mt-16 md:grid-cols-2">
                         <div>
                             <div className="flex items-center gap-x-2">
                                 <IconBadge icon={LayoutDashboard} />
                                 <h2 className="text-xl">
-                                    Customize your lesson
+                                    Chỉnh sửa bài học
                                 </h2>
                             </div>
                             <LessonTitleForm
@@ -112,9 +112,9 @@ const LessonToken = ({
                                 mutate={mutate}
                             />
 
-                            <div className="flex items-center gap-x-2 mt-12">
+                            <div className="flex items-center mt-12 gap-x-2">
                                 <IconBadge icon={ClipboardCheck} />
-                                <h2 className="text-xl">Exercise</h2>
+                                <h2 className="text-xl">Bài tập</h2>
                             </div>
                             <ExerciseLessonForm
                                 initialData={data}
@@ -140,7 +140,7 @@ const LessonToken = ({
                         <div className="space-y-6">
                             <div className="flex items-center gap-x-2">
                                 <IconBadge icon={Video} />
-                                <h2 className="text-xl">Add a video</h2>
+                                <h2 className="text-xl">Thêm video mới</h2>
                             </div>
                             <LessonVideoForm
                                 initialData={data}
@@ -149,7 +149,7 @@ const LessonToken = ({
                                 lesson_token={params.lessonToken}
                                 mutate={mutate}
                             />
-                            <div className="flex items-center gap-x-2 mt-12">
+                            <div className="flex items-center mt-12 gap-x-2">
                                 <IconBadge icon={Image} />
                                 <h2 className="text-xl">Thumbnail</h2>
                             </div>

@@ -81,7 +81,7 @@ export default function LoginPage() {
     return (
         <>
             <div className="relative">
-                <div className="container relative flex-col items-center justify-center hidden h-screen md:grid lg:max-w-none lg:grid-cols-2 lg:px-0">
+                <div className="container relative flex-col items-center justify-center hidden h-screen md:grid lg:max-w-none lg:grid-cols-2 lg:px-0 bg-slate-100">
                     <div className="relative flex-col hidden h-full p-10 text-white bg-muted dark:border-r lg:flex">
                         <Link href="/" legacyBehavior passHref>
                             <h2 className="z-10 text-4xl font-bold cursor-pointer">
@@ -105,7 +105,7 @@ export default function LoginPage() {
                         <div className="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[350px]">
                             <div className="flex flex-col space-y-2 text-center">
                                 <h1 className="text-4xl font-bold tracking-tight text">
-                                    Login an account
+                                    Đăng nhập
                                 </h1>
                             </div>
                             <Card>
@@ -150,7 +150,7 @@ export default function LoginPage() {
                                                     render={({ field }) => (
                                                         <FormItem>
                                                             <FormLabel className="after:content-['_*'] after:text-red-600 pb-1">
-                                                                Password
+                                                                Mật khẩu
                                                             </FormLabel>
                                                             <FormControl>
                                                                 <Input
@@ -174,7 +174,7 @@ export default function LoginPage() {
                                                 href="/forgotpassword"
                                                 className="-my-2 text-xs text-right underline"
                                             >
-                                                Forgot password?
+                                                Quên mật khẩu?
                                             </Link>
                                             <Button
                                                 disabled={isLoading}
@@ -184,7 +184,7 @@ export default function LoginPage() {
                                                 {isLoading ? (
                                                     <Loader />
                                                 ) : (
-                                                    'Login'
+                                                    'Đăng nhập'
                                                 )}
                                             </Button>
                                         </form>
@@ -195,7 +195,7 @@ export default function LoginPage() {
                                         </div>
                                         <div className="relative flex justify-center text-xs uppercase">
                                             <span className="px-2 bg-background text-muted-foreground">
-                                                Or continue with
+                                                Hoặc tiếp tục với
                                             </span>
                                         </div>
                                     </div>
@@ -229,40 +229,36 @@ export default function LoginPage() {
                                         </div>
                                         <div className="relative flex justify-center px-2 text-xs uppercase">
                                             <span className="px-2 bg-background text-muted-foreground">
-                                                Don't have an account?
+                                                Bạn chưa có tài khoản?
                                             </span>
                                             <Link
                                                 rel="next"
                                                 href="/signup"
                                                 className="grid gap-2 pr-2 underline bg-background decoration-solid"
                                             >
-                                                Sign up
+                                                Đăng kí
                                             </Link>
                                         </div>
                                     </div>
                                 </CardFooter>
                             </Card>
                             <p className="px-8 text-sm text-center text-muted-foreground">
-                                By clicking continue, you agree to our{' '}
+                                Bằng việc tiếp tục, bạn đồng ý với{' '}
                                 <Link
                                     href="/terms"
                                     className="underline underline-offset-4 hover:text-primary"
                                 >
-                                    Terms of Service
+                                    Điều khoản dịch vụ
                                 </Link>{' '}
-                                and{' '}
+                                và{' '}
                                 <Link
                                     href="/privacy"
                                     className="underline underline-offset-4 hover:text-primary"
                                 >
-                                    Privacy Policy
+                                    Chính sách quyền riêng tư của chúng tôi
                                 </Link>
                                 .
                             </p>
-                            {/* <div className="grid grid-cols-2 gap-2">
-                <Button onClick={hanleLoginClick}>Auth action login</Button>
-                <Button onClick={hanleLogoutClick}>Auth action logout</Button>
-              </div> */}
                         </div>
                     </div>
                 </div>

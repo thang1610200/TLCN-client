@@ -33,7 +33,7 @@ const SearchInput = () => {
             onChange={(e: React.ChangeEvent<HTMLInputElement>) => setValue(e.target.value)}
             onKeyDown={onSubmit}
             type="search"
-            placeholder="Search..."
+            placeholder="Tìm kiếm khóa học"
             className="flex w-full h-full text-sm rounded-full bg-slate-100 focus-visible:ring-slate-200"
         />
     );

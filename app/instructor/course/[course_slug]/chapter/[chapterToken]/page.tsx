@@ -58,10 +58,10 @@ const ChapterToken = ({
             </div>
             <a
                 href={`/instructor/course/${params.course_slug}`}
-                className="flex items-center text-sm hover:opacity-75 transition mb-6"
+                className="flex items-center mb-6 text-sm transition hover:opacity-75"
                 >
-                    <ArrowLeft className="h-4 w-4 mr-2" />
-                    Back to course setup
+                    <ArrowLeft className="w-4 h-4 mr-2" />
+                    Trở về trang thông tin khóa học
             </a>
             <TabsContent
                 value="music"
@@ -70,10 +70,10 @@ const ChapterToken = ({
                 <div className="flex items-center justify-between">
                     <div className="flex flex-col gap-y-2">
                         <h1 className="text-2xl font-medium">
-                            Chapter Creation
+                            Thông tin chương
                         </h1>
                         <span className="text-sm text-slate-700">
-                            Complete all fields {completionText}
+                        Thông tin đã hoàn thành {completionText}
                         </span>
                     </div>
                     <ChapterActions
@@ -84,12 +84,12 @@ const ChapterToken = ({
                         mutate={mutate}
                     />
                 </div>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-16">
+                <div className="grid grid-cols-1 gap-6 mt-16 md:grid-cols-2">
                     <div>
                         <div className="flex items-center gap-x-2">
                             <IconBadge icon={LayoutDashboard} />
                             <h2 className="text-xl">
-                                Customize your chapter
+                                Chỉnh sửa chương
                             </h2>
                         </div>
                         <ChapterTitleForm
@@ -110,7 +110,7 @@ const ChapterToken = ({
                             <div className="flex items-center gap-x-2">
                                 <IconBadge icon={ListChecks} />
                                 <h2 className="text-xl">
-                                    Chapter lessons
+                                    Bài học trong chương
                                 </h2>
                             </div>
                             <LessonsForm

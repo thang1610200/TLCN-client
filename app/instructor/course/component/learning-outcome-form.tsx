@@ -105,16 +105,16 @@ export const LearningOutcomeForm = ({
     };
 
     return (
-        <div className="mt-6 border bg-slate-100 rounded-md p-4">
-            <div className="font-medium flex items-center justify-between">
-                Course Learning Outcome
+        <div className="p-4 mt-6 border rounded-md bg-slate-100">
+            <div className="flex items-center justify-between font-medium">
+                Mục tiêu khóa học
                 <Button onClick={toggleEdit} variant="ghost">
                     {isEditing ? (
-                        <>Cancel</>
+                        <>Hủy bỏ</>
                     ) : (
                         <>
-                            <Pencil className="h-4 w-4 mr-2" />
-                            Edit content
+                            <Pencil className="w-4 h-4 mr-2" />
+                            Chỉnh sửa mục tiêu
                         </>
                     )}
                 </Button>
@@ -130,8 +130,8 @@ export const LearningOutcomeForm = ({
                 //     {initialData?.learning_outcome || 'No learning outcome'}
                 // </p>
                 (initialData?.learning_outcome.length === 0 ? (
-                    <p className="text-sm mt-2 text-slate-500 italic">
-                        No learning outcome
+                    <p className="mt-2 text-sm italic text-slate-500">
+                        Không có
                     </p>
                 ) : (
                     <ul className="space-y-4 text-left text-gray-500 dark:text-gray-400">
@@ -149,7 +149,7 @@ export const LearningOutcomeForm = ({
                 <Form {...form}>
                     <form
                         onSubmit={form.handleSubmit(onSubmit)}
-                        className="space-y-4 mt-4"
+                        className="mt-4 space-y-4"
                     >
                         {fields.map((field, index) => (
                             <FormField
@@ -193,13 +193,13 @@ export const LearningOutcomeForm = ({
                                 type="button"
                                 onClick={() => append({ value: '' })}
                             >
-                                Add
+                                Thêm
                             </Button>
                             <Button
                                 disabled={!isValid || isSubmitting}
                                 type="submit"
                             >
-                                Save
+                                Lưu lại
                             </Button>
                         </div>
                     </form>

@@ -14,22 +14,22 @@ const sidebarNavItems = [
         title: 'Profile',
         href: '/profile',
     },
-    {
-        title: 'Account',
-        href: '/examples/forms/account',
-    },
-    {
-        title: 'Appearance',
-        href: '/examples/forms/appearance',
-    },
-    {
-        title: 'Notifications',
-        href: '/examples/forms/notifications',
-    },
-    {
-        title: 'Display',
-        href: '/examples/forms/display',
-    },
+    // {
+    //     title: 'Account',
+    //     href: '/examples/forms/account',
+    // },
+    // {
+    //     title: 'Appearance',
+    //     href: '/examples/forms/appearance',
+    // },
+    // {
+    //     title: 'Notifications',
+    //     href: '/examples/forms/notifications',
+    // },
+    // {
+    //     title: 'Display',
+    //     href: '/examples/forms/display',
+    // },
 ];
 
 interface SettingsLayoutProps {

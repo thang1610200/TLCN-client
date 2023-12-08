@@ -104,26 +104,26 @@ export const LessonVideoForm = ({
     return (
         <div className="p-4 mt-6 border rounded-md bg-slate-100">
             <div className="flex items-center justify-between font-medium">
-                Lesson video
+                Video bài học
                 <Button onClick={toggleEdit} variant="ghost">
                     {isEditing && <>Cancel</>}
                     {!isEditing && !initialData?.videoUrl && (
                         <>
                             <PlusCircle className="w-4 h-4 mr-2" />
-                            Add a video
+                            Thêm video
                         </>
                     )}
                     {!isEditing && initialData?.videoUrl && (
                         <>
                             <Pencil className="w-4 h-4 mr-2" />
-                            Edit video
+                            Chỉnh sửa video
                         </>
                     )}
                 </Button>
             </div>
             {!isEditing &&
                 (!initialData?.videoUrl ? (
-                    <div className="flex items-center justify-center h-60 bg-slate-200 rounded-md">
+                    <div className="flex items-center justify-center rounded-md h-60 bg-slate-200">
                         <Video className="w-10 h-10 text-slate-500" />
                     </div>
                 ) : (
@@ -172,13 +172,13 @@ export const LessonVideoForm = ({
                                     disabled={!isValid || isSubmitting}
                                     type="submit"
                                 >
-                                    Save
+                                    Lưu lại
                                 </Button>
                             </div>
                         </form>
                     </Form>
                     <div className="mt-4 text-xs text-muted-foreground">
-                        Upload this lesson&apos;s video
+                        Đăng tải video bài học
                     </div>
                 </div>
             )}
@@ -186,8 +186,7 @@ export const LessonVideoForm = ({
                 !isEditing &&
                 !initialData?.isCompleteVideo && (
                     <div className="mt-2 text-xs text-muted-foreground">
-                        Videos can take a few minutes to process. Refresh the
-                        page if video does not appear.
+                        Video cần một vài phút để hoàn thành. Refresh trang sẽ làm video không được đăng tải
                     </div>
                 )}
         </div>

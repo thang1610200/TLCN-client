@@ -26,8 +26,8 @@ export const columns: ColumnDef<Course>[] = [
                         column.toggleSorting(column.getIsSorted() === 'asc')
                     }
                 >
-                    Title
-                    <ArrowUpDown className="ml-2 h-4 w-4" />
+                    Tiêu đề
+                    <ArrowUpDown className="w-4 h-4 ml-2" />
                 </Button>
             );
         },
@@ -42,8 +42,8 @@ export const columns: ColumnDef<Course>[] = [
                         column.toggleSorting(column.getIsSorted() === 'asc')
                     }
                 >
-                    Published
-                    <ArrowUpDown className="ml-2 h-4 w-4" />
+                    Đã phát hành
+                    <ArrowUpDown className="w-4 h-4 ml-2" />
                 </Button>
             );
         },
@@ -69,8 +69,8 @@ export const columns: ColumnDef<Course>[] = [
                         column.toggleSorting(column.getIsSorted() === 'asc')
                     }
                 >
-                    Create Date
-                    <ArrowUpDown className="ml-2 h-4 w-4" />
+                    Ngày tạo
+                    <ArrowUpDown className="w-4 h-4 ml-2" />
                 </Button>
             );
         },
@@ -88,16 +88,16 @@ export const columns: ColumnDef<Course>[] = [
             return (
                 <DropdownMenu>
                     <DropdownMenuTrigger asChild>
-                        <Button variant="ghost" className="h-4 w-8 p-0">
-                            <span className="sr-only">Open menu</span>
-                            <MoreHorizontal className="h-4 w-4" />
+                        <Button variant="ghost" className="w-8 h-4 p-0">
+                            <span className="sr-only">Mở danh sách</span>
+                            <MoreHorizontal className="w-4 h-4" />
                         </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end">
                         <Link href={`/instructor/course/${slug}`}>
                             <DropdownMenuItem>
-                                <Pencil className="h-4 w-4 mr-2" />
-                                Edit
+                                <Pencil className="w-4 h-4 mr-2" />
+                                Chỉnh sửa
                             </DropdownMenuItem>
                         </Link>
                     </DropdownMenuContent>
