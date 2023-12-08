@@ -21,7 +21,8 @@ export default function UserProgressPage() {
     }
 
     if(error || errorUser){
-        router.back();
+        console.log(errorUser)
+        //router.back();
     }
 
     return (

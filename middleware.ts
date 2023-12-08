@@ -33,13 +33,5 @@ export async function middleware(req: NextRequest) {
 };
 
 export const config = {
-    matcher: [
-        '/login',
-        '/signup',
-        '/forgotpassword',
-        '/reset-password',
-        '/profile',
-        '/instructor/:path*',
-        '/course-access/:path*',
-    ],
+    matcher: ['/((?!api|static|.*\\..*|_next).*)'],
 };
