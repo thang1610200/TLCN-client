@@ -75,20 +75,20 @@ export default function Navbar() {
     const roleInstructor = 'INSTRUCTOR';
     const role = roleInstructor;
     const navRef = useRef();
-    const handleBecomeInstructor = () => {};
-    const handleSearch = () => {};
+    const handleBecomeInstructor = () => { };
+    const handleSearch = () => { };
     return (
-        <>
-            <NavigationMenu className="fixed z-10 flex items-center justify-between w-[calc(100%_-_2rem)] h-16 m-4 px-2 space-x-2 text-center bg-white max-w-none md:pl-10 md:pr-10 bg-opacity-25 backdrop-blur-sm shadow-[0_8px_32px_0_rgba(_31,38,135,0.37_)] border rounded-[10px] border-solid border-[rgba(_255,255,255,0.18_)]">
-                <NavigationMenuList className="">
-                    <NavigationMenuItem className="flex md:hidden">
-                        <BiMenu size={24} />
-                    </NavigationMenuItem>
+        <div className='fixed z-10 flex items-center justify-between w-[calc(100%_-_2rem)] h-16 m-4 px-2 space-x-2 text-center bg-white max-w-none md:pl-10 md:pr-10 bg-opacity-25 backdrop-blur-sm shadow-[0_8px_32px_0_rgba(_31,38,135,0.37_)] border rounded-[10px] border-solid border-[rgba(_255,255,255,0.18_)]'>
+            <h2 className="text-xl font-bold md:text-3xl">
+                LEARNER
+            </h2>
+            <NavigationMenu className="">
+                <NavigationMenuList className="flex space-x-8 ">
                     <NavigationMenuItem>
                         <Link href="/" legacyBehavior passHref>
                             <NavigationMenuLink>
-                                <h2 className="text-xl font-bold md:text-3xl">
-                                    Udemy
+                                <h2 className="text-lg">
+                                    Trang chính
                                 </h2>
                             </NavigationMenuLink>
                         </Link>
@@ -98,7 +98,7 @@ export default function Navbar() {
                             Danh mục
                         </NavigationMenuTrigger>
                         <NavigationMenuContent>
-                            <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px] ">
+                            <ul className="grid w-[400px] md:w-[500px] md:grid-cols-2 lg:w-[600px] ">
                                 {components.map((components) => (
                                     <ListItem
                                         key={components.title}
@@ -111,25 +111,52 @@ export default function Navbar() {
                             </ul>
                         </NavigationMenuContent>
                     </NavigationMenuItem>
+                    <NavigationMenuItem>
+                        <Link href="/" legacyBehavior passHref>
+                            <NavigationMenuLink>
+                                <h2 className="text-lg">
+                                    Khóa học
+                                </h2>
+                            </NavigationMenuLink>
+                        </Link>
+                    </NavigationMenuItem>
+                    
+                    <NavigationMenuItem>
+                        <Link href="/" legacyBehavior passHref>
+                            <NavigationMenuLink>
+                                <h2 className="text-lg">
+                                    Người Hướng Dẫn
+                                </h2>
+                            </NavigationMenuLink>
+                        </Link>
+                    </NavigationMenuItem>
+                    <NavigationMenuItem>
+                        <Link href="/" legacyBehavior passHref>
+                            <NavigationMenuLink className=''>
+                                <h2 className="text-lg">
+                                    Liên hệ
+                                </h2>
+                            </NavigationMenuLink>
+                        </Link>
+                    </NavigationMenuItem>
                 </NavigationMenuList>
-                <div className="w-full h-2/3">
+                {/* <div className="w-full h-2/3">
                     <SearchInput />
-                </div>
+                </div> */}
+            </NavigationMenu>
+            <div className="flex">
                 {role.toString() === 'INSTRUCTOR' ? (
-                    <div className="relative flex p-2 rounded-full w-fit h-fit hover:bg-slate-50 hover:bg-opacity-30 ">
+                    <div className="relative flex items-center justify-center rounded-full hover:bg-slate-50 hover:bg-opacity-30 ">
                         <Link
                             href="/instructor/course"
                             legacyBehavior
                             passHref
                             className="justify-center align-middle "
                         >
-                            <button className="items-center justify-center hidden text-center md:flex ">
+                            <Button className="">
                                 Gia sư
-                            </button>
+                            </Button>
                         </Link>
-                        {/* <Link href="/instructor" legacyBehavior passHref className="md:hidden">
-                <BiSolidGraduation />
-              </Link> */}
                     </div>
                 ) : session.status == 'authenticated' ? (
                     <RegisterInsModal />
@@ -200,23 +227,18 @@ export default function Navbar() {
                     {session.status == 'unauthenticated' && (
                         <div className="flex p-3">
                             <Link rel="stylesheet" href="\login">
-                                <button className="border border-black text-sm font-bold w-20 h-10 hover:bg-[#F5F5F5] rounded-full">
+                                <Button className="">
                                     Đăng nhập
-                                </button>
+                                </Button>
                             </Link>
                         </div>
                     )}
                     {session.status == 'loading' && (
                         <div className="flex w-20 h-10"></div>
                     )}
-                    {/* <Link rel="stylesheet" href="\" >
-            <button className="border border-black h-10 w-10 lg:flex items-center justify-center hover:bg-[#F5F5F5] hidden rounded-3xl ">
-              <BiGlobe className="w-8 h-8" />
-            </button>
-          </Link> */}
                 </div>
-            </NavigationMenu>
-        </>
+            </div>
+        </div>
     );
 }
 
