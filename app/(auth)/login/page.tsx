@@ -18,7 +18,7 @@ import {
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
-import { signIn, useSession } from 'next-auth/react';
+import { signIn } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import toast from 'react-hot-toast';
 import { useState } from 'react';
@@ -37,7 +37,6 @@ const formSchema = z.object({
 type LoginFormValues = z.infer<typeof formSchema>;
 
 export default function LoginPage() {
-    const session = useSession();
     const [isLoading, setIsLoading] = useState(false);
     const router = useRouter();
 
@@ -50,6 +49,7 @@ export default function LoginPage() {
     });
 
     function onSubmit(values: z.infer<typeof formSchema>) {
+        console.log(values);
         setIsLoading(true);
         signIn('credentials', {
             email: values.email,

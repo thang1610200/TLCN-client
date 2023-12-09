@@ -11,6 +11,7 @@ import { BACKEND_URL } from '@/lib/constant';
 import { useSession } from 'next-auth/react';
 import { useConfettiStore } from '@/app/hook/useConfettiStore';
 import { KeyedMutator } from 'swr';
+import LoadingModal from '@/components/modal/loading-modal';
 
 interface ActionsProps {
     disabled: boolean;
@@ -84,6 +85,10 @@ export const Actions = ({
             setIsLoading(false);
         }
     };
+
+    if(isLoading){
+        return (<LoadingModal />);
+    }
 
     return (
         <div className="flex items-center gap-x-2">
