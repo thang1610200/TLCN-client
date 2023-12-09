@@ -67,7 +67,7 @@ export const authOptions: NextAuthOptions = {
                     },
                 });
 
-                if (res.status == 401) {
+                if (res.status == 401 || res.status === 500) {
                     return null;
                 }
                 const user = await res.json();
@@ -105,7 +105,7 @@ export const authOptions: NextAuthOptions = {
                         'Content-Type': 'application/json',
                     },
                 });
-                if (res.status === 401) {
+                if (res.status === 401 || res.status === 500) {
                     return null;
                 }
                 const user = await res.json();

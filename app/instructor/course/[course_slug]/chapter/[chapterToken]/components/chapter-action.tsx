@@ -11,6 +11,7 @@ import { ConfirmModal } from "@/components/modal/confirm-modal";
 import { BACKEND_URL } from "@/lib/constant";
 import { useSession } from "next-auth/react";
 import { KeyedMutator } from "swr";
+import LoadingModal from "@/components/modal/loading-modal";
 
 interface ChapterActionsProps {
     disabled: boolean;
@@ -78,6 +79,10 @@ export const ChapterActions = ({
         } finally {
             setIsLoading(false);
         }
+    }
+
+    if(isLoading){
+        return (<LoadingModal />);
     }
 
     return (

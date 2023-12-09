@@ -11,6 +11,7 @@ import { ConfirmModal } from '@/components/modal/confirm-modal';
 import { BACKEND_URL } from '@/lib/constant';
 import { useSession } from 'next-auth/react';
 import { KeyedMutator } from 'swr';
+import LoadingModal from '@/components/modal/loading-modal';
 
 interface LessonActionsProps {
     disabled: boolean;
@@ -91,6 +92,10 @@ export const LessonActions = ({
             setIsLoading(false);
         }
     };
+
+    if(isLoading){
+        return (<LoadingModal />);
+    }
 
     return (
         <div className="flex items-center gap-x-2">

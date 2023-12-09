@@ -216,7 +216,7 @@ export default function Navbar() {
                                 <DropdownMenuItem
                                     className="hover:bg-inherit"
                                     onClick={() => {
-                                        signOut({ callbackUrl: '/' });
+                                        signOut({ callbackUrl: '/login' });
                                     }}
                                 >
                                     Đăng xuất
@@ -227,7 +227,7 @@ export default function Navbar() {
                     {session.status == 'unauthenticated' && (
                         <div className="flex p-3">
                             <Link rel="stylesheet" href="\login">
-                                <Button className="">
+                                <Button className="border border-black text-sm font-bold w-20 h-10 hover:bg-[#F5F5F5] rounded-full">
                                     Đăng nhập
                                 </Button>
                             </Link>
