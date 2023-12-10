@@ -3,6 +3,7 @@ import { Tab } from '@headlessui/react';
 import ReviewCourse from './review-course';
 import { Course, Lesson } from '@/app/types';
 import Overview from './overview';
+import ResourcesLesson from './resources';
 
 function classNames(...classes: any[]) {
     return classes.filter(Boolean).join(' ');
@@ -28,7 +29,9 @@ export const OverviewNavigation: React.FC<OverviewProps> = ({
         },
         {
             label: 'Resources',
-            component: ''
+            component: <ResourcesLesson
+                            lesson={lesson} 
+                        />
         },
         {
             label: 'Reviews',

@@ -10,6 +10,7 @@ import {
     LayoutDashboard,
     Video,
     ClipboardCheck,
+    File
 } from 'lucide-react';
 import Link from 'next/link';
 import useLessonDetail from '@/app/hook/useLessonDetail';
@@ -21,7 +22,7 @@ import { ThumbnailForm } from './components/thumbnail-video';
 import { ExerciseLessonForm } from './components/add-exercise-form';
 import useAllExercise from '@/app/hook/useAllExerciseOpen';
 import { NumberQuestionPass } from './components/add-number-pass';
-//import { LessonQuizzForm } from './components/lesson-quizz';
+import { AttachmentForm } from './components/attachment-form';
 
 const LessonToken = ({
     params,
@@ -93,9 +94,7 @@ const LessonToken = ({
                         <div>
                             <div className="flex items-center gap-x-2">
                                 <IconBadge icon={LayoutDashboard} />
-                                <h2 className="text-xl">
-                                    Chỉnh sửa bài học
-                                </h2>
+                                <h2 className="text-xl">Chỉnh sửa bài học</h2>
                             </div>
                             <LessonTitleForm
                                 initialData={data}
@@ -135,6 +134,18 @@ const LessonToken = ({
                                 chapter_token={params.chapterToken}
                                 lesson_token={params.lessonToken}
                                 mutate={mutate}
+                            />
+
+                            <div className="flex items-center gap-x-2 mt-12">
+                                <IconBadge icon={File} />
+                                <h2 className="text-xl">
+                                Tài nguyên & Tệp đính kèm
+                                </h2>
+                            </div>
+                            <AttachmentForm
+                                mutate={mutate}
+                                initialData={data}
+                                lesson_token={params.lessonToken}
                             />
                         </div>
                         <div className="space-y-6">

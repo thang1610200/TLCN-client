@@ -57,6 +57,7 @@ export interface Lesson {
     exerciseId: string;
     exercise: Exercise;
     userProgress: UserProgress[];
+    attachment: Attachment[]
     amountToPass: number;
 }
 
@@ -134,4 +135,13 @@ export interface ReviewReply {
     review: Review,
     reply: string,
     create_at: Date
+}
+
+export interface Attachment {
+    id: string,
+    name: string,
+    url: string,
+    lessonId: string,
+    lesson: Lesson,
+    createdAt: Date
 }
