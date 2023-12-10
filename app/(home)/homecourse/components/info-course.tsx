@@ -6,7 +6,7 @@ import { Heart, Timer, Book, GraduationCap  } from 'lucide-react';
 
 export default function InfoCourse() {
     return (
-        <div className='w-1/3 max-w-xs grid-rows-3 border-2 rounded-lg h-1/3 bg-slate-200 max-h-xs'>
+        <div className='w-1/3 max-w-xs grid-rows-3 border-2 rounded-lg h-1/3 bg-slate-100 max-h-xs'>
             <div className="flex items-center justify-center w-full col-span-2 overflow-hidden rounded-lg h-1/3" >
                 <Image
                     src="https://picsum.photos/400/200"

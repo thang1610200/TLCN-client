@@ -3,11 +3,109 @@
 import React, { Fragment, useState } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
 import { Button } from "@/components/ui/button";
+import { Input } from '@/components/ui/input';
+import {
+    Form,
+    FormControl,
+    FormDescription,
+    FormField,
+    FormItem,
+    FormLabel,
+    FormMessage,
+} from "@/components/ui/form"
+import * as z from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import Loader from '@/components/loader';
 
+
+const MAX_FILE_SIZE = 1000000;
+const ACCEPTED_IMAGE_TYPES = ["image/jpeg", "image/jpg", "image/png", "image/webp"];
+
+const CertificateFormSchema = z.object({
+    image: z.any()
+        .refine((files) => files?.[0]?.size <= MAX_FILE_SIZE, `Max image size is 10MB.`)
+        .refine(
+            (files) => ACCEPTED_IMAGE_TYPES.includes(files?.[0]?.type),
+            "Only .jpg, .jpeg, .png and .webp formats are supported."
+        )
+});
+
+type CertificateFormValues = z.infer<typeof CertificateFormSchema>;
 
 export default function RegisterInsModal() {
-
     let [isOpen, setIsOpen] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
+    const [imageCertificate, setImageCertificate] = useState("");
+
+    const defaultValues: Partial<CertificateFormValues> = {
+        image: ""
+    };
+
+    const handleOnChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const file = event.target.files?.[0]
+        if (file) {
+            const reader = new FileReader();
+            // setFileInput(file);
+            reader.onload = (e) => {
+                if (e.target) {
+                    setImageCertificate(e.target.result as string);
+                }
+            };
+
+            reader.readAsDataURL(file);
+        }
+    }
+
+    const form = useForm<CertificateFormValues>({
+        resolver: zodResolver(CertificateFormSchema),
+        defaultValues,
+    })
+
+    function SubmitUpdate(data: CertificateFormValues) {
+        console.log("submit");
+        // setIsLoading(true);
+        // axios.patch(`${BACKEND_URL}/user/update-avatar`, {
+        //     email: user.email,
+        //     file: data.image[0]
+        // }, {
+        //     headers: {
+        //         Authorization: `Bearer ${props.token}`,
+        //         'Content-Type': 'multipart/form-data'
+        //     }
+        // })
+        //     .then((res: any) => {
+        //         toast.success("Update success!");
+        //         update({
+        //             user: {
+        //                 ...session?.user,
+        //                 image: res.data.image as string,
+        //                 name: res.data.name as string
+        //             }
+        //         });
+        //         setImageUser(res.data.image);
+        //         setIsOpenChangeImage(false);
+        //         router.refresh();
+        //     })
+        //     .catch((err: AxiosError<any, any>) => {
+        //         if (err.response?.status === 401) {
+        //             router.push('/login');
+        //         }
+        //         else {
+        //             toast.error(err.response?.data?.message || "Error");
+        //         }
+        //     })
+        //     .finally(() => {
+        //         setIsLoading(false);
+        //     });
+    }
+
+    function CancelImage() {
+        setIsOpen(false);
+        setImageCertificate("");
+    }
+
+
     const setLearnerToInstructor = () => {
         console.log("Set Learner to Instructor");
         setIsOpen(false);
@@ -16,11 +114,7 @@ export default function RegisterInsModal() {
     }
     return (
         <div>
-            <div className="relative flex justify-center align-middle rounded-full w-fit h-fit hover:bg-slate-50 hover:bg-opacity-30 " onClick={() => setIsOpen(true)}>
-                <p className="items-center justify-center hidden text-center md:flex">
-                    Trở thành gia sư
-                </p>
-            </div>
+            <Button onClick={() => { setIsOpen(true) }} className='relative flex items-center justify-center focus-visible::ring-0 focus-visible::ring-offset-0'>Trở thành giảng viên</Button>
             <Transition appear show={isOpen} as={Fragment}>
                 <Dialog as="div" className="relative z-10" onClose={() => { setIsOpen(false) }}>
                     <Transition.Child
@@ -46,23 +140,63 @@ export default function RegisterInsModal() {
                                 leaveFrom="opacity-100 scale-100"
                                 leaveTo="opacity-0 scale-95"
                             >
-                                <Dialog.Panel className="w-full max-w-md p-6 overflow-hidden text-left align-middle transition-all transform bg-white shadow-xl rounded-2xl">
+                                <Dialog.Panel className="w-full max-w-xl p-6 space-y-4 overflow-hidden text-left align-middle transition-all transform bg-white shadow-xl rounded-2xl">
                                     <Dialog.Title
                                         as="h3"
-                                        className="p-4 pb-0 text-lg font-medium leading-6 text-gray-900"
+                                        className="flex items-center justify-center p-4 pb-0 text-2xl font-semibold leading-6 text-gray-900"
                                     >
-                                        Bạn muốn trở thành gia sư
+                                        Bạn muốn trở thành giảng viên
+
                                     </Dialog.Title>
-                                    <div className='p-4'>
-                                        <span>Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                                            Etiam nisl dolor, egestas eu auctor ut, bibendum eget quam.
-                                            Nam et suscipit purus. Fusce at tempor ipsum.
-                                        </span>
-                                    </div>
-                                    <div className='grid grid-cols-2 gap-10'>
+                                    <p className='flex items-center justify-center text-center  indent-4 max-w-[500px] min-w-[500px] '>
+                                        Để trở thành giảng viên, chúng tôi yêu cầu bạn xác thực trình độ. Vui lòng cung cấp hình ảnh chứng minh chứng chỉ của bạn
+                                    </p>
+                                    <Form {...form}>
+                                        <form onSubmit={form.handleSubmit(SubmitUpdate)}>
+
+                                            <FormField
+                                                control={form.control}
+                                                name="image"
+                                                render={({ field }) => (
+                                                    <FormItem className='flex items-center justify-center '>
+
+                                                        <FormControl className=''>
+                                                            <div className="flex items-center justify-center max-w-[500px] min-w-[500px] max-h-[500px] min-h-[500px]">
+                                                                <label htmlFor="dropzone-file" className="flex flex-col items-center justify-center w-full h-full border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-bray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600 max-w-[500px] min-w-[500px] max-h-[500px] min-h-[500px]">
+                                                                    {!imageCertificate && <div className="flex flex-col items-center justify-center pt-5 pb-6">
+                                                                        <svg className="w-8 h-8 mb-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 16">
+                                                                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2" />
+                                                                        </svg>
+                                                                        <p className="mb-2 text-sm text-gray-500 dark:text-gray-400"><span className="font-semibold">Click to upload</span> or drag and drop</p>
+                                                                        <p className="text-xs text-gray-500 dark:text-gray-400">PG, JPEG, PNG or WEBP (Max image size is 10MB)</p>
+                                                                    </div>}
+                                                                    {imageCertificate && <img
+                                                                        src={imageCertificate}
+                                                                        alt="User image"
+                                                                        className="relative justify-center object-scale-down p-4 bg-no-repeat  max-w-[500px] min-w-[500px] max-h-[500px] min-h-[500px]"
+                                                                        width={400}
+                                                                        height={400}
+                                                                    />}
+                                                                    <Input id="dropzone-file" accept="image/*" type="file" {...form.register("image")} onChange={handleOnChange} className='hidden' />
+                                                                </label>
+                                                            </div>
+                                                        </FormControl>
+                                                        <FormMessage />
+                                                    </FormItem>
+                                                )}
+                                            />
+                                            {/* <Input onChange={handleOnChange} accept="image/*" type="file" /> */}
+
+                                            <div className="grid w-full grid-cols-2 gap-10 pt-6">
+                                                <Button disabled={isLoading} type="submit">{isLoading ? <Loader /> : 'Lưu lại'}</Button>
+                                                <Button type="button" onClick={() => { CancelImage() }}>Hủy bỏ</Button>
+                                            </div>
+                                        </form>
+                                    </Form>
+                                    {/* <div className='grid grid-cols-2 gap-10'>
                                         <Button onClick={() => setLearnerToInstructor()}>Chấp nhận</Button>
                                         <Button onClick={() => setIsOpen(false)}>Hủy bỏ</Button>
-                                    </div>
+                                    </div> */}
                                 </Dialog.Panel>
                             </Transition.Child>
                         </div>
