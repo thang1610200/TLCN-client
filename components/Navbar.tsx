@@ -73,22 +73,23 @@ export default function Navbar() {
     const router = useRouter();
     const roleLearner = 'LEARNER';
     const roleInstructor = 'INSTRUCTOR';
-    const role = roleInstructor;
+    const role = roleLearner;
     const navRef = useRef();
-    const handleBecomeInstructor = () => {};
-    const handleSearch = () => {};
+    const handleBecomeInstructor = () => { };
+    const handleSearch = () => { };
     return (
-        <>
+        <div className=''>
+
             <NavigationMenu className="fixed z-10 flex items-center justify-between w-[calc(100%_-_2rem)] h-16 m-4 px-2 space-x-2 text-center bg-white max-w-none md:pl-10 md:pr-10 bg-opacity-25 backdrop-blur-sm shadow-[0_8px_32px_0_rgba(_31,38,135,0.37_)] border rounded-[10px] border-solid border-[rgba(_255,255,255,0.18_)]">
-                <NavigationMenuList className="">
-                    <NavigationMenuItem className="flex md:hidden">
-                        <BiMenu size={24} />
-                    </NavigationMenuItem>
+                <h2 className="text-xl font-bold md:text-3xl">
+                    LEARNER
+                </h2>
+                <NavigationMenuList className="flex space-x-8 ">
                     <NavigationMenuItem>
                         <Link href="/" legacyBehavior passHref>
                             <NavigationMenuLink>
-                                <h2 className="text-xl font-bold md:text-3xl">
-                                    Udemy
+                                <h2 className="text-lg">
+                                    Trang chính
                                 </h2>
                             </NavigationMenuLink>
                         </Link>
@@ -98,7 +99,7 @@ export default function Navbar() {
                             Danh mục
                         </NavigationMenuTrigger>
                         <NavigationMenuContent>
-                            <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px] ">
+                            <ul className="grid w-[400px] md:w-[500px] md:grid-cols-2 lg:w-[600px] ">
                                 {components.map((components) => (
                                     <ListItem
                                         key={components.title}
@@ -111,107 +112,137 @@ export default function Navbar() {
                             </ul>
                         </NavigationMenuContent>
                     </NavigationMenuItem>
-                </NavigationMenuList>
-                <div className="w-full h-2/3">
-                    <SearchInput />
-                </div>
-                {role.toString() === 'INSTRUCTOR' ? (
-                    <div className="relative flex p-2 rounded-full w-fit h-fit hover:bg-slate-50 hover:bg-opacity-30 ">
-                        <Link
-                            href="/instructor/course"
-                            legacyBehavior
-                            passHref
-                            className="justify-center align-middle "
-                        >
-                            <button className="items-center justify-center hidden text-center md:flex ">
-                                Gia sư
-                            </button>
+                    <NavigationMenuItem>
+                        <Link href="/" legacyBehavior passHref>
+                            <NavigationMenuLink>
+                                <h2 className="text-lg">
+                                    Khóa học
+                                </h2>
+                            </NavigationMenuLink>
                         </Link>
-                        {/* <Link href="/instructor" legacyBehavior passHref className="md:hidden">
-                <BiSolidGraduation />
-              </Link> */}
-                    </div>
-                ) : session.status == 'authenticated' ? (
-                    <RegisterInsModal />
-                ) : (
-                    <div></div>
-                )}
-                <div className="flex justify-end space-x-2 cursor-pointer ">
-                    {session.status == 'authenticated' && (
-                        <DropdownMenu modal={false}>
-                            <DropdownMenuTrigger asChild>
-                                <Button
-                                    variant="ghost"
-                                    className="relative w-16 h-16 pr-0 rounded-full focus:ring-0 focus:ring-offset-0 hover:bg-inherit"
-                                >
-                                    <Avatar className="w-full h-fit">
-                                        <AvatarImage
-                                            src={session.data?.user.image}
-                                            alt="User Image"
-                                        />
-                                        <AvatarFallback>User</AvatarFallback>
-                                    </Avatar>
-                                </Button>
-                            </DropdownMenuTrigger>
-                            <DropdownMenuContent
-                                className="w-56"
-                                align="end"
-                                forceMount
+                    </NavigationMenuItem>
+
+                    <NavigationMenuItem>
+                        <Link href="/" legacyBehavior passHref>
+                            <NavigationMenuLink>
+                                <h2 className="text-lg">
+                                    Người Hướng Dẫn
+                                </h2>
+                            </NavigationMenuLink>
+                        </Link>
+                    </NavigationMenuItem>
+                    <NavigationMenuItem>
+                        <Link href="/" legacyBehavior passHref>
+                            <NavigationMenuLink className=''>
+                                <h2 className="text-lg">
+                                    Liên hệ
+                                </h2>
+                            </NavigationMenuLink>
+                        </Link>
+                    </NavigationMenuItem>
+                </NavigationMenuList>
+                {/* <div className="w-full h-2/3">
+                    <SearchInput />
+                </div> */}
+                <div className="flex">
+                    {role.toString() === 'INSTRUCTOR' ? (
+                        <div className="relative flex items-center justify-center rounded-full hover:bg-slate-50 hover:bg-opacity-30 ">
+                            <Link
+                                href="/instructor/course"
+                                legacyBehavior
+                                passHref
+                                className="justify-center align-middle "
                             >
-                                <DropdownMenuLabel className="font-normal">
-                                    <div className="flex flex-col space-y-1">
-                                        <p className="text-sm font-medium leading-none">
-                                            {session.data?.user.name}
-                                        </p>
-                                        <p className="text-xs leading-none text-muted-foreground">
-                                            {session.data?.user.email}
-                                        </p>
-                                    </div>
-                                </DropdownMenuLabel>
-                                <DropdownMenuSeparator />
-                                <DropdownMenuGroup>
-                                    <Link
-                                        href="/profile"
-                                        legacyBehavior
-                                        passHref
-                                    >
-                                        <DropdownMenuItem>
-                                            <NavigationMenuLink>
-                                                Trang cá nhân
-                                            </NavigationMenuLink>
-                                        </DropdownMenuItem>
-                                    </Link>
-                                    <DropdownMenuItem>
-                                        Chỉnh sửa
-                                    </DropdownMenuItem>
-                                </DropdownMenuGroup>
-                                <DropdownMenuSeparator />
-                                <DropdownMenuItem
-                                    className="hover:bg-inherit"
-                                    onClick={() => {
-                                        signOut({ callbackUrl: '/login' });
-                                    }}
-                                >
-                                    Đăng xuất
-                                </DropdownMenuItem>
-                            </DropdownMenuContent>
-                        </DropdownMenu>
-                    )}
-                    {session.status == 'unauthenticated' && (
-                        <div className="flex p-3">
-                            <Link rel="stylesheet" href="/login">
-                                <button className="border border-black text-sm font-bold w-20 h-10 hover:bg-[#F5F5F5] rounded-full">
-                                    Đăng nhập
-                                </button>
+                                <Button className="">
+                                    Giảng viên
+                                </Button>
                             </Link>
                         </div>
+                    ) : session.status == 'authenticated' ? (
+                        <div className='relative flex items-center justify-center '>
+                            <RegisterInsModal />
+                        </div>
+                    ) : (
+                        <div></div>
                     )}
-                    {session.status == 'loading' && (
-                        <div className="flex w-20 h-10"></div>
-                    )}
+                    <div className="flex justify-end space-x-2 cursor-pointer ">
+                        {session.status == 'authenticated' && (
+                            <DropdownMenu modal={false}>
+                                <DropdownMenuTrigger asChild>
+                                    <Button
+                                        variant="ghost"
+                                        className="relative w-16 h-16 pr-0 rounded-full focus-visible::ring-0 focus-visible::ring-offset-0 hover:bg-inherit"
+                                    >
+                                        <Avatar className="w-full h-fit">
+                                            <AvatarImage
+                                                src={session.data?.user.image}
+                                                alt="User Image"
+                                            />
+                                            <AvatarFallback>User</AvatarFallback>
+                                        </Avatar>
+                                    </Button>
+                                </DropdownMenuTrigger>
+                                <DropdownMenuContent
+                                    className="w-56"
+                                    align="end"
+                                    forceMount
+                                >
+                                    <DropdownMenuLabel className="font-normal">
+                                        <div className="flex flex-col space-y-1">
+                                            <p className="text-sm font-medium leading-none">
+                                                {session.data?.user.name}
+                                            </p>
+                                            <p className="text-xs leading-none text-muted-foreground">
+                                                {session.data?.user.email}
+                                            </p>
+                                        </div>
+                                    </DropdownMenuLabel>
+                                    <DropdownMenuSeparator />
+                                    <DropdownMenuGroup>
+                                        <Link
+                                            href="/profile"
+                                            legacyBehavior
+                                            passHref
+                                        >
+                                            <DropdownMenuItem>
+                                                <NavigationMenuLink>
+                                                    Trang cá nhân
+                                                </NavigationMenuLink>
+                                            </DropdownMenuItem>
+                                        </Link>
+                                        <DropdownMenuItem>
+                                            Chỉnh sửa
+                                        </DropdownMenuItem>
+                                    </DropdownMenuGroup>
+                                    <DropdownMenuSeparator />
+                                    <DropdownMenuItem
+                                        className="hover:bg-inherit"
+                                        onClick={() => {
+                                            signOut({ callbackUrl: '/login' });
+                                        }}
+                                    >
+                                        Đăng xuất
+                                    </DropdownMenuItem>
+                                </DropdownMenuContent>
+                            </DropdownMenu>
+                        )}
+                        {session.status == 'unauthenticated' && (
+                            <div className="flex p-3">
+                                <Link rel="stylesheet" href="\login">
+                                    <Button className="border border-black text-sm font-bold w-20 h-10 hover:bg-[#F5F5F5] rounded-full">
+                                        Đăng nhập
+                                    </Button>
+                                </Link>
+                            </div>
+                        )}
+                        {session.status == 'loading' && (
+                            <div className="flex w-20 h-10"></div>
+                        )}
+                    </div>
                 </div>
             </NavigationMenu>
-        </>
+
+        </div>
     );
 }
 
