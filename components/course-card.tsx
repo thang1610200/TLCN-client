@@ -1,15 +1,17 @@
 import Image from 'next/image';
 import Link from 'next/link';
-import { BookOpen } from 'lucide-react';
+import { BookOpen, Timer } from 'lucide-react';
 import { IconBadge } from '@/components/icon-badge';
+import { sumBy } from 'lodash';
+import { Chapter } from '@/app/types';
 
 interface CourseCardProps {
     slug: string;
     title: string;
     imageUrl: string;
     chaptersLength: number;
-    progress: number | null;
     category?: string;
+    chapter?: Chapter[]
 }
 
 export const CourseCard = ({
@@ -17,9 +19,29 @@ export const CourseCard = ({
     title,
     imageUrl,
     chaptersLength,
-    progress,
     category,
+    chapter
 }: CourseCardProps) => {
+
+    function convertTime(second: number): string {
+        let hour: number = Math.floor(second / 3600);
+
+        if (hour > 0) {
+            let minute: number = Math.floor((second % 3600) / 60);
+
+            return `${hour} h ${minute} m`;
+        } else {
+            let minute: number = Math.floor(second / 60);
+
+            return `${minute} m`;
+        }
+    }
+
+    var sumTimeCourse = 0;
+    chapter?.map((item) => {
+        sumTimeCourse += sumBy(item.lessons,'duration');
+    })
+
     return (
         <Link href={`/course/${slug}`}>
             <div className="group hover:shadow-sm transition overflow-hidden border rounded-lg p-3 h-full">
@@ -36,7 +58,7 @@ export const CourseCard = ({
                         {title}
                     </div>
                     <p className="text-xs text-muted-foreground">{category}</p>
-                    <div className="my-3 flex items-center gap-x-2 text-sm md:text-xs">
+                    <div className="my-3 flex items-center gap-x-5 text-sm md:text-xs">
                         <div className="flex items-center gap-x-1 text-slate-500">
                             <IconBadge size="sm" icon={BookOpen} />
                             <span>
@@ -44,15 +66,11 @@ export const CourseCard = ({
                                 {chaptersLength === 1 ? 'Chapter' : 'Chapters'}
                             </span>
                         </div>
+                        <div className="flex items-center gap-x-1 text-slate-500">
+                        <IconBadge size="sm" icon={Timer} />
+                        <span>{convertTime(sumTimeCourse)}</span>
+                        </div>
                     </div>
-                    {progress !== null && (
-                        // <CourseProgress
-                        //   variant={progress === 100 ? "success" : "default"}
-                        //   size="sm"
-                        //   value={progress}
-                        // />
-                        <p>ts</p>
-                    )}
                 </div>
             </div>
         </Link>

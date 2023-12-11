@@ -7,20 +7,10 @@ import { Categories } from '../components/categories';
 import { CoursesList } from '@/components/courses-list';
 import useAllTopicHome from '../../hook/useAllTopicHome';
 import { useSearchParams } from 'next/navigation';
-import { Input } from '@/components/ui/input';
-import FilterBar from './components/filter-bar';
-import {
-    Tabs,
-    TabsContent,
-    TabsList,
-    TabsTrigger,
-} from "@/components/ui/tabs"
-import { Button } from "@/components/ui/button"
-import { Separator } from "@/components/ui/separator"
-import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area"
-import { PlusCircle } from 'lucide-react';
-import InfoCourse from './components/info-course';
-
+import { Button } from '@/components/ui/button';
+import { Separator } from '@/components/ui/separator';
+import { Star, Sparkle, Circle, Square } from 'lucide-react';
+import Image from 'next/image';
 
 export default function HomePage() {
     const searchParams = useSearchParams();
@@ -35,55 +25,79 @@ export default function HomePage() {
     }
     return (
         <>
-            <div className="container w-screen h-screen p-0">
-                <div className="w-full h-full space-y-10">
-                    <div className="w-full h-20 py-4 space-y-4 ">
-                        
-                        <Input
-                            placeholder="Filter User..."
-                            // value={
-                            //     (table
-                            //         .getColumn('title')
-                            //         ?.getFilterValue() as string) ?? ''
-                            // }
-                            // onChange={(event) =>
-                            //     table
-                            //         .getColumn('title')
-                            //         ?.setFilterValue(event.target.value)
-                            // }
-                            className="w-full h-full rounded-3xl bg-white bg-opacity-25 backdrop-blur-sm shadow-[0_8px_32px_0_rgba(_31,38,135,0.37_)] border border-solid border-[rgba(_255,255,255,0.18_)]"
-                        />
-                    </div>
-                    <div className="flex w-full h-screen">
-                        <div className="w-full h-full ">
-                            <div className="w-full h-full bg-background">
-                                <div className="grid grid-cols-6 place-content-center">
-                                    <FilterBar className="flex w-full h-full col-span-1 " />
-                                    <div className="w-full h-full col-span-5 ">
-                                        <div className="flex flex-wrap items-center justify-center w-full h-full gap-y-6 gap-x-6">
-                                            <InfoCourse/>
-                                            <InfoCourse/>
-                                            <InfoCourse/>
-                                            <InfoCourse/>
-                                            <InfoCourse/>
-                                            <InfoCourse/>
-                                            <InfoCourse/>
-                                            <InfoCourse/>
-                                            <InfoCourse/>
+            <div className="w-full h-full px-32 ">
+                <div className="container grid h-full grid-cols-2 py-4 space-x-20">
+                    <div className="container grid-rows-3 mt-10 space-y-4">
+                        <div className="text-5xl font-bold ">Leadership and learning are indispensable to each other</div>
+                        <div className="gap-4 space-y-4">
+                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+                            <div className="flex items-center justify-center gap-4 rounded-lg">
+                                <Button>Join Course</Button>
+                                <Button>Connect to mentor</Button>
+                            </div>
+                        </div>
+                        <div className="gap-4 space-y-4">
+                            <Separator className='h-1.5 rounded-lg' />
+                            <div className="grid grid-cols-3 grid-rows-2 ">
+                                <p>Best course for you</p>
+                                <div className="grid col-span-2 row-span-2 gap-4 ">
+                                    <div className="grid grid-cols-2 gap-4 ">
+                                        <div className="flex items-center justify-center gap-4">
+                                            <Button className='w-32'>UI/UX Design</Button>
+                                            <Star color='#ffe871' />
+                                        </div>
+                                        <div className="flex items-center justify-center gap-4">
+                                            <Button className='w-32'>Graphic Design</Button>
+                                            <Sparkle color='#96a4f9' />
+                                        </div>
+                                    </div>
+                                    <div className="grid grid-cols-2 gap-4 ">
+                                        <div className="flex items-center justify-center gap-4">
+                                            <Button className='w-32'>Development</Button>
+                                            <Circle color='#f58af7' />
+                                        </div>
+                                        <div className="flex items-center justify-center gap-4">
+                                            <Button className='w-32'>Development</Button>
+                                            <Square color='#a0f78a' />
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
+                    <div className="container grid-rows-2 p-4 space-y-4">
+                        <Image
+                            src="https://picsum.photos/600/200"
+                            alt="description image"
+                            width={600}
+                            height={200}
+                            className="object-cover w-auto h-auto transition-all rounded-lg hover:scale-105 aspect-video"
+                        />
+                        <div className="grid grid-cols-3 gap-4">
+                            <div className="col-span-2 ">
+                                <Image
+                                    src="https://picsum.photos/500/325"
+                                    alt="description image"
+                                    width={500}
+                                    height={325}
+                                    className="object-cover w-auto h-auto transition-all rounded-lg hover:scale-105 "
+                                />
+                            </div>
+                            <div className="col-span-1 ">
+                                <Image
+                                    src="https://picsum.photos/250/325"
+                                    alt="description image"
+                                    width={250}
+                                    height={325}
+                                    className="object-cover w-auto h-auto transition-all rounded-lg hover:scale-105 "
+                                />
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
 
             </div>
-
-            {/* <div className="p-6 space-y-4">
-                <Categories items={topic} />
-                <CoursesList items={data} />
-            </div> */}
         </>
     );
 }

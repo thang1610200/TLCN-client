@@ -4,7 +4,6 @@ import { CourseCard } from '@/components/course-card';
 type CourseWithProgressWithCategory = Course & {
     topic: Topic | null;
     chapters: { id: string }[];
-    progress: number | null;
 };
 
 interface CoursesListProps {
@@ -13,17 +12,17 @@ interface CoursesListProps {
 
 export const CoursesList = ({ items }: CoursesListProps) => {
     return (
-        <div>
+        <div className='col-span-5'>
             <div className="grid sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-4 gap-4">
-                {items?.map((item) => (
+                {items?.map((item, index) => (
                     <CourseCard
-                        key={item.slug}
+                        key={index}
                         slug={item.slug}
                         title={item.title}
                         imageUrl={item.picture!}
                         chaptersLength={item.chapters.length}
-                        progress={item.progress}
                         category={item?.topic?.title}
+                        chapter={item.chapters}
                     />
                 ))}
             </div>

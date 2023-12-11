@@ -319,36 +319,6 @@ const DetailCourse = ({ params }: { params: { slug: string } }) => {
                                     </div>
                                 </div>
                             </div>
-                            {/* <div className="w-full col-span-1 p-4 ">
-                                <h1 className="text-[25px] font-Poppins font-[600]  dark:text-white  bg-purple-200 rounded-lg p-2 text-violet-700">
-                                    Course Reviews
-                                </h1>
-                                <br />
-                                <div className="w-full pb-4">
-                                    <div className="flex">
-                                        <div className="w-[50px] h-[50px]">
-                                            <img
-                                                className="w-[50px] h-[50px] rounded-full object-cover"
-                                                src="https://tlcn-upload.s3.ap-southeast-1.amazonaws.com/1698824755428_z4829239748115_73034f65f61b41e9a89f7572ba1c12a5.jpg"
-                                            />
-                                        </div>
-                                        <div className="pl-2 800px:block">
-                                            <div className="flex items-center">
-                                                <h5 className="text-[18px] pr-2 text-black dark:text-white font-bold">
-                                                    Manash Roy
-                                                </h5>
-                                            </div>
-                                            <p className="text-black dark:text-white">
-                                                Hello This is the best course
-                                                ever I have seen
-                                            </p>
-                                            <small className="text-[#000000d1] dark:text-[#ffffff83]">
-                                                5 days ago •
-                                            </small>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div> */}
                         </div>
                     </div>
                 </div>

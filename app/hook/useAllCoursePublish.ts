@@ -2,6 +2,7 @@ import useSwr from 'swr';
 import { AxiosError } from 'axios';
 import { BACKEND_URL } from '@/lib/constant';
 import fetcher from '@/lib/fetcher';
+import { Course } from '../types';
 
 
 const useAllCoursePublish = (title?: string, topic?:string) => {

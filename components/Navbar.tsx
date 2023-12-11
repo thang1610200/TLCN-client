@@ -74,9 +74,6 @@ export default function Navbar() {
     const roleLearner = 'LEARNER';
     const roleInstructor = 'INSTRUCTOR';
     const role = roleLearner;
-    const navRef = useRef();
-    const handleBecomeInstructor = () => { };
-    const handleSearch = () => { };
     return (
         <div className=''>
 
