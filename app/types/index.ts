@@ -3,6 +3,7 @@ export interface User {
     email: string,
     image: string,
     bio?: string,
+    password?: string,
     facebook_id?: string
     youtube_id?: string
     titok_id?: string

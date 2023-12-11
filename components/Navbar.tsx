@@ -29,6 +29,7 @@ import RegisterInsModal from '@/components/Reg-Ins-Modal';
 
 import { useRouter } from 'next/navigation';
 import SearchInput from './search-input';
+import DetailsDialog from './detail-dialog';
 
 const components: { title: string; href: string; description: string }[] = [
     {
@@ -129,13 +130,7 @@ export default function Navbar() {
                         </Link>
                     </NavigationMenuItem>
                     <NavigationMenuItem>
-                        <Link href="/" legacyBehavior passHref>
-                            <NavigationMenuLink className=''>
-                                <h2 className="text-lg">
-                                    Liên hệ
-                                </h2>
-                            </NavigationMenuLink>
-                        </Link>
+                        <DetailsDialog />
                     </NavigationMenuItem>
                 </NavigationMenuList>
                 {/* <div className="w-full h-2/3">
