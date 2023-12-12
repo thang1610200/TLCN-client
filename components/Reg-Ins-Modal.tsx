@@ -7,46 +7,46 @@ import { Input } from '@/components/ui/input';
 import {
     Form,
     FormControl,
-    FormDescription,
     FormField,
     FormItem,
-    FormLabel,
     FormMessage,
 } from "@/components/ui/form"
 import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import Loader from '@/components/loader';
+import toast from 'react-hot-toast';
+import axios from 'axios';
+import { BACKEND_URL } from '@/lib/constant';
+import { useSession } from 'next-auth/react';
+import { useRouter } from 'next/navigation';
+import { UploadCloud } from 'lucide-react';
 
-
-const MAX_FILE_SIZE = 1000000;
+const MAX_FILE_SIZE: number = 1000000;
 const ACCEPTED_IMAGE_TYPES = ["image/jpeg", "image/jpg", "image/png", "image/webp"];
 
-const CertificateFormSchema = z.object({
-    image: z.any()
-        .refine((files) => files?.[0]?.size <= MAX_FILE_SIZE, `Max image size is 10MB.`)
-        .refine(
-            (files) => ACCEPTED_IMAGE_TYPES.includes(files?.[0]?.type),
-            "Only .jpg, .jpeg, .png and .webp formats are supported."
-        )
-});
-
-type CertificateFormValues = z.infer<typeof CertificateFormSchema>;
-
 export default function RegisterInsModal() {
-    let [isOpen, setIsOpen] = useState(false);
-    const [isLoading, setIsLoading] = useState(false);
-    const [imageCertificate, setImageCertificate] = useState("");
+    const CertificateFormSchema = z.object({
+        image: z.any()
+            .refine((files) => files?.[0]?.size <= MAX_FILE_SIZE, `Max image size is 1MB.`)
+            .refine(
+                (files) => ACCEPTED_IMAGE_TYPES.includes(files?.[0]?.type),
+                "Only .jpg, .jpeg, .png and .webp formats are supported."
+            )
+    });
 
-    const defaultValues: Partial<CertificateFormValues> = {
-        image: ""
-    };
+    type CertificateFormValues = z.infer<typeof CertificateFormSchema>;
+
+    const [isLoading, setIsLoading] = useState(false);
+    const [isOpen, setIsOpen] = useState(false);
+    const [imageCertificate, setImageCertificate] = useState("");
+    const session = useSession();
+    const router = useRouter();
 
     const handleOnChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const file = event.target.files?.[0]
         if (file) {
             const reader = new FileReader();
-            // setFileInput(file);
             reader.onload = (e) => {
                 if (e.target) {
                     setImageCertificate(e.target.result as string);
@@ -59,59 +59,41 @@ export default function RegisterInsModal() {
 
     const form = useForm<CertificateFormValues>({
         resolver: zodResolver(CertificateFormSchema),
-        defaultValues,
-    })
+        defaultValues: {
+            image: ""
+        },
+    });
 
     function SubmitUpdate(data: CertificateFormValues) {
-        console.log("submit");
-        // setIsLoading(true);
-        // axios.patch(`${BACKEND_URL}/user/update-avatar`, {
-        //     email: user.email,
-        //     file: data.image[0]
-        // }, {
-        //     headers: {
-        //         Authorization: `Bearer ${props.token}`,
-        //         'Content-Type': 'multipart/form-data'
-        //     }
-        // })
-        //     .then((res: any) => {
-        //         toast.success("Update success!");
-        //         update({
-        //             user: {
-        //                 ...session?.user,
-        //                 image: res.data.image as string,
-        //                 name: res.data.name as string
-        //             }
-        //         });
-        //         setImageUser(res.data.image);
-        //         setIsOpenChangeImage(false);
-        //         router.refresh();
-        //     })
-        //     .catch((err: AxiosError<any, any>) => {
-        //         if (err.response?.status === 401) {
-        //             router.push('/login');
-        //         }
-        //         else {
-        //             toast.error(err.response?.data?.message || "Error");
-        //         }
-        //     })
-        //     .finally(() => {
-        //         setIsLoading(false);
-        //     });
+        setIsLoading(true);
+        axios.post(`${BACKEND_URL}/register-instructor/create`, {
+            email: session.data?.user.email,
+            file: data.image[0]
+        }, {
+            headers: {
+                Authorization: `Bearer ${session.data?.backendTokens.accessToken}`,
+                'Content-Type': 'multipart/form-data'
+            }
+        })
+            .then((res: any) => {
+                toast.success("Send success!");
+                form.reset();
+                setIsOpen(false);
+                setImageCertificate("");
+                router.refresh();
+            })
+            .catch((err: any) => {
+                toast.error("Something went wrong");
+            })
+            .finally(() => setIsLoading(false));
     }
 
     function CancelImage() {
+        form.reset();
         setIsOpen(false);
         setImageCertificate("");
     }
 
-
-    const setLearnerToInstructor = () => {
-        console.log("Set Learner to Instructor");
-        setIsOpen(false);
-        //set role = instructor
-        //link to instructor page
-    }
     return (
         <div>
             <Button onClick={() => { setIsOpen(true) }} className='relative flex items-center justify-center focus-visible::ring-0 focus-visible::ring-offset-0'>Trở thành giảng viên</Button>
@@ -148,7 +130,7 @@ export default function RegisterInsModal() {
                                         Bạn muốn trở thành giảng viên
 
                                     </Dialog.Title>
-                                    <p className='flex items-center justify-center text-center  indent-4 max-w-[500px] min-w-[500px] '>
+                                    <p className='flex items-center justify-center text-center indent-4 max-w-[500px] min-w-[500px]'>
                                         Để trở thành giảng viên, chúng tôi yêu cầu bạn xác thực trình độ. Vui lòng cung cấp hình ảnh chứng minh chứng chỉ của bạn
                                     </p>
                                     <Form {...form}>
@@ -157,16 +139,14 @@ export default function RegisterInsModal() {
                                             <FormField
                                                 control={form.control}
                                                 name="image"
+                                                disabled={isLoading}
                                                 render={({ field }) => (
                                                     <FormItem className='flex items-center justify-center '>
-
-                                                        <FormControl className=''>
+                                                        <FormControl>
                                                             <div className="flex items-center justify-center max-w-[500px] min-w-[500px] max-h-[500px] min-h-[500px]">
                                                                 <label htmlFor="dropzone-file" className="flex flex-col items-center justify-center w-full h-full border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-bray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600 max-w-[500px] min-w-[500px] max-h-[500px] min-h-[500px]">
                                                                     {!imageCertificate && <div className="flex flex-col items-center justify-center pt-5 pb-6">
-                                                                        <svg className="w-8 h-8 mb-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 16">
-                                                                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2" />
-                                                                        </svg>
+                                                                        <UploadCloud className="w-8 h-8 mb-4 text-gray-500 dark:text-gray-400"/>
                                                                         <p className="mb-2 text-sm text-gray-500 dark:text-gray-400"><span className="font-semibold">Click to upload</span> or drag and drop</p>
                                                                         <p className="text-xs text-gray-500 dark:text-gray-400">PG, JPEG, PNG or WEBP (Max image size is 10MB)</p>
                                                                     </div>}
