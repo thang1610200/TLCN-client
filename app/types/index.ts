@@ -146,3 +146,17 @@ export interface Attachment {
     lesson: Lesson,
     createdAt: Date
 }
+
+export enum StatusRegisterInstructor {
+    Progressing = 'PROGRESSING',
+    Reject = 'REJECT',
+    Success = 'SUCCESS',
+}
+
+export interface RegisterInstructor {
+    user: User;
+    userId: string;
+    status: StatusRegisterInstructor;
+    reply: string;
+    createdAt: Date;
+}

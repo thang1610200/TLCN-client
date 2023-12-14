@@ -1,4 +1,5 @@
-'use client';
+"use client"
+
 import React, { useRef } from 'react';
 import { cn } from '@/lib/utils';
 import { BiSearch, BiGlobe, BiMenu, BiSolidGraduation } from 'react-icons/bi';
@@ -26,8 +27,6 @@ import {
 } from '@/components/ui/navigation-menu';
 
 import RegisterInsModal from '@/components/Reg-Ins-Modal';
-
-import { useRouter } from 'next/navigation';
 import SearchInput from './search-input';
 import DetailsDialog from './detail-dialog';
 
@@ -69,15 +68,11 @@ const components: { title: string; href: string; description: string }[] = [
     },
 ];
 
-export default function Navbar() {
+export const Navbar = () => {
     const session = useSession();
-    const router = useRouter();
-    const roleLearner = 'LEARNER';
-    const roleInstructor = 'INSTRUCTOR';
-    const role = roleLearner;
+    const role = session.data?.user.role;
     return (
-        <div className=''>
-
+        <div>
             <NavigationMenu className="fixed z-10 flex items-center justify-between w-[calc(100%_-_2rem)] h-16 m-4 px-2 space-x-2 text-center bg-white max-w-none md:pl-10 md:pr-10 bg-opacity-25 backdrop-blur-sm shadow-[0_8px_32px_0_rgba(_31,38,135,0.37_)] border rounded-[10px] border-solid border-[rgba(_255,255,255,0.18_)]">
                 <h2 className="text-xl font-bold md:text-3xl">
                     LEARNER
@@ -137,7 +132,7 @@ export default function Navbar() {
                     <SearchInput />
                 </div> */}
                 <div className="flex">
-                    {role.toString() === 'INSTRUCTOR' ? (
+                    {(role === 'INSTRUCTOR' || session.status === 'unauthenticated') ? (
                         <div className="relative flex items-center justify-center rounded-full hover:bg-slate-50 hover:bg-opacity-30 ">
                             <Link
                                 href="/instructor/course"
@@ -145,17 +140,15 @@ export default function Navbar() {
                                 passHref
                                 className="justify-center align-middle "
                             >
-                                <Button className="">
+                                <Button>
                                     Giảng viên
                                 </Button>
                             </Link>
                         </div>
-                    ) : session.status == 'authenticated' ? (
+                    ) :  (
                         <div className='relative flex items-center justify-center '>
                             <RegisterInsModal />
                         </div>
-                    ) : (
-                        <div></div>
                     )}
                     <div className="flex justify-end space-x-2 cursor-pointer ">
                         {session.status == 'authenticated' && (
@@ -233,7 +226,6 @@ export default function Navbar() {
                     </div>
                 </div>
             </NavigationMenu>
-
         </div>
     );
 }

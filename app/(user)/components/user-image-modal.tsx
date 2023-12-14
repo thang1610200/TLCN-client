@@ -115,46 +115,12 @@ export default function UserImageModal(props: UserProps) {
         setImageUser(user.image);
     }
 
-    // const resizeFile = (file: File) =>
-    //     new Promise((resolve) => {
-    //         Resizer.imageFileResizer(
-    //             file,
-    //             valueWH[0],
-    //             valueWH[0],
-    //             "WEBP",
-    //             100,
-    //             0,
-    //             (uri) => {
-    //                 resolve(uri);
-    //             },
-    //             "base64"
-    //         );
-    //     });
-    // const handleSliderChange = async () =>{
-    //     try {
-    //         const file = 
-    //         const image = await resizeFile(file);
-    //         console.log(image);
-    //       } catch (err) {
-    //         console.log(err);
-    //       }
-    // }
-    // const handleSubmit = () => {
-    //     const file = event.target.files?.[0];
-    //     console.log(file);
-    //     console.log("Handle Submit");
-    // // }
-    // useEffect(() => {
-    //     console.log(valueWH)
-    // }, [valueWH]);
-
-
     return (
         <>
             <div className="flex justify-center ">
                 <div className="w-[150px] h-[150px] relative   ">
                     <div className='flex overflow-hidden rounded-full shrink-0'>
-                        <img src={user.image.toString()} className="w-full h-full aspect-square " width={100} height={100} />
+                        <img src={user.image.toString()} className="w-full h-full aspect-square" width={100} height={100} />
                     </div>
                     <Button onClick={() => { setIsOpenChangeImage(true) }} className="absolute bottom-0 right-0 w-10 h-10 text-xl text-white rounded-full bg-slate-400">＋</Button>
                 </div>
@@ -198,18 +164,6 @@ export default function UserImageModal(props: UserProps) {
                                         width={400}
                                         height={400}
                                     />
-                                    {/* <div className='relative'>
-                                        
-                                        <img
-                                            src={imageUser}
-                                            alt="User image"
-                                            className="absolute justify-center object-contain w-full h-full p-4 translate-x-1/2 -translate-y-1/2 bg-no-repeat top-1/2 right-1/2"
-                                            width={valueWH[0]}
-                                            height={valueWH[0]}
-                                        />
-
-                                    </div> */}
-                                    {/* <Slider defaultValue={valueWH} max={600} min={400} step={10} className='py-4' onValueChange={setValueWH} /> */}
                                     <Form {...form}>
                                         <form onSubmit={form.handleSubmit(SubmitUpdate)}>
                                             <FormField

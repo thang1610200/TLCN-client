@@ -18,9 +18,11 @@ import Loader from '@/components/loader';
 import toast from 'react-hot-toast';
 import axios from 'axios';
 import { BACKEND_URL } from '@/lib/constant';
-import { useSession } from 'next-auth/react';
+import { signOut, useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import { UploadCloud } from 'lucide-react';
+import useRegisterInstructor from '@/app/hook/useRegisterInstructor';
+import LoadingModal from './modal/loading-modal';
 
 const MAX_FILE_SIZE: number = 1000000;
 const ACCEPTED_IMAGE_TYPES = ["image/jpeg", "image/jpg", "image/png", "image/webp"];
@@ -28,9 +30,9 @@ const ACCEPTED_IMAGE_TYPES = ["image/jpeg", "image/jpg", "image/png", "image/web
 export default function RegisterInsModal() {
     const CertificateFormSchema = z.object({
         image: z.any()
-            .refine((files) => files?.[0]?.size <= MAX_FILE_SIZE, `Max image size is 1MB.`)
+            .refine((files) => files?.size <= MAX_FILE_SIZE, `Max image size is 1MB.`)
             .refine(
-                (files) => ACCEPTED_IMAGE_TYPES.includes(files?.[0]?.type),
+                (files) => ACCEPTED_IMAGE_TYPES.includes(files?.type),
                 "Only .jpg, .jpeg, .png and .webp formats are supported."
             )
     });
@@ -42,6 +44,7 @@ export default function RegisterInsModal() {
     const [imageCertificate, setImageCertificate] = useState("");
     const session = useSession();
     const router = useRouter();
+    const { data, isLoadingRegister, error } = useRegisterInstructor(session.data?.user.email, session.data?.backendTokens.accessToken);
 
     const handleOnChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const file = event.target.files?.[0]
@@ -54,6 +57,29 @@ export default function RegisterInsModal() {
             };
 
             reader.readAsDataURL(file);
+            form.setValue('image', file);
+        }
+    }
+
+    const onHandleClick = () => {
+        if(!error){
+            switch(data?.status) {
+                case 'PROGRESSING':
+                    toast('Chứng chỉ của bạn đang được xem xét. Vui lòng kiểm tra email',{
+                        duration: 5000,
+                        position: 'top-right'
+                    })
+                    break;
+                case 'SUCCESS':
+                    toast('Chứng chỉ đã được chấp thuận. Vui lòng đăng nhập lại để tiếp tục',{
+                        duration: 5000,
+                        position: 'top-right'
+                    })
+                    signOut({callbackUrl: '/login'})
+                    break;
+                default:
+                    setIsOpen(true);
+            }
         }
     }
 
@@ -68,7 +94,7 @@ export default function RegisterInsModal() {
         setIsLoading(true);
         axios.post(`${BACKEND_URL}/register-instructor/create`, {
             email: session.data?.user.email,
-            file: data.image[0]
+            file: data.image
         }, {
             headers: {
                 Authorization: `Bearer ${session.data?.backendTokens.accessToken}`,
@@ -94,9 +120,15 @@ export default function RegisterInsModal() {
         setImageCertificate("");
     }
 
+    if(isLoadingRegister){
+        return (
+            <LoadingModal />
+        )
+    }
+
     return (
         <div>
-            <Button onClick={() => { setIsOpen(true) }} className='relative flex items-center justify-center focus-visible::ring-0 focus-visible::ring-offset-0'>Trở thành giảng viên</Button>
+            <Button onClick={() => { onHandleClick() }} className='relative flex items-center justify-center focus-visible::ring-0 focus-visible::ring-offset-0'>Trở thành giảng viên</Button>
             <Transition appear show={isOpen} as={Fragment}>
                 <Dialog as="div" className="relative z-10" onClose={() => { setIsOpen(false) }}>
                     <Transition.Child

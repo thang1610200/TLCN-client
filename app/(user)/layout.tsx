@@ -2,7 +2,7 @@ import { Metadata } from 'next';
 import Image from 'next/image';
 import { Separator } from '@/components/ui/separator';
 import { SidebarNav } from '@/components/sidebar-nav';
-import Navbar from '@/components/navbar';
+import {Navbar} from '../../components/navbar';
 
 export const metadata: Metadata = {
     title: 'Forms',

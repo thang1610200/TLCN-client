@@ -49,7 +49,6 @@ export default function LoginPage() {
     });
 
     function onSubmit(values: z.infer<typeof formSchema>) {
-        console.log(values);
         setIsLoading(true);
         signIn('credentials', {
             email: values.email,

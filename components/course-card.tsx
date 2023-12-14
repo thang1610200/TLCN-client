@@ -47,10 +47,12 @@ export const CourseCard = ({
             <div className="group hover:shadow-sm transition overflow-hidden border rounded-lg p-3 h-full">
                 <div className="relative w-full aspect-video rounded-md overflow-hidden">
                     <Image
+                        priority={true}
                         fill
                         className="object-cover"
                         alt={title}
                         src={imageUrl}
+                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                     />
                 </div>
                 <div className="flex flex-col pt-2">
