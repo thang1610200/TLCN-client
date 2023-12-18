@@ -15,8 +15,7 @@ COPY . .
 RUN apk add --no-cache git curl \
     && npm run build \
     && rm -rf node_modules \
-    && npm install --production --ignore-scripts --prefer-offline \
-    && npm prune --production
+    && npm install --production --ignore-scripts --prefer-offline
 
 # Build production
 FROM node:18-alpine AS PRODUCTION
