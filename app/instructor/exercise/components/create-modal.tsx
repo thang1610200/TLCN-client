@@ -126,7 +126,7 @@ export default function CreateExerciseModal() {
             <div className="ml-auto" onClick={() => setIsOpen(true)}>
                 <Button>
                     <BiPlusCircle className="w-4 h-4 mr-2" />
-                    New Exercise
+                    Tạo bài tập mới
                 </Button>
             </div>
             <Transition appear show={isOpen} as={Fragment}>
@@ -165,7 +165,7 @@ export default function CreateExerciseModal() {
                                         as="h3"
                                         className="flex justify-center p-4 text-lg font-medium leading-6 text-gray-900"
                                     >
-                                        Create New Exercise
+                                        Tạo bài tập mới
                                     </Dialog.Title>
                                     <div className="w-full p-10 border-2 rounded-lg ">
                                         <Form {...form}>
@@ -300,7 +300,7 @@ export default function CreateExerciseModal() {
                                                         {isLoading ? (
                                                             <Loader />
                                                         ) : (
-                                                            'Continue'
+                                                            'Tiếp tục'
                                                         )}
                                                     </Button>
                                                     <Button
@@ -308,7 +308,7 @@ export default function CreateExerciseModal() {
                                                         onClick={handleCancel}
                                                         className="flex disabled:bg-slate-200 disabled:cursor-not-allowed"
                                                     >
-                                                        Cancel
+                                                        Hủy
                                                     </Button>
                                                 </div>
                                             </form>

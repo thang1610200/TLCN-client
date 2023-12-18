@@ -111,7 +111,7 @@ const CourseSwitcher = ({
                         <CommandGroup>
                             <CommandItem
                                 onSelect={() => {
-                                    setOpen(false);
+                                    router.push('/instructor/course')
                                 }}
                             >
                                 <PlusCircle className="mr-2 h-5 w-5" />
