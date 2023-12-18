@@ -1,7 +1,5 @@
 'use client';
 
-import { Metadata } from 'next';
-
 import * as React from 'react';
 
 import { Card, CardContent } from '@/components/ui/card';
@@ -28,11 +26,6 @@ import { useRouter } from 'next/navigation';
 import { signIn } from 'next-auth/react';
 import { useState } from 'react';
 import Loader from '@/components/loader';
-
-export const metadata: Metadata = {
-    title: 'Authentication',
-    description: 'Authentication forms built using the components.',
-};
 
 const formSchema = z.object({
     email: z.string().email(),

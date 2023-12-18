@@ -1,10 +1,7 @@
 "use client";
 
-import { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
-
-import Navbar from "../../../components/navbar";
 import { Button } from "@/components/ui/button";
 import { BiArrowBack } from "react-icons/bi";
 import { Input } from "@/components/ui/input";
@@ -26,12 +23,6 @@ import { BACKEND_URL } from "@/lib/constant";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
 import Loader from "@/components/loader";
-
-
-export const metadata: Metadata = {
-  title: "Authentication",
-  description: "Authentication forms built using the components.",
-};
 
 const formSchema = z.object({
   email: z.string().email(),

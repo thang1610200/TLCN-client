@@ -1,7 +1,5 @@
 'use client';
 
-import { Metadata } from 'next';
-
 import Link from 'next/link';
 import { Icons } from '@/components/icons';
 import { Button } from '@/components/ui/button';
@@ -23,11 +21,6 @@ import { useRouter } from 'next/navigation';
 import toast from 'react-hot-toast';
 import { useState } from 'react';
 import Loader from '@/components/loader';
-
-export const metadata: Metadata = {
-    title: 'Authentication',
-    description: 'Authentication forms built using the components.',
-};
 
 const formSchema = z.object({
     email: z.string().email(),
