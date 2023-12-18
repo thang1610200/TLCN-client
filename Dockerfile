@@ -3,7 +3,7 @@ RUN apk add --no-cache libc6-compat
 WORKDIR /app
 
 COPY package.json package-lock.json ./
-RUN  npm install --production
+RUN  npm ci
 
 FROM node:18-alpine AS builder
 WORKDIR /app
@@ -13,6 +13,7 @@ COPY . .
 ENV NEXT_TELEMETRY_DISABLED 1
 
 RUN npm run build
+RUN npm ci --only=production && npm cache clean --force
 
 FROM node:18-alpine AS runner
 WORKDIR /app
@@ -31,6 +32,5 @@ USER nextjs
 
 EXPOSE 3000
 
-ENV PORT 3000
-
 CMD ["npm", "start"]
+
