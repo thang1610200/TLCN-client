@@ -20,10 +20,6 @@ import { ChaptersForm } from '../component/chapter-form';
 import { RequirementForm } from '../component/requirement-form';
 import { filter } from 'lodash';
 
-export const metadata: Metadata = {
-    title: 'Course',
-};
-
 const CourseDetail = ({ params }: { params: { course_slug: string } }) => {
     const session = useSession();
     const router = useRouter();
