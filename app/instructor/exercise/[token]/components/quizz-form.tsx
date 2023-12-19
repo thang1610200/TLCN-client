@@ -126,16 +126,18 @@ export const QuizzForm = ({
             )}
             <div className="font-medium flex items-center justify-between">
                 Quizz question
-                <Button onClick={toggleCreating} variant="ghost">
-                    {isCreating ? (
-                        <>Cancel</>
-                    ) : (
-                        <>
-                            <PlusCircle className="h-4 w-4 mr-2" />
-                            Add a question
-                        </>
-                    )}
-                </Button>
+                {initialData?.lesson.length === 0 && (
+                    <Button onClick={toggleCreating} variant="ghost">
+                        {isCreating ? (
+                            <>Cancel</>
+                        ) : (
+                            <>
+                                <PlusCircle className="h-4 w-4 mr-2" />
+                                Add a question
+                            </>
+                        )}
+                    </Button>
+                )}
             </div>
             {isCreating && (
                 <Form {...form}>

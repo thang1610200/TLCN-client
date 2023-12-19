@@ -37,7 +37,7 @@ export default function HomePage() {
                         <SearchInput />
                     </div>
                     <div className="flex">
-                        <div className="w-full h-full ">
+                        <div className="w-full h-full">
                             <div className="w-full h-full bg-background">
                                 <div className="grid grid-cols-6 place-content-center">
                                     <FilterBar topic={topic} />

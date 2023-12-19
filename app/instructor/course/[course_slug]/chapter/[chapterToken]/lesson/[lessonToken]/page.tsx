@@ -23,6 +23,7 @@ import { ExerciseLessonForm } from './components/add-exercise-form';
 import useAllExercise from '@/app/hook/useAllExerciseOpen';
 import { NumberQuestionPass } from './components/add-number-pass';
 import { AttachmentForm } from './components/attachment-form';
+import useCourseDetail from '@/app/hook/useCourseDetail';
 
 const LessonToken = ({
     params,
@@ -45,15 +46,23 @@ const LessonToken = ({
         session.data?.user.email,
         session.data?.backendTokens.accessToken
     );
-    const requiredFields = [data?.title, data?.description, data?.videoUrl];
+    const { data: course = {}, isLoading: courseLoading = false, error: courseError } = useCourseDetail(
+        params.course_slug,
+        session.data?.user.email,
+        session.data?.backendTokens.accessToken
+    );
+    const requiredFields = [data?.title, 
+                            data?.description, 
+                            data?.videoUrl,
+                            data?.thumbnail];
     const totalFields = requiredFields.length;
     const completedFields = requiredFields.filter(Boolean).length;
     const completionText = `(${completedFields}/${totalFields})`;
     const isComplete = requiredFields.every(Boolean);
-    if (isLoading || loading) {
+    if (isLoading || loading || courseLoading) {
         return <LoadingModal />;
     }
-    if (error || error_exercise) {
+    if (error || error_exercise || courseError) {
         return redirect('/');
     }
     return (
@@ -81,6 +90,7 @@ const LessonToken = ({
                             </span>
                         </div>
                         <LessonActions
+                            coursePublished={course?.isPublished}
                             disabled={!isComplete}
                             course_slug={params.course_slug}
                             chapter_token={params.chapterToken}
@@ -116,6 +126,7 @@ const LessonToken = ({
                                 <h2 className="text-xl">Bài tập</h2>
                             </div>
                             <ExerciseLessonForm
+                                coursePublished={course?.isPublished}
                                 initialData={data}
                                 course_slug={params.course_slug}
                                 chapter_token={params.chapterToken}

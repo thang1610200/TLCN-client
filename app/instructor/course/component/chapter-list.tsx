@@ -11,17 +11,20 @@ import { Grip, Pencil } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
 import { Chapter } from "@/app/types";
+import toast from "react-hot-toast";
 
 interface ChaptersListProps {
     items: Chapter[];
     onReorder: (updateData: { id: string; position: number }[]) => void;
     onEdit: (id: string) => void;
+    coursePublished?:boolean 
 };
 
 export const ChaptersList = ({
     items,
     onReorder,
-    onEdit
+    onEdit,
+    coursePublished
 }: ChaptersListProps) => {
     const [isMounted, setIsMounted] = useState(false);
     const [chapters, setChapters] = useState(items);
@@ -37,23 +40,28 @@ export const ChaptersList = ({
     const onDragEnd = (result: DropResult) => {
         if (!result.destination) return;
 
-        const items = Array.from(chapters);
-        const [reorderedItem] = items.splice(result.source.index, 1);
-        items.splice(result.destination.index, 0, reorderedItem);
+        if(!coursePublished) {
+            const items = Array.from(chapters);
+            const [reorderedItem] = items.splice(result.source.index, 1);
+            items.splice(result.destination.index, 0, reorderedItem);
 
-        const startIndex = Math.min(result.source.index, result.destination.index);
-        const endIndex = Math.max(result.source.index, result.destination.index);
+            const startIndex = Math.min(result.source.index, result.destination.index);
+            const endIndex = Math.max(result.source.index, result.destination.index);
 
-        const updatedChapters = items.slice(startIndex, endIndex + 1);
+            const updatedChapters = items.slice(startIndex, endIndex + 1);
 
-        setChapters(items);
+            setChapters(items);
 
-        const bulkUpdateData = updatedChapters.map((chapter) => ({
-            id: chapter.id,
-            position: items.findIndex((item) => item.id === chapter.id)
-        }));
+            const bulkUpdateData = updatedChapters.map((chapter) => ({
+                id: chapter.id,
+                position: items.findIndex((item) => item.id === chapter.id)
+            }));
 
-        onReorder(bulkUpdateData);
+            onReorder(bulkUpdateData);
+        }
+        else {
+            toast.error('Khóa học đang được publish');
+        }
     }
 
     if (!isMounted) {

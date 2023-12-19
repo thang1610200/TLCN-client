@@ -69,6 +69,7 @@ const QuizzDetail = ({
                             </span>
                         </div>
                         <ActionQuestion
+                            isCheck={data?.exercise?.lesson.length > 0}
                             disabled={!isComplete}
                             token={params.quizz_token}
                             exercise_token={params.token}
@@ -91,6 +92,7 @@ const QuizzDetail = ({
                                 mutate={mutate}
                             />
                             <OptionForm
+                                isCheck={data?.exercise?.lesson.length > 0}
                                 initialData={data}
                                 exercise_token={params.token}
                                 token={data?.token}

@@ -65,6 +65,7 @@ const ExerciseDetail = ({ params }: { params: { token: string } }) => {
                             token={params.token}
                             isOpen={data?.isOpen}
                             mutate={mutate}
+                            isCheck={data?.lesson?.length > 0}
                         />
                     </div>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-16">

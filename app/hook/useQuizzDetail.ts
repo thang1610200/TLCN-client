@@ -13,7 +13,7 @@ const fetcher = async ([url, token]: [string, string]) => {
 
 const useQuizzDetail = (email?: string, token?: string, exerciseToken?: string, quizzToken?:string) => {
     const { data, error, isLoading, mutate} = useSwr<any, AxiosError>(token ? [`${BACKEND_URL}/quizz/detail-quizz?email=${email}&token=${quizzToken}&exercise_token=${exerciseToken}`,token]: null, fetcher, {
-        revalidateIfStale: false,
+        revalidateIfStale: true,
         revalidateOnFocus: false,
         revalidateOnReconnect: false,
         shouldRetryOnError: false,       // nếu khi gọi dữ liệu bị lỗi thì sẽ gọi lại (true)

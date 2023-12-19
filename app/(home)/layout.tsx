@@ -11,7 +11,7 @@ export default function HomeLayout({
         <>
             <Navbar />
             <div>
-                <div className="flex flex-col w-full h-full ">
+                <div className="flex flex-col w-full h-full">
                     <div className="flex-1 w-full h-full p-6 pt-20">{children}</div>
                 </div>
             </div>

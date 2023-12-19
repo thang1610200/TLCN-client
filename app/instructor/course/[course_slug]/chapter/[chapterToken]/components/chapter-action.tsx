@@ -18,7 +18,8 @@ interface ChapterActionsProps {
     course_slug: string;
     chapter_token: string;
     isPublished: boolean;
-    mutate: KeyedMutator<any>
+    mutate: KeyedMutator<any>;
+    coursePublished?:boolean 
 };
 
 export const ChapterActions = ({
@@ -26,10 +27,12 @@ export const ChapterActions = ({
     course_slug,
     chapter_token,
     isPublished,
-    mutate
+    mutate,
+    coursePublished
 }: ChapterActionsProps) => {
     const router = useRouter();
     const session = useSession();
+
     const [isLoading, setIsLoading] = useState(false);
 
     const onClick = async () => {
@@ -89,14 +92,14 @@ export const ChapterActions = ({
         <div className="flex items-center gap-x-2">
         <Button
             onClick={onClick}
-            disabled={disabled || isLoading}
+            disabled={disabled || isLoading || coursePublished}
             variant="outline"
             size="sm"
         >
             {isPublished ? "Unpublish" : "Publish"}
         </Button>
         <ConfirmModal onConfirm={onDelete}>
-            <Button size="sm" disabled={isLoading}>
+            <Button size="sm" disabled={isLoading || coursePublished}>
             <Trash className="h-4 w-4" />
             </Button>
         </ConfirmModal>

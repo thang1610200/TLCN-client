@@ -17,6 +17,7 @@ interface ActionQuestionProps {
     token: string;
     isPublished?: boolean;
     mutate: KeyedMutator<any>;
+    isCheck?: boolean
 }
 
 export const ActionQuestion = ({
@@ -25,6 +26,7 @@ export const ActionQuestion = ({
     exercise_token,
     isPublished,
     mutate,
+    isCheck
 }: ActionQuestionProps) => {
     const router = useRouter();
     const session = useSession();
@@ -89,14 +91,14 @@ export const ActionQuestion = ({
         <div className="flex items-center gap-x-2">
             <Button
                 onClick={onClick}
-                disabled={disabled || isLoading}
+                disabled={disabled || isLoading || isCheck}
                 variant="outline"
                 size="sm"
             >
                 {isPublished ? 'Unpublish' : 'Publish'}
             </Button>
             <ConfirmModal onConfirm={onDelete}>
-                <Button size="sm" disabled={isLoading}>
+                <Button size="sm" disabled={isLoading || isCheck}>
                     <Trash className="h-4 w-4" />
                 </Button>
             </ConfirmModal>

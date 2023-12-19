@@ -36,23 +36,23 @@ export const QuizzList = ({
     const onDragEnd = (result: DropResult) => {
         if (!result.destination) return;
 
-        const items = Array.from(quizzs);
-        const [reorderedItem] = items.splice(result.source.index, 1);
-        items.splice(result.destination.index, 0, reorderedItem);
-
-        const startIndex = Math.min(result.source.index, result.destination.index);
-        const endIndex = Math.max(result.source.index, result.destination.index);
-
-        const updatedQuizzs = items.slice(startIndex, endIndex + 1);
-
-        setQuizzs(items);
-
-        const bulkUpdateData = updatedQuizzs.map((quizz) => ({
-            token: quizz.token,
-            position: items.findIndex((item) => item.token === quizz.token)
-        }));
-
-        onReorder(bulkUpdateData);
+            const items = Array.from(quizzs);
+            const [reorderedItem] = items.splice(result.source.index, 1);
+            items.splice(result.destination.index, 0, reorderedItem);
+    
+            const startIndex = Math.min(result.source.index, result.destination.index);
+            const endIndex = Math.max(result.source.index, result.destination.index);
+    
+            const updatedQuizzs = items.slice(startIndex, endIndex + 1);
+    
+            setQuizzs(items);
+    
+            const bulkUpdateData = updatedQuizzs.map((quizz) => ({
+                token: quizz.token,
+                position: items.findIndex((item) => item.token === quizz.token)
+            }));
+    
+            onReorder(bulkUpdateData);
     }
 
     if (!isMounted) {

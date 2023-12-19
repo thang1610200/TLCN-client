@@ -41,6 +41,7 @@ interface ExerciseLessonProps {
     lesson_token: string;
     options: { label: string; value: string; type: string }[];
     mutate: KeyedMutator<any>;
+    coursePublished?: boolean;
 }
 
 const formSchema = z.object({
@@ -54,6 +55,7 @@ export const ExerciseLessonForm = ({
     lesson_token,
     options,
     mutate,
+    coursePublished,
 }: ExerciseLessonProps) => {
     const [isEditing, setIsEditing] = useState(false);
     const router = useRouter();
@@ -105,16 +107,18 @@ export const ExerciseLessonForm = ({
         <div className="p-4 mt-6 border rounded-md bg-slate-100">
             <div className="flex items-center justify-between font-medium">
                 Bài tập
-                <Button onClick={toggleEdit} variant="ghost">
-                    {isEditing ? (
-                        <>Hủy bỏ</>
-                    ) : (
-                        <>
-                            <Pencil className="w-4 h-4 mr-2" />
-                            Chỉnh sửa bài tập
-                        </>
-                    )}
-                </Button>
+                {!coursePublished && (
+                    <Button onClick={toggleEdit} variant="ghost">
+                        {isEditing ? (
+                            <>Hủy bỏ</>
+                        ) : (
+                            <>
+                                <Pencil className="w-4 h-4 mr-2" />
+                                Chỉnh sửa bài tập
+                            </>
+                        )}
+                    </Button>
+                )}
             </div>
             {!isEditing && (
                 <p

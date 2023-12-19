@@ -30,6 +30,7 @@ export const Actions = ({
     const session = useSession();
     const confetti = useConfettiStore();
     const [isLoading, setIsLoading] = useState(false);
+
     const onClick = async () => {
         try {
             setIsLoading(true);
@@ -101,7 +102,7 @@ export const Actions = ({
                 {isPublished ? 'Unpublish' : 'Publish'}
             </Button>
             <ConfirmModal onConfirm={onDelete}>
-                <Button size="sm" disabled={isLoading}>
+                <Button size="sm" disabled={isLoading || isPublished}>
                     <Trash className="h-4 w-4" />
                 </Button>
             </ConfirmModal>

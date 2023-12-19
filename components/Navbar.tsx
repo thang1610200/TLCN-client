@@ -87,7 +87,7 @@ export const Navbar = () => {
                             </NavigationMenuLink>
                         </Link>
                     </NavigationMenuItem>
-                    <NavigationMenuItem className="hidden md:flex">
+                    {/* <NavigationMenuItem className="hidden md:flex">
                         <NavigationMenuTrigger className="text-lg bg-transparent hover:bg-transparent">
                             Danh mục
                         </NavigationMenuTrigger>
@@ -104,8 +104,8 @@ export const Navbar = () => {
                                 ))}
                             </ul>
                         </NavigationMenuContent>
-                    </NavigationMenuItem>
-                    <NavigationMenuItem>
+                    </NavigationMenuItem> */}
+                    {/* <NavigationMenuItem>
                         <Link href="/" legacyBehavior passHref>
                             <NavigationMenuLink>
                                 <h2 className="text-lg">
@@ -123,7 +123,7 @@ export const Navbar = () => {
                                 </h2>
                             </NavigationMenuLink>
                         </Link>
-                    </NavigationMenuItem>
+                    </NavigationMenuItem> */}
                     <NavigationMenuItem>
                         <DetailsDialog />
                     </NavigationMenuItem>
@@ -195,9 +195,9 @@ export const Navbar = () => {
                                                 </NavigationMenuLink>
                                             </DropdownMenuItem>
                                         </Link>
-                                        <DropdownMenuItem>
+                                        {/* <DropdownMenuItem>
                                             Chỉnh sửa
-                                        </DropdownMenuItem>
+                                        </DropdownMenuItem> */}
                                     </DropdownMenuGroup>
                                     <DropdownMenuSeparator />
                                     <DropdownMenuItem

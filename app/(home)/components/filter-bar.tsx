@@ -116,7 +116,7 @@ export default function FilterBar({ topic }: FilterBarProps) {
                         </PopoverContent>
                     </Popover>
                 </div>
-                <div className="px-3 ">
+                {/* <div className="px-3 ">
                     <h2 className="px-4 mb-2 text-lg font-semibold tracking-tight">
                         License
                     </h2>
@@ -150,7 +150,7 @@ export default function FilterBar({ topic }: FilterBarProps) {
                             </label>
                         </div>
                     </div>
-                </div>
+                </div> */}
                 <div className="px-3 ">
                     <h2 className="px-4 mb-2 text-lg font-semibold tracking-tight">
                         Skill

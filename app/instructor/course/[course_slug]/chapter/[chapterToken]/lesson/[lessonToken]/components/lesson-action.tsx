@@ -19,7 +19,8 @@ interface LessonActionsProps {
     chapter_token: string;
     lesson_token: string;
     isPublished: boolean;
-    mutate: KeyedMutator<any>
+    mutate: KeyedMutator<any>;
+    coursePublished?: boolean;
 }
 
 export const LessonActions = ({
@@ -28,7 +29,8 @@ export const LessonActions = ({
     chapter_token,
     lesson_token,
     isPublished,
-    mutate
+    mutate,
+    coursePublished
 }: LessonActionsProps) => {
     const router = useRouter();
     const session = useSession();
@@ -101,14 +103,14 @@ export const LessonActions = ({
         <div className="flex items-center gap-x-2">
             <Button
                 onClick={onClick}
-                disabled={disabled || isLoading}
+                disabled={disabled || isLoading || coursePublished}
                 variant="outline"
                 size="sm"
             >
                 {isPublished ? 'Unpublish' : 'Publish'}
             </Button>
             <ConfirmModal onConfirm={onDelete}>
-                <Button size="sm" disabled={isLoading}>
+                <Button size="sm" disabled={isLoading || coursePublished}>
                     <Trash className="h-4 w-4" />
                 </Button>
             </ConfirmModal>

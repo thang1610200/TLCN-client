@@ -31,6 +31,7 @@ interface OptionFormProps {
     exercise_token: string;
     token?: string;
     mutate: KeyedMutator<any>;
+    isCheck?: boolean;
 }
 
 const formSchema = z.object({
@@ -40,7 +41,7 @@ const formSchema = z.object({
     option: z
         .array(
             z.object({
-                value: z.string().min(5,{
+                value: z.string().min(5, {
                     message: 'Option is required',
                 }),
             })
@@ -54,6 +55,7 @@ export const OptionForm = ({
     exercise_token,
     token,
     mutate,
+    isCheck,
 }: OptionFormProps) => {
     const [isEditing, setIsEditing] = useState(false);
 
@@ -76,7 +78,7 @@ export const OptionForm = ({
             answer: initialData?.answer || '',
             option:
                 initialData?.option.length === 0 ? [{ value: '' }] : options,
-        }
+        },
     });
 
     const { isSubmitting, isValid } = form.formState;
@@ -121,16 +123,18 @@ export const OptionForm = ({
         <div className="mt-6 border bg-slate-100 rounded-md p-4">
             <div className="font-medium flex items-center justify-between">
                 Option
-                <Button onClick={toggleEdit} variant="ghost">
-                    {isEditing ? (
-                        <>Cancel</>
-                    ) : (
-                        <>
-                            <Pencil className="h-4 w-4 mr-2" />
-                            Edit option
-                        </>
-                    )}
-                </Button>
+                {!isCheck && (
+                    <Button onClick={toggleEdit} variant="ghost">
+                        {isEditing ? (
+                            <>Cancel</>
+                        ) : (
+                            <>
+                                <Pencil className="h-4 w-4 mr-2" />
+                                Edit option
+                            </>
+                        )}
+                    </Button>
+                )}
             </div>
             {!isEditing &&
                 (initialData?.option.length === 0 ? (
@@ -189,9 +193,7 @@ export const OptionForm = ({
                                         {index === 0 && (
                                             <FormLabel>False Answer</FormLabel>
                                         )}
-                                        <div
-                                            className="flex items-center space-x-2 rounded-md"
-                                        >
+                                        <div className="flex items-center space-x-2 rounded-md">
                                             <FormControl>
                                                 <Input
                                                     disabled={isSubmitting}
@@ -203,7 +205,7 @@ export const OptionForm = ({
                                             </FormControl>
                                             {index > 0 && (
                                                 <Button
-                                                    type='button'
+                                                    type="button"
                                                     disabled={isSubmitting}
                                                     onClick={() =>
                                                         remove(index)

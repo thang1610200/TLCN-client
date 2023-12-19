@@ -1,6 +1,5 @@
 'use client';
 
-import { Metadata } from 'next';
 import React from 'react';
 import { Tabs, TabsContent } from '@/components/ui/tabs';
 import { Actions } from '../component/action';

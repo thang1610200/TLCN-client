@@ -17,6 +17,7 @@ interface ActionsProps {
     token: string;
     isOpen?: boolean;
     mutate: KeyedMutator<any>;
+    isCheck?: boolean
 }
 
 export const Actions = ({
@@ -24,6 +25,7 @@ export const Actions = ({
     token,
     isOpen,
     mutate,
+    isCheck
 }: ActionsProps) => {
     const router = useRouter();
     const session = useSession();
@@ -89,14 +91,14 @@ export const Actions = ({
         <div className="flex items-center gap-x-2">
             <Button
                 onClick={onClick}
-                disabled={disabled || isLoading}
+                disabled={disabled || isLoading || isCheck}
                 variant="outline"
                 size="sm"
             >
                 {isOpen ? 'Close' : 'Open'}
             </Button>
             <ConfirmModal onConfirm={onDelete}>
-                <Button size="sm" disabled={isLoading}>
+                <Button size="sm" disabled={isLoading || isCheck}>
                     <Trash className="h-4 w-4" />
                 </Button>
             </ConfirmModal>

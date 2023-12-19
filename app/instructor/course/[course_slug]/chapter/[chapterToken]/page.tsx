@@ -16,6 +16,7 @@ import { ChapterTitleForm } from "./components/chapter-title-form";
 import { ChapterDescriptionForm } from "./components/chapter-description-form";
 import { LessonsForm } from "./components/lesson-form";
 import { filter } from "lodash";
+import useCourseDetail from "@/app/hook/useCourseDetail";
 
 
 const ChapterToken = ({
@@ -25,6 +26,11 @@ const ChapterToken = ({
 }) => {
     const session = useSession();
     const { data, isLoading, error, mutate } = useChapterDetail(params.course_slug, session.data?.user.email, session.data?.backendTokens.accessToken, params.chapterToken);
+    const { data: course = {}, isLoading: courseLoading = false, error: courseError } = useCourseDetail(
+        params.course_slug,
+        session.data?.user.email,
+        session.data?.backendTokens.accessToken
+    );
 
     const lesson = filter(data?.lessons,{
         isPublished: true
@@ -43,11 +49,11 @@ const ChapterToken = ({
     
     const isComplete = requiredFields.every(Boolean);
 
-    if (isLoading) {
+    if (isLoading || courseLoading) {
         return <LoadingModal />;
     }
 
-    if(error){
+    if(error || courseError){
         return redirect('/');
     }
 
@@ -77,6 +83,7 @@ const ChapterToken = ({
                         </span>
                     </div>
                     <ChapterActions
+                        coursePublished={course?.isPublished}
                         disabled={!isComplete}
                         course_slug={params.course_slug}
                         chapter_token={params.chapterToken}
@@ -114,6 +121,7 @@ const ChapterToken = ({
                                 </h2>
                             </div>
                             <LessonsForm
+                                coursePublished={course?.isPublished}
                                 initialData={data}
                                 course_slug={params.course_slug}
                                 chapter_token={params.chapterToken}

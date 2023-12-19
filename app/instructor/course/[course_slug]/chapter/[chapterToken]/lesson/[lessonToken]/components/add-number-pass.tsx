@@ -28,8 +28,8 @@ interface NumberQuestionPassProps {
     chapter_token: string;
     lesson_token: string;
     mutate: KeyedMutator<any>;
+    coursePublished?: boolean;
 }
-
 
 export const NumberQuestionPass = ({
     initialData,
@@ -37,9 +37,14 @@ export const NumberQuestionPass = ({
     chapter_token,
     lesson_token,
     mutate,
+    coursePublished,
 }: NumberQuestionPassProps) => {
     const formSchema = z.object({
-        number: z.number().int().positive().lte(initialData?.exercise?.quizz.length)
+        number: z
+            .number()
+            .int()
+            .positive()
+            .lte(initialData?.exercise?.quizz.length),
     });
     const [isEditing, setIsEditing] = useState(false);
     const router = useRouter();
@@ -58,45 +63,53 @@ export const NumberQuestionPass = ({
 
     const onSubmit = async (values: z.infer<typeof formSchema>) => {
         try {
-            await axios.patch(`${BACKEND_URL}/lesson/update-lesson`, {
-                course_slug: course_slug,
-                value: {
-                    amountToPass: values.number
+            await axios.patch(
+                `${BACKEND_URL}/lesson/update-lesson`,
+                {
+                    course_slug: course_slug,
+                    value: {
+                        amountToPass: values.number,
+                    },
+                    email: session.data?.user.email,
+                    chapter_token,
+                    lesson_token,
                 },
-                email: session.data?.user.email,
-                chapter_token,
-                lesson_token
-            },{
-                headers: {
-                    Authorization: `Bearer ${session.data?.backendTokens.accessToken}`,
-                    "Content-Type": "application/json"
+                {
+                    headers: {
+                        Authorization: `Bearer ${session.data?.backendTokens.accessToken}`,
+                        'Content-Type': 'application/json',
+                    },
                 }
-            });
-            toast.success("Lesson updated");
+            );
+            toast.success('Lesson updated');
             toggleEdit();
             mutate();
             router.refresh();
         } catch {
-            toast.error("Something went wrong");
+            toast.error('Something went wrong');
         }
-    }
+    };
 
     return (
         <div className="p-4 mt-6 border rounded-md bg-slate-100">
             <div className="flex items-center justify-between font-medium">
                 Số lượng câu trả lời đúng để qua bài học mới
-                <Button onClick={toggleEdit} variant="ghost">
-                    {isEditing ? (
-                        <>Hủy bỏ</>
-                    ) : (
-                        <>
-                            <Pencil className="w-4 h-4 mr-2" />
-                            Chỉnh sửa
-                        </>
-                    )}
-                </Button>
+                {!coursePublished && (
+                    <Button onClick={toggleEdit} variant="ghost">
+                        {isEditing ? (
+                            <>Hủy bỏ</>
+                        ) : (
+                            <>
+                                <Pencil className="w-4 h-4 mr-2" />
+                                Chỉnh sửa
+                            </>
+                        )}
+                    </Button>
+                )}
             </div>
-            {!isEditing && <p className="mt-2 text-sm">{initialData?.amountToPass || 0}</p>}
+            {!isEditing && (
+                <p className="mt-2 text-sm">{initialData?.amountToPass || 0}</p>
+            )}
             {isEditing && (
                 <Form {...form}>
                     <form
@@ -110,14 +123,12 @@ export const NumberQuestionPass = ({
                                 <FormItem>
                                     <FormControl>
                                         <Input
-                                            type='number'
+                                            type="number"
                                             disabled={isSubmitting}
                                             placeholder="e.g. 'Number of questions to pass'"
-                                            {...form.register(
-                                                'number',{ 
-                                                    valueAsNumber: true
-                                                }
-                                            )}
+                                            {...form.register('number', {
+                                                valueAsNumber: true,
+                                            })}
                                         />
                                     </FormControl>
                                     <FormMessage />
