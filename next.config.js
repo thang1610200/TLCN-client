@@ -7,9 +7,13 @@ const nextConfig = {
         remotePatterns: [
             {
                 protocol: 'https',
-                hostname: '**',
+                hostname: '**.tlcn-server.store',
+            },
+            {
+                protocol: 'https',
+                hostname: 's3.amazonaws.com',
                 port: '',
-                pathname: '**',
+                pathname: '/tlcn-upload/**',
             },
         ],
     }
