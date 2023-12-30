@@ -77,7 +77,7 @@ export default function LoginPage() {
                     <div className="relative flex-col hidden h-full p-10 text-white bg-muted dark:border-r lg:flex">
                         <Link href="/" legacyBehavior passHref>
                             <h2 className="z-10 text-4xl font-bold cursor-pointer">
-                                Udemy
+                                LEARNER
                             </h2>
                         </Link>
                         <div className="absolute inset-0 bg-zinc-900" />

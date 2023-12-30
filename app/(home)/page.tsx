@@ -41,10 +41,6 @@ export default function HomePage() {
                             <div className="w-full h-full bg-background">
                                 <div className="grid grid-cols-6 place-content-center">
                                     <FilterBar topic={topic} />
-                                    {/* <div className="w-full h-full col-span-5 ">
-                                        <div className="flex flex-wrap w-full h-full gap-y-6 gap-x-6">
-                                        </div>
-                                    </div> */}
                                     <CoursesList items={data} />
                                 </div>
                             </div>
