@@ -1,3 +1,27 @@
+@font-face {
+  font-family: 'LinotteRegular';
+  src: url('/fonts/Linotte_Regular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'LinotteBold';
+  src: url('/fonts/Linotte_Bold.ttf') format('truetype');
+  font-weight: bold;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'BeauSansRegular';
+  src: url('/fonts/BT-BeauSans-Regular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'BeauSansExtraBold';
+  src: url('/fonts/BT-BeauSans-ExtraBold.ttf') format('truetype');
+  font-weight: 900;
+  font-style: normal;
+}
 @tailwind base;
 @tailwind components;
 @tailwind utilities;

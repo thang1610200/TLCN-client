@@ -16,6 +16,12 @@ module.exports = {
       },
     },
     extend: {
+      fontFamily:{
+        'linotte': ["LinotteRegular", "sans-serif"],
+        'linotte-bold': ['LinotteBold', 'sans-serif', 'bold'],
+        'beauSans': ["BeauSansRegular", "sans-serif"],
+        'beauSans-extrabold': ['BeauSansExtraBold', 'sans-serif', 'extrabold'],
+      },
       colors: {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",

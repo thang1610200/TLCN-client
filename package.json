@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@gsap/react": "^2.0.2",
     "@headlessui/react": "^1.7.17",
     "@hello-pangea/dnd": "^16.3.0",
     "@heroicons/react": "^2.0.18",
@@ -40,6 +41,7 @@
     "@radix-ui/react-toggle": "^1.0.3",
     "@radix-ui/react-tooltip": "^1.0.6",
     "@tailwindcss/line-clamp": "^0.4.4",
+    "@tailwindcss/typography": "^0.5.10",
     "@tanstack/react-table": "^8.10.7",
     "@types/lodash": "^4.14.201",
     "@types/node": "20.5.9",
@@ -55,6 +57,7 @@
     "eslint": "8.48.0",
     "eslint-config-next": "13.4.19",
     "framer-motion": "^10.16.4",
+    "gsap": "^3.12.4",
     "keen-slider": "^6.8.6",
     "lodash": "^4.17.21",
     "lucide-react": "^0.274.0",
@@ -79,7 +82,7 @@
     "socket.io-client": "^4.7.2",
     "swr": "^2.2.4",
     "tailwind-merge": "^1.14.0",
-    "tailwindcss": "3.3.3",
+    "tailwindcss": "^3.4.0",
     "tailwindcss-animate": "^1.0.7",
     "typescript": "5.2.2",
     "zod": "^3.22.2",
