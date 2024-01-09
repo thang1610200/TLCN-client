@@ -10,18 +10,20 @@ import { useGSAP } from "@gsap/react";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 export default function SecondPage() {
-  gsap.registerPlugin(ScrollTrigger);
+
   const refPage2 = useRef<HTMLDivElement | null>(null)
   const refRightPage2 = useRef<HTMLDivElement | null>(null)
   const refLeftPage2 = useRef<HTMLDivElement | null>(null)
   useGSAP(() => {
+    gsap.registerPlugin(ScrollTrigger);
     let Timeline = gsap.timeline({
       repeat: 0,
     })
     Timeline.fromTo(refRightPage2.current, {
       xPercent: 100,
       yPercent: 100,
-      
+      rotateZ: -180,
+
     }, {
       scrollTrigger: {
         trigger: refPage2.current,
@@ -33,29 +35,31 @@ export default function SecondPage() {
       yPercent: 0,
       ease: "none",
       duration: 3,
+      rotateZ: 0
     })
-    .fromTo(refRightPage2.current, {
-      xPercent: 0,
-      yPercent: 0,
-      
-    }, {
-      scrollTrigger: {
-        trigger: refPage2.current,
-        start: "bottom center",
-        end: "150% center",
-        scrub: 3,
-      },
-      xPercent: 100,
-      yPercent: -100,
-      ease: "none",
-      duration: 3,
-    })
+      .fromTo(refRightPage2.current, {
+        xPercent: 0,
+        yPercent: 0,
+        rotateZ: 0
+      }, {
+        scrollTrigger: {
+          trigger: refPage2.current,
+          start: "bottom center",
+          end: "150% center",
+          scrub: 3,
+        },
+        xPercent: 100,
+        yPercent: -100,
+        rotateZ: 180,
+        ease: "none",
+        duration: 3,
+      })
 
-    
+
     Timeline.fromTo(refLeftPage2.current, {
       xPercent: -100,
       yPercent: 100,
-      
+      rotateZ: 180,
     }, {
       scrollTrigger: {
         trigger: refPage2.current,
@@ -65,25 +69,27 @@ export default function SecondPage() {
       },
       xPercent: 0,
       yPercent: 0,
+      rotateZ: 0,
       ease: "none",
       duration: 3,
     })
-    .fromTo(refLeftPage2.current, {
-      xPercent: 0,
-      yPercent: 0,
-      
-    }, {
-      scrollTrigger: {
-        trigger: refPage2.current,
-        start: "bottom center",
-        end: "150% center",
-        scrub: 3,
-      },
-      xPercent: -100,
-      yPercent: -100,
-      ease: "none",
-      duration: 3,
-    })
+      .fromTo(refLeftPage2.current, {
+        xPercent: 0,
+        yPercent: 0,
+        rotateZ: 0,
+      }, {
+        scrollTrigger: {
+          trigger: refPage2.current,
+          start: "bottom center",
+          end: "150% center",
+          scrub: 3,
+        },
+        xPercent: -100,
+        yPercent: -100,
+        rotateZ: -180,
+        ease: "none",
+        duration: 3,
+      })
   })
   return (
     <div ref={refPage2} className="container grid items-center justify-center grid-cols-2 gap-4 p-20 ">

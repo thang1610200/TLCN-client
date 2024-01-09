@@ -44,7 +44,7 @@ export default function AnimationChatGPT() {
         opacity: 1,
         duration: 0.5,
         ease: "expo.inOut",
-        delay: .5
+        delay: .5,
       })
       .to(BoxQuestion.current, {
         y: 0,
