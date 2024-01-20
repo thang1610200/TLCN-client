@@ -63,7 +63,6 @@ export default function UserImageModal(props: UserProps) {
                     setImageUser(e.target.result as string);
                 }
             };
-
             reader.readAsDataURL(file);
         }
     }
@@ -120,7 +119,7 @@ export default function UserImageModal(props: UserProps) {
             <div className="flex justify-center ">
                 <div className="w-[150px] h-[150px] relative   ">
                     <div className='flex overflow-hidden rounded-full shrink-0'>
-                        <img src={user.image.toString()} className="w-full h-full aspect-square" width={100} height={100} />
+                        <Image src={user.image.toString()} className="w-full h-full aspect-square" width={100} height={100} alt='User image' />
                     </div>
                     <Button onClick={() => { setIsOpenChangeImage(true) }} className="absolute bottom-0 right-0 w-10 h-10 text-xl text-white rounded-full bg-slate-400">＋</Button>
                 </div>
@@ -157,7 +156,7 @@ export default function UserImageModal(props: UserProps) {
                                     >
                                         Select image user
                                     </Dialog.Title>
-                                    <img
+                                    <Image
                                         src={imageUser}
                                         alt="User image"
                                         className="relative justify-center object-cover p-4 bg-no-repeat rounded-full max-w-[400px] min-w-[400px] max-h-[400px] min-h-[400px]"
