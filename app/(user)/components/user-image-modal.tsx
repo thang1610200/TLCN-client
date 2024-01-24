@@ -101,7 +101,7 @@ export default function UserImageModal(props: UserProps) {
                     router.push('/login');
                 }
                 else {
-                    toast.error(err.response?.data?.message || "Error");
+                    toast.error('Something went wrong');
                 }
             })
             .finally(() => {

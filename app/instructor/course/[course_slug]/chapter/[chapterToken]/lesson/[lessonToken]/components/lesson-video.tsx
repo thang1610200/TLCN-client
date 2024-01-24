@@ -186,7 +186,7 @@ export const LessonVideoForm = ({
                 !isEditing &&
                 !initialData?.isCompleteVideo && (
                     <div className="mt-2 text-xs text-muted-foreground">
-                        Video cần một vài phút để hoàn thành. Refresh trang sẽ làm video không được đăng tải
+                        Video cần một vài phút để hoàn thành. Refresh trang để hiển thị video
                     </div>
                 )}
         </div>

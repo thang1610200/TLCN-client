@@ -160,3 +160,40 @@ export interface RegisterInstructor {
     reply: string;
     createdAt: Date;
 }
+
+export interface Channel {
+    id: string;
+    name: string;
+    type: ChannelType;
+    user: User;
+    userId: string;
+    serverId: string;
+    server: Server;
+}
+
+export enum ChannelType {
+    Text = 'TEXT',
+    Audio = 'AUDIO',
+    Video = 'VIDEO',
+}
+
+export interface Server {
+    token: string;
+    name: string;
+    imageUrl: string;
+}
+
+export enum MemberRole {
+    Admin = 'ADMIN',
+    Morderator = 'MODERATOR',
+    Guest = 'GUEST',
+}
+
+export interface Member {
+    id: string;
+    role: MemberRole
+}
+
+export type ServerWithMembersWithProfiles = Server & {
+    members: (Member & { profile: User })[];
+};

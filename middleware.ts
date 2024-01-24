@@ -3,7 +3,7 @@ import { getToken } from 'next-auth/jwt';
 
 export async function middleware(req: NextRequest) {
     const token = await getToken({ req, secret: process.env.NEXT_AUTH_SECRET });
-    const isAuthenticated = !!token;
+    const isAuthenticated = token?.backendTokens?.accessToken ? true : false;
 
     if (
         isAuthenticated &&
@@ -18,7 +18,8 @@ export async function middleware(req: NextRequest) {
     if (
         !isAuthenticated &&
         (req.nextUrl.pathname.startsWith('/profile') ||
-            req.nextUrl.pathname.startsWith('/lesson'))
+            req.nextUrl.pathname.startsWith('/lesson') ||
+            req.nextUrl.pathname.startsWith('/change-password'))
     ) {
         return NextResponse.redirect(new URL('/login', req.url));
         // const url = new URL(`/signin`, request.url);
