@@ -19,7 +19,8 @@ export async function middleware(req: NextRequest) {
         !isAuthenticated &&
         (req.nextUrl.pathname.startsWith('/profile') ||
             req.nextUrl.pathname.startsWith('/lesson') ||
-            req.nextUrl.pathname.startsWith('/change-password'))
+            req.nextUrl.pathname.startsWith('/change-password') ||
+            req.nextUrl.pathname.startsWith('/thread'))
     ) {
         return NextResponse.redirect(new URL('/login', req.url));
         // const url = new URL(`/signin`, request.url);

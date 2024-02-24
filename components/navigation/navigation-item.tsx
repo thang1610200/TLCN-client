@@ -17,7 +17,7 @@ export const NavigationItem = ({ serverToken, imageUrl, name }: NavigationItemPr
     const router = useRouter();
 
     const onClick = () => {
-        router.push(`/servers/${serverToken}`);
+        router.push(`/thread/servers/${serverToken}`);
     };
 
     return (

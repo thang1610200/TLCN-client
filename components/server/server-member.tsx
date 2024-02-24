@@ -8,8 +8,8 @@ import { UserAvatar } from '@/components/user-avatar';
 import { Member, Server, User, MemberRole } from '@/app/types';
 
 interface ServerMemberProps {
-    member: Member & { profile: User };
-    server: Server;
+    member: Member;
+    server?: Server;
 }
 
 const roleIconMap = {
@@ -40,7 +40,7 @@ export const ServerMember = ({ member, server }: ServerMemberProps) => {
             )}
         >
             <UserAvatar
-                src={member.profile.image}
+                src={member.user.image}
                 className="h-8 w-8 md:h-8 md:w-8"
             />
             <p
@@ -50,7 +50,7 @@ export const ServerMember = ({ member, server }: ServerMemberProps) => {
                         'text-primary dark:text-zinc-200 dark:group-hover:text-white'
                 )}
             >
-                {member.profile.name}
+                {member.user.name}
             </p>
             {icon}
         </button>

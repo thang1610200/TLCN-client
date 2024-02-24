@@ -10,7 +10,7 @@ import { Channel, ChannelType, MemberRole, Server } from '@/app/types';
 
 interface ServerChannelProps {
     channel: Channel;
-    server: Server;
+    server?: Server;
     role?: MemberRole;
 }
 

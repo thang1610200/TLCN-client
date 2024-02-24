@@ -181,6 +181,10 @@ export interface Server {
     token: string;
     name: string;
     imageUrl: string;
+    inviteCode: string;
+    createAt: Date;
+    members: Member[];
+    channels: Channel[];
 }
 
 export enum MemberRole {
@@ -191,9 +195,8 @@ export enum MemberRole {
 
 export interface Member {
     id: string;
-    role: MemberRole
+    role: MemberRole;
+    user: User;
+    server: Server;
+    userId: string;
 }
-
-export type ServerWithMembersWithProfiles = Server & {
-    members: (Member & { profile: User })[];
-};
