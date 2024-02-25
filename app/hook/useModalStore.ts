@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 import { Server, Channel, ChannelType } from '../types';
+import { KeyedMutator } from 'swr';
 
 export type ModalType =
     | 'createServer'

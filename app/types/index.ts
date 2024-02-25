@@ -180,6 +180,7 @@ export enum ChannelType {
 export interface Server {
     token: string;
     name: string;
+    user: User;
     imageUrl: string;
     inviteCode: string;
     createAt: Date;

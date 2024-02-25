@@ -32,6 +32,7 @@ import Image from 'next/image';
 import { BACKEND_URL } from '@/lib/constant';
 import { useSession } from 'next-auth/react';
 import toast from 'react-hot-toast';
+import { mutate } from 'swr';
 
 const MAX_FILE_SIZE = 1000000;
 const ACCEPTED_IMAGE_TYPES = [
@@ -61,11 +62,11 @@ type ImageFormValues = z.infer<typeof formSchema>;
 
 export const EditServerModal = () => {
     const { isOpen, onClose, type, data } = useModal();
+    const { server } = data;
     const router = useRouter();
     const session = useSession();
     const isModalOpen = isOpen && type === 'editServer';
     const [image, setImage] = useState('');
-    const { server } = data;
 
     const defaultValues: Partial<ImageFormValues> = {
         name: '',
@@ -119,7 +120,7 @@ export const EditServerModal = () => {
         form.setValue('imageUrl', '');
     };
 
-    useEffect(() => {
+    const setValueForm = () => {
         if (server) {
             form.setValue('name', server.name);
             fetch(server.imageUrl)
@@ -132,41 +133,44 @@ export const EditServerModal = () => {
                 });
             setImage(server.imageUrl);
         }
-    });
+    }
+
+    const handleClose = () => {
+        setImage('');
+        setValueForm();
+        onClose();
+    };
+
+    useEffect(() => {
+        setValueForm();
+    },[server]);
 
     const isLoading = form.formState.isSubmitting;
 
     const onSubmit = async (values: ImageFormValues) => {
-        console.log(values);
-        // try {
-        //     await axios.patch(
-        //         `${BACKEND_URL}/thread/update-server`,
-        //         {
-        //             file: values.imageUrl,
-        //             name: values.name,
-        //             email: session.data?.user.email,
-        //             serverToken: server?.token,
-        //         },
-        //         {
-        //             headers: {
-        //                 Authorization: `Bearer ${session.data?.backendTokens.accessToken}`,
-        //                 'Content-Type': 'multipart/form-data',
-        //             },
-        //         }
-        //     );
-        //     toast.success('Server updated');
-        //     handleClose();
-        //     router.refresh();
-        //     window.location.reload();
-        // } catch {
-        //     toast.error('Something went wrong');
-        // }
-    };
-
-    const handleClose = () => {
-        setImage('');
-        form.reset();
-        onClose();
+        try {
+            await axios.patch(
+                `${BACKEND_URL}/thread/update-server`,
+                {
+                    file: values.imageUrl,
+                    name: values.name,
+                    email: session.data?.user.email,
+                    serverToken: server?.token,
+                },
+                {
+                    headers: {
+                        Authorization: `Bearer ${session.data?.backendTokens.accessToken}`,
+                        'Content-Type': 'multipart/form-data',
+                    },
+                }
+            );
+            toast.success('Server updated');
+            mutate([`${BACKEND_URL}/thread/detail-server?serverToken=${server?.token}`,session.data?.backendTokens.accessToken]);
+            handleClose();
+            router.refresh();
+        } catch {
+            toast.error('Something went wrong');
+        }
     };
 
     return (
