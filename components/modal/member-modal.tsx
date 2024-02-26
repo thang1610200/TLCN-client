@@ -36,6 +36,9 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { useModal } from '@/app/hook/useModalStore';
 import { MemberRole, Server } from '@/app/types';
+import toast from 'react-hot-toast';
+import { BACKEND_URL } from '@/lib/constant';
+import { useSession } from 'next-auth/react';
 
 const roleIconMap = {
     GUEST: null,
@@ -45,49 +48,67 @@ const roleIconMap = {
 
 export const MembersModal = () => {
     const router = useRouter();
+    const session = useSession();
     const { onOpen, isOpen, onClose, type, data } = useModal();
     const [loadingId, setLoadingId] = useState('');
 
     const isModalOpen = isOpen && type === 'members';
     const { server } = data as { server: Server };
 
-    const onKick = async (memberId: string) => {
+    const onKick = async (emailMember: string) => {
         try {
-            setLoadingId(memberId);
+            setLoadingId(emailMember);
             const url = qs.stringifyUrl({
-                url: `/api/members/${memberId}`,
+                url: `${BACKEND_URL}/thread/kick-member`,
                 query: {
-                    serverId: server?.token,
+                    serverToken: server?.token,
+                    email: session.data?.user.email,
+                    emailMember
                 },
             });
 
-            const response = await axios.delete(url);
+            const response = await axios.delete(url, {
+                headers: {
+                    Authorization: `Bearer ${session.data?.backendTokens.accessToken}`,
+                    'Content-Type': 'application/json',
+                },
+            });
 
+            toast.success('Kick Success');
             router.refresh();
             onOpen('members', { server: response.data });
         } catch (error) {
-            console.log(error);
+            toast.error('Something went wrong');
         } finally {
             setLoadingId('');
         }
     };
 
-    const onRoleChange = async (memberId: string, role: MemberRole) => {
+    const onRoleChange = async (emailMember: string, role: MemberRole) => {
         try {
-            setLoadingId(memberId);
-            const url = qs.stringifyUrl({
-                url: `/api/members/${memberId}`,
-                query: {
-                    serverId: server?.token,
+            setLoadingId(emailMember);
+
+            const response = await axios.patch(
+                `${BACKEND_URL}/thread/update-role`,
+                {
+                    serverToken: server?.token,
+                    email: session.data?.user.email,
+                    emailMember,
+                    role
                 },
-            });
+                {
+                    headers: {
+                        Authorization: `Bearer ${session.data?.backendTokens.accessToken}`,
+                        'Content-Type': 'application/json',
+                    },
+                }
+            );
 
-            const response = await axios.patch(url, { role });
-
+            toast.success('Role Updated');
             router.refresh();
             onOpen('members', { server: response.data });
         } catch (error) {
-            console.log(error);
+            toast.error('Something went wrong');
         } finally {
             setLoadingId('');
         }
@@ -121,7 +142,7 @@ export const MembersModal = () => {
                                 </p>
                             </div>
                             {server.user.email !== member.user.email &&
-                                loadingId !== member.id && (
+                                loadingId !== member.user.email && (
                                     <div className="ml-auto">
                                         <DropdownMenu>
                                             <DropdownMenuTrigger>
@@ -138,7 +159,7 @@ export const MembersModal = () => {
                                                             <DropdownMenuItem
                                                                 onClick={() =>
                                                                     onRoleChange(
-                                                                        member.id,
+                                                                        member.user.email,
                                                                         MemberRole.Guest
                                                                     )
                                                                 }
@@ -153,7 +174,7 @@ export const MembersModal = () => {
                                                             <DropdownMenuItem
                                                                 onClick={() =>
                                                                     onRoleChange(
-                                                                        member.id,
+                                                                        member.user.email,
                                                                         MemberRole.Morderator
                                                                     )
                                                                 }
@@ -171,7 +192,7 @@ export const MembersModal = () => {
                                                 <DropdownMenuSeparator />
                                                 <DropdownMenuItem
                                                     onClick={() =>
-                                                        onKick(member.id)
+                                                        onKick(member.user.email)
                                                     }
                                                 >
                                                     <Gavel className="h-4 w-4 mr-2" />
@@ -181,7 +202,7 @@ export const MembersModal = () => {
                                         </DropdownMenu>
                                     </div>
                                 )}
-                            {loadingId === member.id && (
+                            {loadingId === member.user.email && (
                                 <Loader2 className="animate-spin text-zinc-500 ml-auto w-4 h-4" />
                             )}
                         </div>
