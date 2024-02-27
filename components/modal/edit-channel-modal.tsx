@@ -1,10 +1,10 @@
 'use client';
 
-import qs from 'query-string';
 import axios from 'axios';
 import * as z from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
+
 import {
     Dialog,
     DialogContent,
@@ -22,7 +22,7 @@ import {
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import { useParams, useRouter } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import {
     Select,
     SelectContent,
@@ -33,9 +33,9 @@ import {
 import { useEffect } from 'react';
 import { useModal } from '@/app/hook/useModalStore';
 import { ChannelType } from '@/app/types';
-import toast from 'react-hot-toast';
 import { BACKEND_URL } from '@/lib/constant';
 import { useSession } from 'next-auth/react';
+import toast from 'react-hot-toast';
 import { mutate } from 'swr';
 
 const formSchema = z.object({
@@ -50,42 +50,40 @@ const formSchema = z.object({
     type: z.nativeEnum(ChannelType),
 });
 
-export const CreateChannelModal = () => {
+export const EditChannelModal = () => {
     const { isOpen, onClose, type, data } = useModal();
     const router = useRouter();
-    const params = useParams();
     const session = useSession();
-
-    const isModalOpen = isOpen && type === 'createChannel';
-    const { channelType } = data;
+    const isModalOpen = isOpen && type === 'editChannel';
+    const { channel, server } = data;
 
     const form = useForm({
         resolver: zodResolver(formSchema),
         defaultValues: {
             name: '',
-            type: channelType || ChannelType.Text,
+            type: channel?.type || ChannelType.Text,
         },
     });
 
     useEffect(() => {
-        if (channelType) {
-            form.setValue('type', channelType);
-        } else {
-            form.setValue('type', ChannelType.Text);
+        if (channel) {
+            form.setValue('name', channel.name);
+            form.setValue('type', channel.type);
         }
-    }, [channelType, form]);
+    }, [form, channel]);
 
     const isLoading = form.formState.isSubmitting;
 
     const onSubmit = async (values: z.infer<typeof formSchema>) => {
         try {
-            await axios.post(
-                `${BACKEND_URL}/thread/create-channel`,
+            await axios.patch(
+                `${BACKEND_URL}/thread/edit-channel`,
                 {
                     type: values.type,
                     name: values.name,
                     email: session.data?.user.email,
-                    serverToken: params?.serverToken
+                    serverToken: server?.token,
+                    channelToken: channel?.token
                 },
                 {
                     headers: {
@@ -94,8 +92,8 @@ export const CreateChannelModal = () => {
                 }
             );
 
-            toast.success('Channel created');
-            mutate([`${BACKEND_URL}/thread/detail-server?serverToken=${params?.serverToken}&email=${session.data?.user.email}`,session.data?.backendTokens.accessToken]);
+            toast.success('Channel updated');
+            mutate([`${BACKEND_URL}/thread/detail-server?serverToken=${server?.token}&email=${session.data?.user.email}`,session.data?.backendTokens.accessToken]);
             form.reset();
             router.refresh();
             onClose();
@@ -114,7 +112,7 @@ export const CreateChannelModal = () => {
             <DialogContent className="bg-white text-black p-0 overflow-hidden">
                 <DialogHeader className="pt-8 px-6">
                     <DialogTitle className="text-2xl text-center font-bold">
-                        Create Channel
+                        Edit Channel
                     </DialogTitle>
                 </DialogHeader>
                 <Form {...form}>
@@ -180,7 +178,7 @@ export const CreateChannelModal = () => {
                         </div>
                         <DialogFooter className="bg-gray-100 px-6 py-4">
                             <Button variant="primary" disabled={isLoading}>
-                                Create
+                                Save
                             </Button>
                         </DialogFooter>
                     </form>
