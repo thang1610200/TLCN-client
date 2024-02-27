@@ -164,6 +164,7 @@ export interface RegisterInstructor {
 export interface Channel {
     id: string;
     name: string;
+    token: string;
     type: ChannelType;
     user: User;
     userId: string;

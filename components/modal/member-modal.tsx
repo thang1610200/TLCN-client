@@ -39,6 +39,7 @@ import { MemberRole, Server } from '@/app/types';
 import toast from 'react-hot-toast';
 import { BACKEND_URL } from '@/lib/constant';
 import { useSession } from 'next-auth/react';
+import { mutate } from 'swr';
 
 const roleIconMap = {
     GUEST: null,
@@ -74,6 +75,7 @@ export const MembersModal = () => {
                 },
             });
 
+            mutate([`${BACKEND_URL}/thread/detail-server?serverToken=${server?.token}&email=${session.data?.user.email}`,session.data?.backendTokens.accessToken]);
             toast.success('Kick Success');
             router.refresh();
             onOpen('members', { server: response.data });
@@ -104,6 +106,7 @@ export const MembersModal = () => {
                 }
             );
 
+            mutate([`${BACKEND_URL}/thread/detail-server?serverToken=${server?.token}&email=${session.data?.user.email}`,session.data?.backendTokens.accessToken]);
             toast.success('Role Updated');
             router.refresh();
             onOpen('members', { server: response.data });

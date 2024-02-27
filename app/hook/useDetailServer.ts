@@ -12,8 +12,8 @@ const fetcher = async ([url, token]: [string, string]) => {
     return res.data;
 }
 
-export const useDetailServer = (serverToken?: string, token?: string) => {
-    const { data, error, isLoading, mutate} = useSwr<Server, AxiosError>(token ? [`${BACKEND_URL}/thread/detail-server?serverToken=${serverToken}`,token]: null, fetcher, {
+export const useDetailServer = (serverToken?: string, token?: string, email?: string) => {
+    const { data, error, isLoading, mutate} = useSwr<Server, AxiosError>(token ? [`${BACKEND_URL}/thread/detail-server?serverToken=${serverToken}&email=${email}`,token]: null, fetcher, {
         revalidateIfStale: true,
         revalidateOnFocus: false,
         revalidateOnReconnect: false,

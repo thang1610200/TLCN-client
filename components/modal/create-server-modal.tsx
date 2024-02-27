@@ -135,7 +135,7 @@ export const CreateServerModal = () => {
                     },
                 }
             );
-            toast.success('Server created');
+            //toast.success('Server created');
             handleClose();
             router.refresh();
             window.location.reload();

@@ -165,7 +165,7 @@ export const EditServerModal = () => {
                 }
             );
             toast.success('Server updated');
-            mutate([`${BACKEND_URL}/thread/detail-server?serverToken=${server?.token}`,session.data?.backendTokens.accessToken]);
+            mutate([`${BACKEND_URL}/thread/detail-server?serverToken=${server?.token}&email=${session.data?.user.email}`,session.data?.backendTokens.accessToken]);
             handleClose();
             router.refresh();
         } catch {

@@ -1,6 +1,6 @@
 "use client";
 
-import { redirect } from 'next/navigation';
+import { redirect, useRouter } from 'next/navigation';
 import { Hash, Mic, ShieldAlert, ShieldCheck, Video } from 'lucide-react';
 
 import { ScrollArea } from '@/components/ui/scroll-area';
@@ -10,7 +10,7 @@ import { ServerSearch } from './server-search';
 import { ServerSection } from './server-section';
 import { ServerChannel } from './server-channel';
 import { ServerMember } from './server-member';
-import { ChannelType, MemberRole } from '@/app/types';
+import { ChannelType, MemberRole, Server } from '@/app/types';
 import { useSession } from 'next-auth/react';
 import { useDetailServer } from '@/app/hook/useDetailServer';
 import LoadingModal from '../modal/loading-modal';
@@ -35,7 +35,8 @@ const roleIconMap = {
 
 export const ServerSidebar = ({ serverToken }: ServerSidebarProps) => {
     const session = useSession();
-    const {server, isLoading, error} = useDetailServer(serverToken, session.data?.backendTokens.accessToken);
+    const router = useRouter();
+    const {server, isLoading, error} = useDetailServer(serverToken, session.data?.backendTokens.accessToken, session.data?.user.email);
 
     const textChannels = server?.channels.filter(
         (channel) => channel.type === ChannelType.Text
@@ -58,6 +59,10 @@ export const ServerSidebar = ({ serverToken }: ServerSidebarProps) => {
         return <LoadingModal />
     }
 
+    if(error){
+        router.push('/thread');
+    }
+
     return (
         <div className="flex flex-col h-full text-primary w-full dark:bg-[#2B2D31] bg-[#F2F3F5]">
             <ServerHeader server={server} role={role}/>
@@ -69,7 +74,7 @@ export const ServerSidebar = ({ serverToken }: ServerSidebarProps) => {
                                 label: 'Text Channels',
                                 type: 'channel',
                                 data: textChannels?.map((channel) => ({
-                                    id: channel.id,
+                                    id: channel.token,
                                     name: channel.name,
                                     icon: iconMap[channel.type],
                                 })),
@@ -78,7 +83,7 @@ export const ServerSidebar = ({ serverToken }: ServerSidebarProps) => {
                                 label: 'Voice Channels',
                                 type: 'channel',
                                 data: audioChannels?.map((channel) => ({
-                                    id: channel.id,
+                                    id: channel.token,
                                     name: channel.name,
                                     icon: iconMap[channel.type],
                                 })),
@@ -87,7 +92,7 @@ export const ServerSidebar = ({ serverToken }: ServerSidebarProps) => {
                                 label: 'Video Channels',
                                 type: 'channel',
                                 data: videoChannels?.map((channel) => ({
-                                    id: channel.id,
+                                    id: channel.token,
                                     name: channel.name,
                                     icon: iconMap[channel.type],
                                 })),
