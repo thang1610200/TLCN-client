@@ -19,7 +19,6 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { useModal } from '@/app/hook/useModalStore';
 import { MemberRole, Server } from '@/app/types';
-import { KeyedMutator } from 'swr';
 
 interface ServerHeaderProps {
     server?: Server;

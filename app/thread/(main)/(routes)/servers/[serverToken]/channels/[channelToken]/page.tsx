@@ -1,21 +1,40 @@
-import { redirect } from 'next/navigation';
+"use client";
+
+import { useDetailChannel } from '@/app/hook/useChannel';
+import { ChannelType } from '@/app/types';
+import { ChatHeader } from '@/components/chat/chat-header';
+import LoadingModal from '@/components/modal/loading-modal';
+import { useSession } from 'next-auth/react';
+import { useRouter } from 'next/navigation';
 
 interface ChannelIdPageProps {
     params: {
-        serverId: string;
-        channelId: string;
+        serverToken: string;
+        channelToken: string;
     };
 }
 
-const ChannelIdPage = async ({ params }: ChannelIdPageProps) => {
+const ChannelIdPage = ({ params }: ChannelIdPageProps) => {
+    const session = useSession();
+    const router = useRouter();
+    const { channel, isLoading, error } = useDetailChannel(params.channelToken, session.data?.backendTokens.accessToken);
+
+    if(error) {
+        return router.push('/thread');
+    }
+
+    if(isLoading) {
+        return <LoadingModal />
+    }
+
     return (
         <div className="bg-white dark:bg-[#313338] flex flex-col h-full">
             <ChatHeader
-                name={channel.name}
-                serverId={channel.serverId}
+                name={channel?.name}
+                serverToken={channel?.token}
                 type="channel"
             />
-            {channel.type === ChannelType.TEXT && (
+            {/* {channel?.type === ChannelType.Text && (
                 <>
                     <ChatMessages
                         member={member}
@@ -47,7 +66,7 @@ const ChannelIdPage = async ({ params }: ChannelIdPageProps) => {
             )}
             {channel.type === ChannelType.VIDEO && (
                 <MediaRoom chatId={channel.id} video={true} audio={true} />
-            )}
+            )} */}
         </div>
     );
 };

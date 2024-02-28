@@ -4,14 +4,14 @@ import { Plus, Settings } from 'lucide-react';
 
 import { ActionTooltip } from '@/components/action-tooltip';
 import { useModal } from '@/app/hook/useModalStore';
-import { ChannelType, MemberRole, ServerWithMembersWithProfiles } from '@/app/types';
+import { ChannelType, MemberRole, Server } from '@/app/types';
 
 interface ServerSectionProps {
     label: string;
     role?: MemberRole;
     sectionType: 'channels' | 'members';
     channelType?: ChannelType;
-    server?: ServerWithMembersWithProfiles;
+    server?: Server;
 }
 
 export const ServerSection = ({

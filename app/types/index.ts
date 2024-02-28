@@ -197,8 +197,20 @@ export enum MemberRole {
 
 export interface Member {
     id: string;
+    token: string;
     role: MemberRole;
     user: User;
     server: Server;
     userId: string;
+}
+
+export interface Message {
+    id: string;
+    content: string;
+    fileUrl: string;
+    member: Member;
+    channel: Channel;
+    deleted: boolean;
+    createAt: Date;
+    updateAt: Date;
 }

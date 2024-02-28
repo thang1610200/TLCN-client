@@ -16,7 +16,7 @@ import { useDetailServer } from '@/app/hook/useDetailServer';
 import LoadingModal from '../modal/loading-modal';
 
 interface ServerSidebarProps {
-    serverToken: string;
+    serverToken?: string;
 }
 
 const iconMap = {
@@ -101,7 +101,7 @@ export const ServerSidebar = ({ serverToken }: ServerSidebarProps) => {
                                 label: 'Members',
                                 type: 'member',
                                 data: members?.map((member) => ({
-                                    id: member.id,
+                                    id: member.token,
                                     name: member.user.name,
                                     icon: roleIconMap[member.role],
                                 })),

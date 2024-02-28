@@ -1,8 +1,6 @@
 const MainPage = () => {
     return (
-        <div>
-            dsdsd
-        </div>
+        <div>test</div>
     )
 }
 
