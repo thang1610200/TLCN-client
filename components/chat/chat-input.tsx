@@ -12,6 +12,9 @@ import { Form, FormControl, FormField, FormItem } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { useModal } from '@/app/hook/useModalStore';
 import { EmojiPicker } from '../emoji-picker';
+import toast from 'react-hot-toast';
+import { BACKEND_URL } from '@/lib/constant';
+import { useSession } from 'next-auth/react';
 
 interface ChatInputProps {
     apiUrl: string;
@@ -27,6 +30,7 @@ const formSchema = z.object({
 export const ChatInput = ({ apiUrl, query, name, type }: ChatInputProps) => {
     const { onOpen } = useModal();
     const router = useRouter();
+    const session = useSession();
 
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
@@ -40,16 +44,28 @@ export const ChatInput = ({ apiUrl, query, name, type }: ChatInputProps) => {
     const onSubmit = async (values: z.infer<typeof formSchema>) => {
         try {
             const url = qs.stringifyUrl({
-                url: apiUrl,
-                query,
+                url: `${BACKEND_URL}/${apiUrl}`,
             });
 
-            await axios.post(url, values);
+            await axios.post(
+                url,
+                {
+                    content: values.content,
+                    email: session.data?.user.email,
+                    serverToken: query.serverToken,
+                    channelToken: query.channelToken
+                },
+                {
+                    headers: {
+                        Authorization: `Bearer ${session.data?.backendTokens.accessToken}`,
+                    },
+                }
+            );
 
             form.reset();
             router.refresh();
         } catch (error) {
-            console.log(error);
+            toast.error('Something went wrong');
         }
     };
 
@@ -57,6 +73,7 @@ export const ChatInput = ({ apiUrl, query, name, type }: ChatInputProps) => {
         <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)}>
                 <FormField
+                    disabled={isLoading}
                     control={form.control}
                     name="content"
                     render={({ field }) => (
@@ -76,7 +93,6 @@ export const ChatInput = ({ apiUrl, query, name, type }: ChatInputProps) => {
                                         <Plus className="text-white dark:text-[#313338]" />
                                     </button>
                                     <Input
-                                        disabled={isLoading}
                                         className="px-14 py-6 bg-zinc-200/90 dark:bg-zinc-700/75 border-none border-0 focus-visible:ring-0 focus-visible:ring-offset-0 text-zinc-600 dark:text-zinc-200"
                                         placeholder={`Message ${
                                             type === 'conversation'

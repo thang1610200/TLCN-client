@@ -1,6 +1,6 @@
 "use client";
 
-import { BACKEND_URL, UPLOAD_NAMESPACE } from "@/lib/constant";
+import { BACKEND_URL, MESSAGE_NAMESPACE } from "@/lib/constant";
 import { createContext, useContext, useEffect, useState } from "react";
 import { io } from "socket.io-client";
 import { useSession } from "next-auth/react";
@@ -19,7 +19,7 @@ export const useSocket = () => {
     return useContext(SocketContext);
 };
 
-export const socketIOUrl = `${BACKEND_URL}/${UPLOAD_NAMESPACE}`;
+export const socketIOUrl = `${BACKEND_URL}/${MESSAGE_NAMESPACE}`;
 
 export const SocketProvider = ({ 
         children 
@@ -40,8 +40,11 @@ export const SocketProvider = ({
         });
 
         socketInstance.on("connect", () => {
-            console.log("OK");
             setIsConnected(true);
+        });
+
+        socketInstance.on("disconnect", () => {
+            setIsConnected(false);
         });
 
         setSocket(socketInstance);

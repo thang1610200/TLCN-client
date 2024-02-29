@@ -1,29 +1,30 @@
+
 export interface User {
-    name: string,
-    email: string,
-    image: string,
-    bio?: string,
-    password?: string,
-    facebook_id?: string
-    youtube_id?: string
-    titok_id?: string
+    name: string;
+    email: string;
+    image: string;
+    bio?: string;
+    password?: string;
+    facebook_id?: string;
+    youtube_id?: string;
+    titok_id?: string;
     role: string;
 }
 
 export interface Course {
-    id: string,
-    title: string,
-    isPublished: boolean,
+    id: string;
+    title: string;
+    isPublished: boolean;
     slug: string;
-    description:string;
+    description: string;
     learning_outcome: string[];
     requirement: string[];
     picture: string;
     topic_id: string;
     toptic: Topic;
     owner: User;
-    chapters: Chapter[],
-    userProgress: UserProgress[]
+    chapters: Chapter[];
+    userProgress: UserProgress[];
 }
 
 export interface Chapter {
@@ -34,7 +35,7 @@ export interface Chapter {
     position: number;
     isPublished: boolean;
     courseId: string;
-    lessons: Lesson[]
+    lessons: Lesson[];
 }
 
 export interface Topic {
@@ -58,7 +59,7 @@ export interface Lesson {
     exerciseId: string;
     exercise: Exercise;
     userProgress: UserProgress[];
-    attachment: Attachment[]
+    attachment: Attachment[];
     amountToPass: number;
 }
 
@@ -88,24 +89,24 @@ export interface Quizz {
 export enum TypeExercise {
     Quizz = 'QUIZZ',
     Image = 'IMAGE',
-    Code = 'CODE'
+    Code = 'CODE',
 }
 
 export enum TypeQuizz {
-    TF = "True Or False",
-    MC = "Multiple Choice"
+    TF = 'True Or False',
+    MC = 'Multiple Choice',
 }
 
 export enum LevelQuizz {
-    Easy = "Easy",
-    Medium = "Medium",
-    Hard = "Hard"
+    Easy = 'Easy',
+    Medium = 'Medium',
+    Hard = 'Hard',
 }
 
 export interface UserProgress {
     id: string;
-    user: User,
-    course: Course,
+    user: User;
+    course: Course;
     courseId: string;
     isCompleted: boolean;
     isPassed: boolean;
@@ -114,37 +115,37 @@ export interface UserProgress {
 }
 
 export interface UserProgressQuiz {
-    quizzId : string,
-    answer: string,
-    userProgressId: string
-    userProgress: UserProgress,
-    isCorrect: boolean
-    createdAt: Date
+    quizzId: string;
+    answer: string;
+    userProgressId: string;
+    userProgress: UserProgress;
+    isCorrect: boolean;
+    createdAt: Date;
 }
 
 export interface Review {
-    id: string,
-    user: User,
-    content: string,
-    reply: ReviewReply[]
-    create_at: Date
+    id: string;
+    user: User;
+    content: string;
+    reply: ReviewReply[];
+    create_at: Date;
 }
 
 export interface ReviewReply {
-    id: string,
-    user: User,
-    review: Review,
-    reply: string,
-    create_at: Date
+    id: string;
+    user: User;
+    review: Review;
+    reply: string;
+    create_at: Date;
 }
 
 export interface Attachment {
-    id: string,
-    name: string,
-    url: string,
-    lessonId: string,
-    lesson: Lesson,
-    createdAt: Date
+    id: string;
+    name: string;
+    url: string;
+    lessonId: string;
+    lesson: Lesson;
+    createdAt: Date;
 }
 
 export enum StatusRegisterInstructor {

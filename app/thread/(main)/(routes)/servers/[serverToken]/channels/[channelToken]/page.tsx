@@ -3,6 +3,7 @@
 import { useDetailChannel } from '@/app/hook/useChannel';
 import { ChannelType } from '@/app/types';
 import { ChatHeader } from '@/components/chat/chat-header';
+import { ChatInput } from '@/components/chat/chat-input';
 import LoadingModal from '@/components/modal/loading-modal';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
@@ -34,9 +35,10 @@ const ChannelIdPage = ({ params }: ChannelIdPageProps) => {
                 serverToken={channel?.token}
                 type="channel"
             />
-            {/* {channel?.type === ChannelType.Text && (
+            {channel?.type === ChannelType.Text && (
                 <>
-                    <ChatMessages
+                    dsdsdsss
+                    {/* <ChatMessages
                         member={member}
                         name={channel.name}
                         chatId={channel.id}
@@ -49,19 +51,19 @@ const ChannelIdPage = ({ params }: ChannelIdPageProps) => {
                         }}
                         paramKey="channelId"
                         paramValue={channel.id}
-                    />
+                    /> */}
                     <ChatInput
                         name={channel.name}
                         type="channel"
-                        apiUrl="/api/socket/messages"
+                        apiUrl="message/create-message"
                         query={{
-                            channelId: channel.id,
-                            serverId: channel.serverId,
+                            channelToken: channel.token,
+                            serverToken: channel.server.token
                         }}
                     />
                 </>
             )}
-            {channel.type === ChannelType.AUDIO && (
+            {/* {channel.type === ChannelType.AUDIO && (
                 <MediaRoom chatId={channel.id} video={false} audio={true} />
             )}
             {channel.type === ChannelType.VIDEO && (
