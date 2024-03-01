@@ -3,14 +3,11 @@
 import { Fragment, useRef, ElementRef } from 'react';
 import { format } from 'date-fns';
 import { Loader2, ServerCrash } from 'lucide-react';
-
-import { useChatQuery } from '@/hooks/use-chat-query';
-import { useChatSocket } from '@/hooks/use-chat-socket';
-import { useChatScroll } from '@/hooks/use-chat-scroll';
-
 import { ChatWelcome } from './chat-welcome';
 import { ChatItem } from './chat-item';
 import { Member, Message, User } from '@/app/types';
+import { useChatQuery } from '@/app/hook/use-chat-query';
+import { useSession } from 'next-auth/react';
 
 const DATE_FORMAT = 'd MMM yyyy, HH:mm';
 
@@ -22,9 +19,8 @@ type MessageWithMemberWithProfile = Message & {
 
 interface ChatMessagesProps {
     name: string;
-    member: Member;
-    chatId: string;
-    apiUrl: string;
+    member?: Member;
+    chatToken: string;
     socketUrl: string;
     socketQuery: Record<string, string>;
     paramKey: 'channelId' | 'conversationId';
@@ -35,38 +31,36 @@ interface ChatMessagesProps {
 export const ChatMessages = ({
     name,
     member,
-    chatId,
-    apiUrl,
+    chatToken,
     socketUrl,
     socketQuery,
     paramKey,
     paramValue,
     type,
 }: ChatMessagesProps) => {
-    const queryKey = `chat:${chatId}`;
-    const addKey = `chat:${chatId}:messages`;
-    const updateKey = `chat:${chatId}:messages:update`;
+    const session = useSession();
+    const queryKey = `chat:${chatToken}`;
+    const addKey = `chat:${chatToken}:messages`;
+    const updateKey = `chat:${chatToken}:messages:update`;
 
     const chatRef = useRef<ElementRef<'div'>>(null);
     const bottomRef = useRef<ElementRef<'div'>>(null);
 
-    const { data, fetchNextPage, hasNextPage, isFetchingNextPage, status } =
-        useChatQuery({
-            queryKey,
-            apiUrl,
-            paramKey,
-            paramValue,
-        });
-    useChatSocket({ queryKey, addKey, updateKey });
-    useChatScroll({
-        chatRef,
-        bottomRef,
-        loadMore: fetchNextPage,
-        shouldLoadMore: !isFetchingNextPage && !!hasNextPage,
-        count: data?.pages?.[0]?.items?.length ?? 0,
+    const { data, isLoading, error, setSize, size } = useChatQuery({
+        paramValue,
+        token: session.data?.backendTokens.accessToken
     });
 
-    if (status === 'loading') {
+    // useChatSocket({ queryKey, addKey, updateKey });
+    // useChatScroll({
+    //     chatRef,
+    //     bottomRef,
+    //     loadMore: fetchNextPage,
+    //     shouldLoadMore: !isFetchingNextPage && !!hasNextPage,
+    //     count: data?.pages?.[0]?.items?.length ?? 0,
+    // });
+
+    if (isLoading) {
         return (
             <div className="flex flex-col flex-1 justify-center items-center">
                 <Loader2 className="h-7 w-7 text-zinc-500 animate-spin my-4" />
@@ -77,7 +71,7 @@ export const ChatMessages = ({
         );
     }
 
-    if (status === 'error') {
+    if (error) {
         return (
             <div className="flex flex-col flex-1 justify-center items-center">
                 <ServerCrash className="h-7 w-7 text-zinc-500 my-4" />
@@ -93,7 +87,7 @@ export const ChatMessages = ({
             ref={chatRef}
             className="flex-1 flex flex-col py-4 overflow-y-auto"
         >
-            {!hasNextPage && <div className="flex-1" />}
+            {/* {!hasNextPage && <div className="flex-1" />}
             {!hasNextPage && <ChatWelcome type={type} name={name} />}
             {hasNextPage && (
                 <div className="flex justify-center">
@@ -108,12 +102,12 @@ export const ChatMessages = ({
                         </button>
                     )}
                 </div>
-            )}
+            )} */}
             <div className="flex flex-col-reverse mt-auto">
-                {data?.pages?.map((group, i) => (
+                {data?.map((group, i) => (
                     <Fragment key={i}>
-                        {group.items.map(
-                            (message: MessageWithMemberWithProfile) => (
+                        {group.item.map(
+                            (message: Message) => (
                                 <ChatItem
                                     key={message.id}
                                     id={message.id}

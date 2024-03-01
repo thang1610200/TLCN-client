@@ -22,13 +22,11 @@ import { Member, MemberRole, User } from '@/app/types';
 interface ChatItemProps {
     id: string;
     content: string;
-    member: Member & {
-        profile: User;
-    };
+    member: Member;
     timestamp: string;
     fileUrl: string | null;
     deleted: boolean;
-    currentMember: Member;
+    currentMember?: Member;
     isUpdated: boolean;
     socketUrl: string;
     socketQuery: Record<string, string>;
@@ -62,11 +60,11 @@ export const ChatItem = ({
     const router = useRouter();
 
     const onMemberClick = () => {
-        if (member.id === currentMember.id) {
+        if (member.token === currentMember?.token) {
             return;
         }
 
-        router.push(`/servers/${params?.serverId}/conversations/${member.id}`);
+        router.push(`/thread/servers/${params?.serverToken}/conversations/${member.token}`);
     };
 
     useEffect(() => {
@@ -114,9 +112,9 @@ export const ChatItem = ({
 
     const fileType = fileUrl?.split('.').pop();
 
-    const isAdmin = currentMember.role === MemberRole.Admin;
-    const isModerator = currentMember.role === MemberRole.Morderator;
-    const isOwner = currentMember.id === member.id;
+    const isAdmin = currentMember?.role === MemberRole.Admin;
+    const isModerator = currentMember?.role === MemberRole.Morderator;
+    const isOwner = currentMember?.token === member.token;
     const canDeleteMessage = !deleted && (isAdmin || isModerator || isOwner);
     const canEditMessage = !deleted && isOwner && !fileUrl;
     const isPDF = fileType === 'pdf' && fileUrl;
@@ -129,7 +127,7 @@ export const ChatItem = ({
                     onClick={onMemberClick}
                     className="cursor-pointer hover:drop-shadow-md transition"
                 >
-                    <UserAvatar src={member.profile.image} />
+                    <UserAvatar src={member.user.image} />
                 </div>
                 <div className="flex flex-col w-full">
                     <div className="flex items-center gap-x-2">
@@ -138,7 +136,7 @@ export const ChatItem = ({
                                 onClick={onMemberClick}
                                 className="font-semibold text-sm hover:underline cursor-pointer"
                             >
-                                {member.profile.name}
+                                {member.user.name}
                             </p>
                             <ActionTooltip label={member.role}>
                                 {roleIconMap[member.role]}

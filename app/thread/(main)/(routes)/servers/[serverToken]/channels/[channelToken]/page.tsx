@@ -4,6 +4,7 @@ import { useDetailChannel } from '@/app/hook/useChannel';
 import { ChannelType } from '@/app/types';
 import { ChatHeader } from '@/components/chat/chat-header';
 import { ChatInput } from '@/components/chat/chat-input';
+import { ChatMessages } from '@/components/chat/chat-message';
 import LoadingModal from '@/components/modal/loading-modal';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
@@ -20,6 +21,10 @@ const ChannelIdPage = ({ params }: ChannelIdPageProps) => {
     const router = useRouter();
     const { channel, isLoading, error } = useDetailChannel(params.channelToken, session.data?.backendTokens.accessToken);
 
+    const member = channel?.server.members.find((data) => {
+        return data.user.email === session.data?.user.email
+    });
+
     if(error) {
         return router.push('/thread');
     }
@@ -32,26 +37,24 @@ const ChannelIdPage = ({ params }: ChannelIdPageProps) => {
         <div className="bg-white dark:bg-[#313338] flex flex-col h-full">
             <ChatHeader
                 name={channel?.name}
-                serverToken={channel?.token}
+                serverToken={channel?.server.token}
                 type="channel"
             />
             {channel?.type === ChannelType.Text && (
                 <>
-                    dsdsdsss
-                    {/* <ChatMessages
+                    <ChatMessages
                         member={member}
                         name={channel.name}
-                        chatId={channel.id}
+                        chatToken={channel.token}
                         type="channel"
-                        apiUrl="/api/messages"
                         socketUrl="/api/socket/messages"
                         socketQuery={{
-                            channelId: channel.id,
-                            serverId: channel.serverId,
+                            channelToken: channel?.token,
+                            serverToken: channel.server.token,
                         }}
                         paramKey="channelId"
-                        paramValue={channel.id}
-                    /> */}
+                        paramValue={channel.token}
+                    />
                     <ChatInput
                         name={channel.name}
                         type="channel"
