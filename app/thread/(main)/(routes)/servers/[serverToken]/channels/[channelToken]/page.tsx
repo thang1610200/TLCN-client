@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import { useDetailChannel } from '@/app/hook/useChannel';
 import { ChannelType } from '@/app/types';
@@ -19,18 +19,21 @@ interface ChannelIdPageProps {
 const ChannelIdPage = ({ params }: ChannelIdPageProps) => {
     const session = useSession();
     const router = useRouter();
-    const { channel, isLoading, error } = useDetailChannel(params.channelToken, session.data?.backendTokens.accessToken);
+    const { channel, isLoading, error } = useDetailChannel(
+        params.channelToken,
+        session.data?.backendTokens.accessToken
+    );
 
     const member = channel?.server.members.find((data) => {
-        return data.user.email === session.data?.user.email
+        return data.user.email === session.data?.user.email;
     });
 
-    if(error) {
+    if (error) {
         return router.push('/thread');
     }
 
-    if(isLoading) {
-        return <LoadingModal />
+    if (isLoading) {
+        return <LoadingModal />;
     }
 
     return (
@@ -47,7 +50,7 @@ const ChannelIdPage = ({ params }: ChannelIdPageProps) => {
                         name={channel.name}
                         chatToken={channel.token}
                         type="channel"
-                        socketUrl="/api/socket/messages"
+                        socketUrl="message"
                         socketQuery={{
                             channelToken: channel?.token,
                             serverToken: channel.server.token,

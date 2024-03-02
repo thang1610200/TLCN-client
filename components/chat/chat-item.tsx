@@ -18,6 +18,9 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { useModal } from '@/app/hook/useModalStore';
 import { Member, MemberRole, User } from '@/app/types';
+import toast from 'react-hot-toast';
+import { useSession } from 'next-auth/react';
+import { BACKEND_URL } from '@/lib/constant';
 
 interface ChatItemProps {
     id: string;
@@ -58,6 +61,7 @@ export const ChatItem = ({
     const { onOpen } = useModal();
     const params = useParams();
     const router = useRouter();
+    const session = useSession();
 
     const onMemberClick = () => {
         if (member.token === currentMember?.token) {
@@ -91,16 +95,29 @@ export const ChatItem = ({
     const onSubmit = async (values: z.infer<typeof formSchema>) => {
         try {
             const url = qs.stringifyUrl({
-                url: `${socketUrl}/${id}`,
-                query: socketQuery,
+                url: `${BACKEND_URL}/message/edit-message`,
             });
 
-            await axios.patch(url, values);
+            await axios.patch(
+                url,
+                {
+                    content: values.content,
+                    email: session.data?.user.email,
+                    serverToken: socketQuery.serverToken,
+                    channelToken: socketQuery.channelToken,
+                    messageId: id
+                },
+                {
+                    headers: {
+                        Authorization: `Bearer ${session.data?.backendTokens.accessToken}`,
+                    },
+                }
+            );
 
             form.reset();
             setIsEditing(false);
         } catch (error) {
-            console.log(error);
+            toast.error('Something went wrong');
         }
     };
 
@@ -197,6 +214,7 @@ export const ChatItem = ({
                                 onSubmit={form.handleSubmit(onSubmit)}
                             >
                                 <FormField
+                                    disabled={isLoading}
                                     control={form.control}
                                     name="content"
                                     render={({ field }) => (
@@ -204,7 +222,6 @@ export const ChatItem = ({
                                             <FormControl>
                                                 <div className="relative w-full">
                                                     <Input
-                                                        disabled={isLoading}
                                                         className="p-2 bg-zinc-200/90 dark:bg-zinc-700/75 border-none border-0 focus-visible:ring-0 focus-visible:ring-offset-0 text-zinc-600 dark:text-zinc-200"
                                                         placeholder="Edited message"
                                                         {...field}
@@ -243,7 +260,7 @@ export const ChatItem = ({
                         <Trash
                             onClick={() =>
                                 onOpen('deleteMessage', {
-                                    apiUrl: `${socketUrl}/${id}`,
+                                    apiUrl: id,
                                     query: socketQuery,
                                 })
                             }

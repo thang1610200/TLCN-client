@@ -8,14 +8,11 @@ import { ChatItem } from './chat-item';
 import { Member, Message, User } from '@/app/types';
 import { useChatQuery } from '@/app/hook/use-chat-query';
 import { useSession } from 'next-auth/react';
+import { useChatSocket } from '@/app/hook/use-chat-socket';
+import { useChatScroll } from '@/app/hook/use-chat-scroll';
 
 const DATE_FORMAT = 'd MMM yyyy, HH:mm';
-
-type MessageWithMemberWithProfile = Message & {
-    member: Member & {
-        profile: User;
-    };
-};
+const PAGE_SIZE = 10;
 
 interface ChatMessagesProps {
     name: string;
@@ -46,19 +43,25 @@ export const ChatMessages = ({
     const chatRef = useRef<ElementRef<'div'>>(null);
     const bottomRef = useRef<ElementRef<'div'>>(null);
 
-    const { data, isLoading, error, setSize, size } = useChatQuery({
+    const { data, isLoading, error, setSize, size, mutate, isValidating } = useChatQuery({
         paramValue,
         token: session.data?.backendTokens.accessToken
     });
 
-    // useChatSocket({ queryKey, addKey, updateKey });
-    // useChatScroll({
-    //     chatRef,
-    //     bottomRef,
-    //     loadMore: fetchNextPage,
-    //     shouldLoadMore: !isFetchingNextPage && !!hasNextPage,
-    //     count: data?.pages?.[0]?.items?.length ?? 0,
-    // });
+    const fetchNextPage = () => {
+        setSize(size + 1);
+    };
+    const isEmpty = data?.[0]?.item.length === 0;
+    const hasNextPage = isEmpty || (data && data[data.length - 1]?.item.length < PAGE_SIZE);
+    useChatSocket({ queryKey, addKey, updateKey, size, setSize, mutate });
+
+    useChatScroll({
+        chatRef,
+        bottomRef,
+        loadMore: fetchNextPage,
+        shouldLoadMore: !isValidating && !hasNextPage,
+        count: data?.[0]?.items?.length ?? 0,
+    });
 
     if (isLoading) {
         return (
@@ -87,11 +90,11 @@ export const ChatMessages = ({
             ref={chatRef}
             className="flex-1 flex flex-col py-4 overflow-y-auto"
         >
-            {/* {!hasNextPage && <div className="flex-1" />}
-            {!hasNextPage && <ChatWelcome type={type} name={name} />}
-            {hasNextPage && (
+            {hasNextPage && <div className="flex-1" />}
+            {hasNextPage && <ChatWelcome type={type} name={name} />}
+            {!hasNextPage && (
                 <div className="flex justify-center">
-                    {isFetchingNextPage ? (
+                    {isValidating? (
                         <Loader2 className="h-6 w-6 text-zinc-500 animate-spin my-4" />
                     ) : (
                         <button
@@ -102,7 +105,7 @@ export const ChatMessages = ({
                         </button>
                     )}
                 </div>
-            )} */}
+            )}
             <div className="flex flex-col-reverse mt-auto">
                 {data?.map((group, i) => (
                     <Fragment key={i}>

@@ -25,7 +25,8 @@ export const useChatQuery = ({
         return res.data;
     };
 
-    const { data, isLoading, error, setSize, mutate, size } = useSWRInfinite((item, previousPageData) => {
+    const { data, isLoading, error, setSize, mutate, size, isValidating } = useSWRInfinite((item, previousPageData) => {
+        //console.log(previousPageData);
         const url = qs.stringifyUrl({
             url: `${BACKEND_URL}/message/pagination-message`,
             query: {
@@ -44,6 +45,7 @@ export const useChatQuery = ({
         error,
         setSize,
         mutate,
-        size
+        size,
+        isValidating
     };
 };
