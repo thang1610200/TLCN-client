@@ -27,12 +27,11 @@ export const useChatSocket = ({
             return;
         }
 
-        socket.on(updateKey, (message: Message) => {
-            setSize(size + 1);
+        socket.on(updateKey, (message: any) => {
+            mutate();
         });
 
-        socket.on(addKey, (message: Message) => {
-            //isEndPage ? setSize(size) : setSize(size + 1);
+        socket.on(addKey, (message: any) => {
             mutate();
         });
 

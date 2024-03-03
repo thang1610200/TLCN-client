@@ -50,13 +50,14 @@ const ChannelIdPage = ({ params }: ChannelIdPageProps) => {
                         name={channel.name}
                         chatToken={channel.token}
                         type="channel"
-                        socketUrl="message"
+                        socketUrl="message/edit-message"
                         socketQuery={{
                             channelToken: channel?.token,
                             serverToken: channel.server.token,
                         }}
-                        paramKey="channelId"
+                        paramKey="channelToken"
                         paramValue={channel.token}
+                        apiUrl='message/pagination-message'
                     />
                     <ChatInput
                         name={channel.name}

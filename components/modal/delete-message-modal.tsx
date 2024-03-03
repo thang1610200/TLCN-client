@@ -31,11 +31,9 @@ export const DeleteMessageModal = () => {
         try {
             setIsLoading(true);
             const url = qs.stringifyUrl({
-                url: `${BACKEND_URL}/message/delete-message`,
+                url: `${BACKEND_URL}/${apiUrl}`,
                 query: {
-                    messageId: apiUrl,
-                    channelToken: query?.channelToken,
-                    serverToken: query?.serverToken,
+                    ...query,
                     email: session.data?.user.email
                 },
             });

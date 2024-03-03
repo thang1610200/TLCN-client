@@ -52,8 +52,7 @@ export const ChatInput = ({ apiUrl, query, name, type }: ChatInputProps) => {
                 {
                     content: values.content,
                     email: session.data?.user.email,
-                    serverToken: query.serverToken,
-                    channelToken: query.channelToken
+                    ...query
                 },
                 {
                     headers: {
@@ -84,7 +83,7 @@ export const ChatInput = ({ apiUrl, query, name, type }: ChatInputProps) => {
                                         type="button"
                                         onClick={() =>
                                             onOpen('messageFile', {
-                                                apiUrl,
+                                                apiUrl: type,
                                                 query,
                                             })
                                         }

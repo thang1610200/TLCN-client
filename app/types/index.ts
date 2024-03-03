@@ -215,3 +215,11 @@ export interface Message {
     createAt: Date;
     updateAt: Date;
 }
+
+export interface Conversation {
+    id: string;
+    memberOwnerId: string;
+    memberOwner: Member;
+    memberGuestId: string;
+    memberGuest: Member;
+}

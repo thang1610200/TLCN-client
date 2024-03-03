@@ -33,6 +33,7 @@ interface ChatItemProps {
     isUpdated: boolean;
     socketUrl: string;
     socketQuery: Record<string, string>;
+    type: 'channel' | 'conversation';
 }
 
 const roleIconMap = {
@@ -56,6 +57,7 @@ export const ChatItem = ({
     isUpdated,
     socketUrl,
     socketQuery,
+    type
 }: ChatItemProps) => {
     const [isEditing, setIsEditing] = useState(false);
     const { onOpen } = useModal();
@@ -70,6 +72,31 @@ export const ChatItem = ({
 
         router.push(`/thread/servers/${params?.serverToken}/conversations/${member.token}`);
     };
+
+    const handleDeleteMessage = () => {
+        let url = "";
+        let data = {};
+
+        if(type === 'channel') {
+            url = 'message/delete-message';
+            data = {
+                ...socketQuery,
+                messageId: id,
+            }
+        }
+        else if(type === 'conversation') {
+            url = 'message/delete-conversation';
+            data = {
+                ...socketQuery,
+                directMessageId: id,
+            }
+        }
+
+        onOpen('deleteMessage',{
+            apiUrl: url,
+            query: data
+        })
+    }
 
     useEffect(() => {
         const handleKeyDown = (event: any) => {
@@ -95,18 +122,30 @@ export const ChatItem = ({
     const onSubmit = async (values: z.infer<typeof formSchema>) => {
         try {
             const url = qs.stringifyUrl({
-                url: `${BACKEND_URL}/message/edit-message`,
+                url: `${BACKEND_URL}/${socketUrl}`,
             });
+
+            let data = {};
+
+            if(type === 'channel') {
+                data = {
+                    content: values.content,
+                    email: session.data?.user.email,
+                    messageId: id,
+                    ...socketQuery
+                }
+            }else if (type === 'conversation') {
+                data = {
+                    content: values.content,
+                    email: session.data?.user.email,
+                    directMessageId: id,
+                    ...socketQuery
+                }
+            }
 
             await axios.patch(
                 url,
-                {
-                    content: values.content,
-                    email: session.data?.user.email,
-                    serverToken: socketQuery.serverToken,
-                    channelToken: socketQuery.channelToken,
-                    messageId: id
-                },
+                data,
                 {
                     headers: {
                         Authorization: `Bearer ${session.data?.backendTokens.accessToken}`,
@@ -258,12 +297,7 @@ export const ChatItem = ({
                     )}
                     <ActionTooltip label="Delete">
                         <Trash
-                            onClick={() =>
-                                onOpen('deleteMessage', {
-                                    apiUrl: id,
-                                    query: socketQuery,
-                                })
-                            }
+                            onClick={handleDeleteMessage}
                             className="cursor-pointer ml-auto w-4 h-4 text-zinc-500 hover:text-zinc-600 dark:hover:text-zinc-300 transition"
                         />
                     </ActionTooltip>

@@ -96,13 +96,21 @@ export const MessageFileModal = () => {
 
     const onSubmit = async (values: FileFormValues) => {
         try {
+            let url = "";
+
+            if(apiUrl === 'channel'){
+                url = `${BACKEND_URL}/message/upload-file-message`;
+            }
+            else if (apiUrl === 'conversation') {
+                url = `${BACKEND_URL}/message/upload-file-conversation`;
+            }
+
             await axios.post(
-                `${BACKEND_URL}/message/upload-file-message`,
+                url,
                 {
                     file: values.fileUrl,
-                    channelToken: query?.channelToken,
-                    serverToken: query?.serverToken,
                     email: session.data?.user.email,
+                    ...query
                 },
                 {
                     headers: {

@@ -1,18 +1,21 @@
 import qs from 'query-string';
 import useSWRInfinite from 'swr/infinite';
 import { useSocket } from '@/components/provider/socket-provider';
-import axios, { AxiosError } from 'axios';
+import axios from 'axios';
 import { BACKEND_URL } from '@/lib/constant';
-import { Message } from '../types';
 
 interface ChatQueryProps {
     paramValue: string;
-    token?: string
+    token?: string;
+    paramKey: "channelToken" | "conversationId";
+    apiUrl: string;
 }
 
 export const useChatQuery = ({
     paramValue,
-    token
+    token,
+    apiUrl,
+    paramKey
 }: ChatQueryProps) => {
     const { isConnected } = useSocket();
 
@@ -28,9 +31,10 @@ export const useChatQuery = ({
     const { data, isLoading, error, setSize, mutate, size, isValidating } = useSWRInfinite((item, previousPageData) => {
         //console.log(previousPageData);
         const url = qs.stringifyUrl({
-            url: `${BACKEND_URL}/message/pagination-message`,
+            url: `${BACKEND_URL}/${apiUrl}`,
             query: {
-                channelToken: paramValue,
+                //channelToken: paramValue,
+                [paramKey]: paramValue,
                 cursor: previousPageData?.nextCursor
             }
         })

@@ -20,9 +20,10 @@ interface ChatMessagesProps {
     chatToken: string;
     socketUrl: string;
     socketQuery: Record<string, string>;
-    paramKey: 'channelId' | 'conversationId';
+    paramKey: 'channelToken' | 'conversationId';
     paramValue: string;
     type: 'channel' | 'conversation';
+    apiUrl: string;
 }
 
 export const ChatMessages = ({
@@ -34,6 +35,7 @@ export const ChatMessages = ({
     paramKey,
     paramValue,
     type,
+    apiUrl
 }: ChatMessagesProps) => {
     const session = useSession();
     const queryKey = `chat:${chatToken}`;
@@ -45,12 +47,15 @@ export const ChatMessages = ({
 
     const { data, isLoading, error, setSize, size, mutate, isValidating } = useChatQuery({
         paramValue,
-        token: session.data?.backendTokens.accessToken
+        token: session.data?.backendTokens.accessToken,
+        apiUrl,
+        paramKey
     });
 
     const fetchNextPage = () => {
         setSize(size + 1);
     };
+
     const isEmpty = data?.[0]?.item.length === 0;
     const hasNextPage = isEmpty || (data && data[data.length - 1]?.item.length < PAGE_SIZE);
     useChatSocket({ queryKey, addKey, updateKey, size, setSize, mutate });
@@ -128,6 +133,7 @@ export const ChatMessages = ({
                                     }
                                     socketUrl={socketUrl}
                                     socketQuery={socketQuery}
+                                    type={type}
                                 />
                             )
                         )}
