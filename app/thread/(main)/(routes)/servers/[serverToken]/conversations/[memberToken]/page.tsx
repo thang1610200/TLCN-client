@@ -7,6 +7,7 @@ import { BACKEND_URL } from '@/lib/constant';
 import getSession from '@/app/actions/getSession';
 import { ChatMessages } from '@/components/chat/chat-message';
 import { Conversation } from '@/app/types';
+import { MediaRoom } from '@/components/media-room';
 
 interface MemberIdPageProps {
     params: {
@@ -60,9 +61,9 @@ const MemberIdPage = async ({ params, searchParams }: MemberIdPageProps) => {
                 serverToken={params.serverToken}
                 type="conversation"
             />
-            {/* {searchParams.video && (
-                <MediaRoom chatId={conversation.id} video={true} audio={true} />
-            )} */}
+            {searchParams.video && (
+                <MediaRoom chatToken={data.id} video={true} audio={true} />
+            )}
             {!searchParams.video && (
                 <>
                     <ChatMessages

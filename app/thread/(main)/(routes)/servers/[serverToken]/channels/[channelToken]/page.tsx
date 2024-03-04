@@ -5,6 +5,7 @@ import { ChannelType } from '@/app/types';
 import { ChatHeader } from '@/components/chat/chat-header';
 import { ChatInput } from '@/components/chat/chat-input';
 import { ChatMessages } from '@/components/chat/chat-message';
+import { MediaRoom } from '@/components/media-room';
 import LoadingModal from '@/components/modal/loading-modal';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
@@ -70,12 +71,12 @@ const ChannelIdPage = ({ params }: ChannelIdPageProps) => {
                     />
                 </>
             )}
-            {/* {channel.type === ChannelType.AUDIO && (
-                <MediaRoom chatId={channel.id} video={false} audio={true} />
+            {channel?.type === ChannelType.Audio && (
+                <MediaRoom chatToken={channel.token} video={false} audio={true} />
             )}
-            {channel.type === ChannelType.VIDEO && (
-                <MediaRoom chatId={channel.id} video={true} audio={true} />
-            )} */}
+            {channel?.type === ChannelType.Video && (
+                <MediaRoom chatToken={channel.token} video={true} audio={true} />
+            )}
         </div>
     );
 };
