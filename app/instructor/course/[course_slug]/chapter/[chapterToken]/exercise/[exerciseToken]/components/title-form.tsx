@@ -8,6 +8,7 @@ import { Pencil } from 'lucide-react';
 import { useState } from 'react';
 import toast from 'react-hot-toast';
 import { useRouter } from 'next/navigation';
+
 import {
     Form,
     FormControl,
@@ -15,48 +16,41 @@ import {
     FormItem,
     FormMessage,
 } from '@/components/ui/form';
+import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { BACKEND_URL } from '@/lib/constant';
 import { useSession } from 'next-auth/react';
 import { KeyedMutator } from 'swr';
-import { Lesson } from '@/app/types';
-import { Input } from '@/components/ui/input';
 
-interface NumberQuestionPassProps {
-    initialData: Lesson;
-    course_slug: string;
-    chapter_token: string;
-    lesson_token: string;
+interface TitleFormProps {
+    initialData?: {
+        title: string;
+    };
+    token?: string;
     mutate: KeyedMutator<any>;
-    coursePublished?: boolean;
 }
 
-export const NumberQuestionPass = ({
+const formSchema = z.object({
+    title: z.string().min(1, {
+        message: 'Title is required',
+    }),
+});
+
+export const TitleForm = ({
     initialData,
-    course_slug,
-    chapter_token,
-    lesson_token,
+    token,
     mutate,
-    coursePublished,
-}: NumberQuestionPassProps) => {
-    const formSchema = z.object({
-        number: z
-            .number()
-            .int()
-            .positive()
-            .lte(initialData?.exercise?.quizz.length),
-    });
+}: TitleFormProps) => {
     const [isEditing, setIsEditing] = useState(false);
-    const router = useRouter();
-    const session = useSession();
 
     const toggleEdit = () => setIsEditing((current) => !current);
 
+    const router = useRouter();
+    const session = useSession();
+
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
-        defaultValues: {
-            number: initialData?.amountToPass || 0,
-        },
+        defaultValues: initialData,
     });
 
     const { isSubmitting, isValid } = form.formState;
@@ -64,15 +58,13 @@ export const NumberQuestionPass = ({
     const onSubmit = async (values: z.infer<typeof formSchema>) => {
         try {
             await axios.patch(
-                `${BACKEND_URL}/lesson/update-lesson`,
+                `${BACKEND_URL}/exercise/update-exercise`,
                 {
-                    course_slug: course_slug,
+                    token,
                     value: {
-                        amountToPass: values.number,
+                        title: values.title,
                     },
                     email: session.data?.user.email,
-                    chapter_token,
-                    lesson_token,
                 },
                 {
                     headers: {
@@ -81,7 +73,7 @@ export const NumberQuestionPass = ({
                     },
                 }
             );
-            toast.success('Lesson updated');
+            toast.success('Exercise updated');
             toggleEdit();
             mutate();
             router.refresh();
@@ -91,44 +83,37 @@ export const NumberQuestionPass = ({
     };
 
     return (
-        <div className="p-4 mt-6 border rounded-md bg-slate-100">
-            <div className="flex items-center justify-between font-medium">
-                Số lượng câu trả lời đúng để qua bài học mới
-                {!coursePublished && (
-                    <Button onClick={toggleEdit} variant="ghost">
-                        {isEditing ? (
-                            <>Hủy bỏ</>
-                        ) : (
-                            <>
-                                <Pencil className="w-4 h-4 mr-2" />
-                                Chỉnh sửa
-                            </>
-                        )}
-                    </Button>
-                )}
+        <div className="mt-6 border bg-slate-100 rounded-md p-4">
+            <div className="font-medium flex items-center justify-between">
+                Exercise title
+                <Button onClick={toggleEdit} variant="ghost">
+                    {isEditing ? (
+                        <>Cancel</>
+                    ) : (
+                        <>
+                            <Pencil className="h-4 w-4 mr-2" />
+                            Edit title
+                        </>
+                    )}
+                </Button>
             </div>
-            {!isEditing && (
-                <p className="mt-2 text-sm">{initialData?.amountToPass || 0}</p>
-            )}
+            {!isEditing && <p className="text-sm mt-2">{initialData?.title}</p>}
             {isEditing && (
                 <Form {...form}>
                     <form
                         onSubmit={form.handleSubmit(onSubmit)}
-                        className="mt-4 space-y-4"
+                        className="space-y-4 mt-4"
                     >
                         <FormField
                             control={form.control}
-                            name="number"
+                            name="title"
                             render={({ field }) => (
                                 <FormItem>
                                     <FormControl>
                                         <Input
-                                            type="number"
                                             disabled={isSubmitting}
-                                            placeholder="e.g. 'Number of questions to pass'"
-                                            {...form.register('number', {
-                                                valueAsNumber: true,
-                                            })}
+                                            placeholder="e.g. 'Advanced web development'"
+                                            {...field}
                                         />
                                     </FormControl>
                                     <FormMessage />
@@ -140,7 +125,7 @@ export const NumberQuestionPass = ({
                                 disabled={!isValid || isSubmitting}
                                 type="submit"
                             >
-                                Lưu lại
+                                Save
                             </Button>
                         </div>
                     </form>

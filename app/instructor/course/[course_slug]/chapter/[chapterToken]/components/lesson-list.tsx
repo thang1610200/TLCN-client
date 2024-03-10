@@ -10,13 +10,13 @@ import { Grip, Pencil } from "lucide-react";
 
 import { cn } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
-import { Lesson } from "@/app/types";
+import { Content, Lesson } from "@/app/types";
 import toast from "react-hot-toast";
 
 interface LessonsListProps {
-    items: Lesson[];
+    items: Content[];
     onReorder: (updateData: { id: string; position: number }[]) => void;
-    onEdit: (id: string) => void;
+    onEdit: (content: Content) => void;
     coursePublished?: boolean;
 };
 
@@ -27,21 +27,21 @@ export const LessonsList = ({
     coursePublished
 }: LessonsListProps) => {
     const [isMounted, setIsMounted] = useState(false);
-    const [lessons, setLessons] = useState(items);
+    const [contents, setContents] = useState(items);
 
     useEffect(() => {
         setIsMounted(true);
     }, []);
 
     useEffect(() => {
-        setLessons(items);
+        setContents(items);
     }, [items]);
 
     const onDragEnd = (result: DropResult) => {
         if (!result.destination) return;
 
         if(!coursePublished){
-            const items = Array.from(lessons);
+            const items = Array.from(contents);
             const [reorderedItem] = items.splice(result.source.index, 1);
             items.splice(result.destination.index, 0, reorderedItem);
 
@@ -50,7 +50,7 @@ export const LessonsList = ({
 
             const updatedLessons = items.slice(startIndex, endIndex + 1);
 
-            setLessons(items);
+            setContents(items);
 
             const bulkUpdateData = updatedLessons.map((lesson) => ({
                 id: lesson.id,
@@ -73,17 +73,17 @@ export const LessonsList = ({
             <Droppable droppableId="chapters">
                 {(provided) => (
                 <div {...provided.droppableProps} ref={provided.innerRef}>
-                    {lessons.map((lesson, index) => (
+                    {contents.map((content, index) => (
                     <Draggable 
-                        key={lesson.id} 
-                        draggableId={lesson.id} 
+                        key={content.id} 
+                        draggableId={content.id} 
                         index={index}
                     >
                         {(provided) => (
                         <div
                             className={cn(
                             "flex items-center gap-x-2 bg-slate-200 border-slate-200 border text-slate-700 rounded-md mb-4 text-sm",
-                            lesson.isPublished && "bg-sky-100 border-sky-200 text-sky-700"
+                            (content.lesson?.isPublished || content.exercise?.isOpen) && "bg-sky-100 border-sky-200 text-sky-700"
                             )}
                             ref={provided.innerRef}
                             {...provided.draggableProps}
@@ -91,7 +91,7 @@ export const LessonsList = ({
                             <div
                             className={cn(
                                 "px-2 py-3 border-r border-r-slate-200 hover:bg-slate-300 rounded-l-md transition",
-                                lesson.isPublished && "border-r-sky-200 hover:bg-sky-200"
+                                (content.lesson?.isPublished || content.exercise?.isOpen) && "border-r-sky-200 hover:bg-sky-200"
                             )}
                             {...provided.dragHandleProps}
                             >
@@ -99,18 +99,18 @@ export const LessonsList = ({
                                 className="h-5 w-5"
                             />
                             </div>
-                            {lesson.title}
+                            {(content.lesson?.title || content.exercise?.title)}
                             <div className="ml-auto pr-2 flex items-center gap-x-2">
                             <Badge
                                 className={cn(
                                 "bg-slate-500",
-                                lesson.isPublished && "bg-sky-700"
+                                (content.lesson?.isPublished || content.exercise?.isOpen) && "bg-sky-700"
                                 )}
                             >
-                                {lesson.isPublished ? "Published" : "Draft"}
+                                {(content.lesson?.isPublished || content.exercise?.isOpen) ? "Published" : "Draft"}
                             </Badge>
                             <Pencil
-                                onClick={() => onEdit(lesson.token)}
+                                onClick={() => onEdit(content)}
                                 className="w-4 h-4 cursor-pointer hover:opacity-75 transition"
                             />
                             </div>

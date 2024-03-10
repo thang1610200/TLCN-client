@@ -7,7 +7,7 @@ import {
 import { ChapterActions } from "./components/chapter-action";
 import useChapterDetail from "@/app/hook/useChapterDetail";
 import { useSession } from "next-auth/react";
-import { redirect } from "next/navigation";
+import { useRouter } from "next/navigation";
 import LoadingModal from "@/components/modal/loading-modal";
 import { IconBadge } from "@/components/icon-badge";
 import { ArrowLeft, LayoutDashboard, ListChecks } from "lucide-react";
@@ -16,7 +16,7 @@ import { ChapterTitleForm } from "./components/chapter-title-form";
 import { ChapterDescriptionForm } from "./components/chapter-description-form";
 import { LessonsForm } from "./components/lesson-form";
 import { filter } from "lodash";
-import useCourseDetail from "@/app/hook/useCourseDetail";
+import CreateExerciseModal from "@/app/instructor/exercise/components/create-modal";
 
 
 const ChapterToken = ({
@@ -25,12 +25,8 @@ const ChapterToken = ({
     params: {course_slug: string, chapterToken: string}
 }) => {
     const session = useSession();
+    const router = useRouter();
     const { data, isLoading, error, mutate } = useChapterDetail(params.course_slug, session.data?.user.email, session.data?.backendTokens.accessToken, params.chapterToken);
-    const { data: course = {}, isLoading: courseLoading = false, error: courseError } = useCourseDetail(
-        params.course_slug,
-        session.data?.user.email,
-        session.data?.backendTokens.accessToken
-    );
 
     const lesson = filter(data?.lessons,{
         isPublished: true
@@ -49,12 +45,12 @@ const ChapterToken = ({
     
     const isComplete = requiredFields.every(Boolean);
 
-    if (isLoading || courseLoading) {
+    if (isLoading) {
         return <LoadingModal />;
     }
 
-    if(error || courseError){
-        return redirect('/');
+    if(error){
+        return router.push('/instructor/course');
     }
 
     return (
@@ -83,7 +79,7 @@ const ChapterToken = ({
                         </span>
                     </div>
                     <ChapterActions
-                        coursePublished={course?.isPublished}
+                        coursePublished={data?.course?.isPublished}
                         disabled={!isComplete}
                         course_slug={params.course_slug}
                         chapter_token={params.chapterToken}
@@ -119,9 +115,14 @@ const ChapterToken = ({
                                 <h2 className="text-xl">
                                     Bài học trong chương
                                 </h2>
+                                <CreateExerciseModal
+                                    mutate={mutate}
+                                    course_slug={params.course_slug}
+                                    chapter_token={params.chapterToken}
+                                />
                             </div>
                             <LessonsForm
-                                coursePublished={course?.isPublished}
+                                coursePublished={data?.course?.isPublished}
                                 initialData={data}
                                 course_slug={params.course_slug}
                                 chapter_token={params.chapterToken}

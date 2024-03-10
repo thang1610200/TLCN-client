@@ -6,7 +6,7 @@ import { Chart } from './components/chart';
 import { useCountCourse, useCountUser } from '@/app/hook/useAnalytic';
 import { useRouter } from 'next/navigation';
 import LoadingModal from '@/components/modal/loading-modal';
-import { useAllCourse } from '@/app/hook/useAllCourse';
+import { useAllCourse } from '@/app/hook/use-course';
 import { uniqBy } from 'lodash';
 
 const AnalyticsPage = () => {

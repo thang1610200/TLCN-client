@@ -56,7 +56,7 @@ const CourseDetail = ({ params }: { params: { course_slug: string } }) => {
     }
 
     if (error) {
-        return router.back();
+        return router.push("/instructor/course");
     }
 
     return (

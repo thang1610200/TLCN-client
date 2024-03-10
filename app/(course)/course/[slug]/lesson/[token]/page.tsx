@@ -73,7 +73,7 @@ const CourseAccessDetail = ({
     }
 
     if (error || errorLesson) {
-        return router.back();
+        return router.push("/");
     }
 
     return (

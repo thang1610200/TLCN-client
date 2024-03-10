@@ -18,31 +18,27 @@ import {
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { Input } from '@/components/ui/input';
-import { Chapter, Content, ContentType, Lesson } from '@/app/types';
 import { BACKEND_URL } from '@/lib/constant';
 import { useSession } from 'next-auth/react';
 import { KeyedMutator } from 'swr';
-import { LessonsList } from './lesson-list';
+import { Exercise, Quizz } from '@/app/types';
+import { QuizzList } from './quizz-list';
 
-interface LessonsFormProps {
-    initialData?: Chapter;
-    course_slug: string;
-    chapter_token: string;
+interface QuizzFormProps {
+    initialData?: Exercise & { quizz: Quizz[] };
+    exercise_token: string;
     mutate: KeyedMutator<any>;
-    coursePublished?: boolean;
 }
 
 const formSchema = z.object({
-    title: z.string().min(1),
+    question: z.string().min(1),
 });
 
-export const LessonsForm = ({
+export const QuizzForm = ({
     initialData,
-    course_slug,
-    chapter_token,
+    exercise_token,
     mutate,
-    coursePublished,
-}: LessonsFormProps) => {
+}: QuizzFormProps) => {
     const [isCreating, setIsCreating] = useState(false);
     const [isUpdating, setIsUpdating] = useState(false);
 
@@ -56,7 +52,7 @@ export const LessonsForm = ({
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
-            title: '',
+            question: '',
         },
     });
 
@@ -65,13 +61,11 @@ export const LessonsForm = ({
     const onSubmit = async (values: z.infer<typeof formSchema>) => {
         try {
             await axios.post(
-                `${BACKEND_URL}/lesson/create-lesson`,
+                `${BACKEND_URL}/quizz/create-quizz`,
                 {
-                    course_slug: course_slug,
-                    title: values.title,
+                    exercise_token,
+                    question: values.question,
                     email: session.data?.user.email,
-                    chapter_token: chapter_token,
-                    type: 'LESSON'
                 },
                 {
                     headers: {
@@ -80,7 +74,7 @@ export const LessonsForm = ({
                     },
                 }
             );
-            toast.success('Lesson created');
+            toast.success('Question created');
             toggleCreating();
             form.reset();
             mutate();
@@ -91,14 +85,16 @@ export const LessonsForm = ({
     };
 
     const onReorder = async (
-        updateData: { id: string; position: number }[]
+        updateData: { token: string; position: number }[]
     ) => {
         try {
             setIsUpdating(true);
 
             await axios.put(
-                `${BACKEND_URL}/lesson/reorder-lesson`,
+                `${BACKEND_URL}/quizz/reorder-quizz`,
                 {
+                    exercise_token,
+                    email: session.data?.user.email,
                     list: updateData,
                 },
                 {
@@ -108,7 +104,7 @@ export const LessonsForm = ({
                     },
                 }
             );
-            toast.success('Lessons reordered');
+            toast.success('Questions reordered');
             router.refresh();
         } catch {
             toast.error('Something went wrong');
@@ -117,36 +113,27 @@ export const LessonsForm = ({
         }
     };
 
-    const onEdit = (content: Content) => {
-        if(content.type === "LESSON") {
-            return  router.push(
-                `/instructor/course/${course_slug}/chapter/${chapter_token}/lesson/${content.lesson?.token}`
-            );
-        }
-        else if (content.type === "EXERCISE") {
-            return  router.push(
-                `/instructor/course/${course_slug}/chapter/${chapter_token}/exercise/${content.exercise?.token}`
-            );
-        }
+    const onEdit = (token: string) => {
+        router.push(`/instructor/exercise/${exercise_token}/quizz/${token}`);
     };
 
     return (
-        <div className="relative p-4 mt-6 border rounded-md bg-slate-100">
+        <div className="relative mt-6 border bg-slate-100 rounded-md p-4">
             {isUpdating && (
-                <div className="absolute top-0 right-0 flex items-center justify-center w-full h-full bg-slate-500/20 rounded-m">
-                    <Loader2 className="w-6 h-6 animate-spin text-sky-700" />
+                <div className="absolute h-full w-full bg-slate-500/20 top-0 right-0 rounded-m flex items-center justify-center">
+                    <Loader2 className="animate-spin h-6 w-6 text-sky-700" />
                 </div>
             )}
-            <div className="flex items-center justify-between font-medium">
-                Bài học trong chương
-                {!coursePublished && (
+            <div className="font-medium flex items-center justify-between">
+                Quizz question
+                {initialData?.lesson.length === 0 && (
                     <Button onClick={toggleCreating} variant="ghost">
                         {isCreating ? (
-                            <>Hủy bỏ</>
+                            <>Cancel</>
                         ) : (
                             <>
-                                <PlusCircle className="w-4 h-4 mr-2" />
-                                Thêm bài học
+                                <PlusCircle className="h-4 w-4 mr-2" />
+                                Add a question
                             </>
                         )}
                     </Button>
@@ -156,17 +143,17 @@ export const LessonsForm = ({
                 <Form {...form}>
                     <form
                         onSubmit={form.handleSubmit(onSubmit)}
-                        className="mt-4 space-y-4"
+                        className="space-y-4 mt-4"
                     >
                         <FormField
                             control={form.control}
-                            name="title"
+                            name="question"
                             render={({ field }) => (
                                 <FormItem>
                                     <FormControl>
                                         <Input
                                             disabled={isSubmitting}
-                                            placeholder="e.g. 'Introduction to the lesson'"
+                                            placeholder="e.g. 'What is javascript?'"
                                             {...field}
                                         />
                                     </FormControl>
@@ -178,7 +165,7 @@ export const LessonsForm = ({
                             disabled={!isValid || isSubmitting}
                             type="submit"
                         >
-                            Tạo bài học mới
+                            Create
                         </Button>
                     </form>
                 </Form>
@@ -187,21 +174,20 @@ export const LessonsForm = ({
                 <div
                     className={cn(
                         'text-sm mt-2',
-                        !initialData?.contents.length && 'text-slate-500 italic'
+                        !initialData?.quizz.length && 'text-slate-500 italic'
                     )}
                 >
-                    {!initialData?.contents.length && 'Không có khóa học'}
-                    <LessonsList
-                        coursePublished={coursePublished}
+                    {!initialData?.quizz.length && 'No chapters'}
+                    <QuizzList
                         onEdit={onEdit}
                         onReorder={onReorder}
-                        items={initialData?.contents || []}
+                        items={initialData?.quizz || []}
                     />
                 </div>
             )}
             {!isCreating && (
-                <p className="mt-4 text-xs text-muted-foreground">
-                    Kéo thả để sắp xếp thứ tự bài học
+                <p className="text-xs text-muted-foreground mt-4">
+                    Drag and drop to reorder the questions
                 </p>
             )}
         </div>

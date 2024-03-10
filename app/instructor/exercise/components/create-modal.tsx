@@ -38,6 +38,7 @@ import { useRouter } from 'next/navigation';
 import { TypeExercise } from '@/app/types';
 import { cn } from '@/lib/utils';
 import { Check, ChevronsUpDown } from 'lucide-react';
+import { KeyedMutator } from 'swr';
 
 const ExerciseFormSchema = z.object({
     title: z
@@ -57,7 +58,17 @@ const ExerciseFormSchema = z.object({
 
 type ExerciseFormValues = z.infer<typeof ExerciseFormSchema>;
 
-export default function CreateExerciseModal() {
+interface CreateExerciseProps {
+    chapter_token: string;
+    course_slug: string;
+    mutate: KeyedMutator<any>;
+}
+
+export default function CreateExerciseModal({
+    chapter_token,
+    course_slug,
+    mutate
+}: CreateExerciseProps) {
     const [isLoading, setIsLoading] = useState(false);
     const [isOpen, setIsOpen] = useState(false);
     const router = useRouter();
@@ -95,8 +106,11 @@ export default function CreateExerciseModal() {
                 `${BACKEND_URL}/exercise/create-exercise`,
                 {
                     title: data.title,
-                    type: data.type,
+                    typeExercise: data.type,
                     email: session.data?.user.email,
+                    typeContent: "EXERCISE",
+                    course_slug,
+                    chapter_token
                 },
                 {
                     headers: {
@@ -106,12 +120,13 @@ export default function CreateExerciseModal() {
                 }
             )
             .then(() => {
+                mutate();
                 toast.success('Create success');
                 handleCancel();
                 router.refresh();
             })
             .catch((e) => {
-                toast.error('Create failed!');
+                toast.error('Something went wrong');
             })
             .finally(() => setIsLoading(false));
     }
@@ -122,7 +137,7 @@ export default function CreateExerciseModal() {
     };
 
     return (
-        <div>
+        <div className="ml-auto">
             <div className="ml-auto" onClick={() => setIsOpen(true)}>
                 <Button>
                     <BiPlusCircle className="w-4 h-4 mr-2" />

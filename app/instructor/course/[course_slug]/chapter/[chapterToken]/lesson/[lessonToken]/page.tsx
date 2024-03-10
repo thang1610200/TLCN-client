@@ -1,7 +1,7 @@
 'use client';
 import { Tabs, TabsContent } from '@/components/ui/tabs';
 import { useSession } from 'next-auth/react';
-import { redirect } from 'next/navigation';
+import { redirect, useRouter } from 'next/navigation';
 import LoadingModal from '@/components/modal/loading-modal';
 import { IconBadge } from '@/components/icon-badge';
 import {
@@ -19,11 +19,7 @@ import { LessonDescriptionForm } from './components/lesson-description-form';
 import { LessonVideoForm } from './components/lesson-video';
 import { LessonActions } from './components/lesson-action';
 import { ThumbnailForm } from './components/thumbnail-video';
-import { ExerciseLessonForm } from './components/add-exercise-form';
-import useAllExercise from '@/app/hook/useAllExerciseOpen';
-import { NumberQuestionPass } from './components/add-number-pass';
 import { AttachmentForm } from './components/attachment-form';
-import useCourseDetail from '@/app/hook/useCourseDetail';
 
 const LessonToken = ({
     params,
@@ -31,25 +27,13 @@ const LessonToken = ({
     params: { course_slug: string; chapterToken: string; lessonToken: string };
 }) => {
     const session = useSession();
+    const router = useRouter();
     const { data, isLoading, error, mutate } = useLessonDetail(
         params.course_slug,
         session.data?.user.email,
         session.data?.backendTokens.accessToken,
         params.chapterToken,
         params.lessonToken
-    );
-    const {
-        data: exercise = [],
-        error_exercise,
-        loading,
-    } = useAllExercise(
-        session.data?.user.email,
-        session.data?.backendTokens.accessToken
-    );
-    const { data: course = {}, isLoading: courseLoading = false, error: courseError } = useCourseDetail(
-        params.course_slug,
-        session.data?.user.email,
-        session.data?.backendTokens.accessToken
     );
     const requiredFields = [data?.title, 
                             data?.description, 
@@ -59,11 +43,11 @@ const LessonToken = ({
     const completedFields = requiredFields.filter(Boolean).length;
     const completionText = `(${completedFields}/${totalFields})`;
     const isComplete = requiredFields.every(Boolean);
-    if (isLoading || loading || courseLoading) {
+    if (isLoading) {
         return <LoadingModal />;
     }
-    if (error || error_exercise || courseError) {
-        return redirect('/');
+    if (error) {
+        return router.push('/instructor/course');
     }
     return (
         <>
@@ -90,13 +74,13 @@ const LessonToken = ({
                             </span>
                         </div>
                         <LessonActions
-                            coursePublished={course?.isPublished}
+                            coursePublished={data?.content.chapter.course.isPublished}
                             disabled={!isComplete}
                             course_slug={params.course_slug}
                             chapter_token={params.chapterToken}
                             lesson_token={params.lessonToken}
                             isPublished={data?.isPublished}
-                            mutate={mutate}
+                            mutates={mutate}
                         />
                     </div>
 
@@ -114,32 +98,6 @@ const LessonToken = ({
                                 mutate={mutate}
                             />
                             <LessonDescriptionForm
-                                initialData={data}
-                                course_slug={params.course_slug}
-                                chapter_token={params.chapterToken}
-                                lesson_token={params.lessonToken}
-                                mutate={mutate}
-                            />
-
-                            <div className="flex items-center mt-12 gap-x-2">
-                                <IconBadge icon={ClipboardCheck} />
-                                <h2 className="text-xl">Bài tập</h2>
-                            </div>
-                            <ExerciseLessonForm
-                                coursePublished={course?.isPublished}
-                                initialData={data}
-                                course_slug={params.course_slug}
-                                chapter_token={params.chapterToken}
-                                lesson_token={params.lessonToken}
-                                mutate={mutate}
-                                options={exercise.map((item) => ({
-                                    label: item.title,
-                                    value: item.id,
-                                    type: item.type,
-                                }))}
-                            />
-
-                            <NumberQuestionPass
                                 initialData={data}
                                 course_slug={params.course_slug}
                                 chapter_token={params.chapterToken}

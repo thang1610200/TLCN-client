@@ -34,7 +34,7 @@ const DetailCourse = ({ params }: { params: { slug: string } }) => {
     }
 
     if (error || errorProgress) {
-        return router.back();
+        return router.push("/");
     }
 
     const lesson = flatten(map(data?.chapters, 'lessons'));

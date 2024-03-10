@@ -4,7 +4,7 @@ import { Tabs, TabsContent } from '@/components/ui/tabs';
 import { DataTable } from './components/data-table';
 import { columns } from './components/columns';
 import { useSession } from 'next-auth/react';
-import { useUserOfInstructor, useAllCourse } from '@/app/hook/useAllCourse';
+import { useUserOfInstructor, useAllCourse } from '@/app/hook/use-course';
 import { useRouter } from 'next/navigation';
 import LoadingModal from '@/components/modal/loading-modal';
 

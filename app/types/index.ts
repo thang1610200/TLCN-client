@@ -1,89 +1,121 @@
 
 export interface User {
-    name: string;
+    id: string;
     email: string;
-    image: string;
-    bio?: string;
     password?: string;
+    name: string;
+    image?: string;
+    bio?: string;
     facebook_id?: string;
     youtube_id?: string;
     titok_id?: string;
     role: string;
+    registration_date: string;
+    verify_date?: Date;
+    register_instructor:  RegisterInstructor[];
+    course: Course[];
+    userProgress: UserProgress[];
+    review: Review[];
+    reply: ReviewReply[];
+    server: Server[];
+    member: Member[];
+    channel: Channel[];
+}
+
+export interface Topic {
+    id: string;
+    slug?: string;
+    title: string;
+    course: Course[];
 }
 
 export interface Course {
     id: string;
+    topic_id: string
+    topic: Topic;
+    owner_id : string;
+    owner: User;
     title: string;
-    isPublished: boolean;
-    slug: string;
-    description: string;
+    description?: string
     learning_outcome: string[];
     requirement: string[];
-    picture: string;
-    topic_id: string;
-    toptic: Topic;
-    owner: User;
+    slug: string
+    picture?: string
     chapters: Chapter[];
-    userProgress: UserProgress[];
+    isPublished: boolean;
+    create_at: Date;
+    update_at: Date;
+    userProgress: UserProgress[]
+    review: Review[]
 }
 
 export interface Chapter {
     id: string;
     title: string;
     token: string;
-    description: string;
+    description?: string;
     position: number;
     isPublished: boolean;
+    contents: Content[]
     courseId: string;
-    lessons: Lesson[];
-}
-
-export interface Topic {
-    id: string;
-    title: string;
-    slug: string;
+    course: Course;
 }
 
 export interface Lesson {
     id: string;
     token: string;
     title: string;
-    description: string;
-    position: number;
+    description?: string
     isPublished: boolean;
-    videoUrl: string;
-    chapterId: string;
+    videoUrl?: string;
+    duration?: number;
     isCompleteVideo: boolean;
-    thumbnail: string;
-    duration: number;
-    exerciseId: string;
-    exercise: Exercise;
-    userProgress: UserProgress[];
-    attachment: Attachment[];
-    amountToPass: number;
+    thumbnail?: string;
+    contentId: string
+    content: Content;
+    userProgress: UserProgress[]
+    attachment: Attachment[]
+}
+
+export enum ContentType {
+    Lesson = 'LESSON',
+    Exercise = 'EXERCISE'
+}
+
+export interface Content {
+    id: string;
+    type: ContentType;
+    chapterId: string;
+    chapter: Chapter;
+    position: number;
+    lesson?: Lesson;
+    exercise?: Exercise;
 }
 
 export interface Exercise {
     id: string;
     token: string;
     title: string;
-    type: string;
-    isOpen: boolean;
-    lessonId: string;
-    quizz: Quizz[];
-    lesson: Lesson[];
+    type: TypeExercise;
+    contentId: string;
+    content: Content;
     create_at: Date;
+    update_at: Date;
+    isOpen: boolean;
+    quizz: Quizz[];
 }
 
 export interface Quizz {
     id: string;
     token: string;
     question: string;
-    answer: string;
+    answer?: string;
     option: string[];
     position: number;
     isPublished: boolean;
-    explain: string;
+    exerciseId: string;
+    exercise: Exercise;
+    explain?: string;
 }
 
 export enum TypeExercise {
@@ -105,16 +137,19 @@ export enum LevelQuizz {
 
 export interface UserProgress {
     id: string;
+    userId: string
     user: User;
-    course: Course;
     courseId: string;
+    course: Course;
+    lessonId: string;
+    lesson: Lesson;
     isCompleted: boolean;
     isPassed: boolean;
     userProgressQuiz: UserProgressQuiz[];
-    createdAt: Date;
 }
 
 export interface UserProgressQuiz {
+    id: string;
     quizzId: string;
     answer: string;
     userProgressId: string;
@@ -125,18 +160,25 @@ export interface UserProgressQuiz {
 
 export interface Review {
     id: string;
+    userId: string;
     user: User;
+    courseId: string;
+    course: Course;
     content: string;
-    reply: ReviewReply[];
     create_at: Date;
+    update_at: Date;
+    reply: ReviewReply[];
 }
 
 export interface ReviewReply {
     id: string;
+    userId: string;
     user: User;
+    reviewId: string;
     review: Review;
     reply: string;
     create_at: Date;
+    update_at: Date;
 }
 
 export interface Attachment {
@@ -146,6 +188,7 @@ export interface Attachment {
     lessonId: string;
     lesson: Lesson;
     createdAt: Date;
+    updatedAt: Date;
 }
 
 export enum StatusRegisterInstructor {
@@ -180,14 +223,17 @@ export enum ChannelType {
 }
 
 export interface Server {
+    id: string;
     token: string;
     name: string;
-    user: User;
     imageUrl: string;
     inviteCode: string;
+    userId: string;
+    user: User;
     createAt: Date;
-    members: Member[];
-    channels: Channel[];
+    updateAt: Date;
+    members: Member[]
+    channels: Channel[]
 }
 
 export enum MemberRole {
