@@ -1,6 +1,7 @@
 import useSwr from 'swr';
 import axios, { AxiosError } from 'axios';
 import { BACKEND_URL } from '@/lib/constant';
+import qs from 'query-string';
 
 const fetcher = async ([url, token]: [string, string]) => {
     const res = await axios.get(url,{
@@ -11,8 +12,18 @@ const fetcher = async ([url, token]: [string, string]) => {
     return res.data;
 }
 
-const useExerciseDetail = (email?: string, token?: string, exercise_token?:string) => {
-    const { data, error, isLoading, mutate} = useSwr<any, AxiosError>(token ? [`${BACKEND_URL}/exercise/detail-exercise?email=${email}&token=${exercise_token}`,token]: null, fetcher, {
+const useExerciseDetail = (email?: string, token?: string, exercise_token?:string, course_slug?: string, chapter_token?: string) => {
+    const url = qs.stringifyUrl({
+        url: `${BACKEND_URL}/exercise/detail-exercise`,
+        query: {
+            email,
+            token: exercise_token,
+            course_slug,
+            chapter_token
+        }
+    })
+
+    const { data, error, isLoading, mutate} = useSwr<any, AxiosError>(token ? [url,token]: null, fetcher, {
         revalidateIfStale: true,
         revalidateOnFocus: false,
         revalidateOnReconnect: false,

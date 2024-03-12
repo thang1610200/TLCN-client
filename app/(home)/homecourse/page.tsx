@@ -5,7 +5,7 @@ import useAllCoursePublish from '../../hook/useAllCoursePublish';
 import LoadingModal from '@/components/modal/loading-modal';
 import { Categories } from '../components/categories';
 import { CoursesList } from '@/components/courses-list';
-import useAllTopicHome from '../../hook/useAllTopicHome';
+import useAllTopicHome from '../../hook/use-topic';
 import { useSearchParams } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';

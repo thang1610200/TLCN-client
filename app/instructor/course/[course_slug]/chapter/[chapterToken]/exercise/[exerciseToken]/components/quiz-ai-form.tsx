@@ -67,11 +67,15 @@ type QuizzAiFormValues = z.infer<typeof QuizzAiSchema>;
 interface QuizzAiModalProps {
     exercise_token?: string;
     mutate: KeyedMutator<any>;
+    chapter_token: string;
+    course_slug: string;
 }
 
 export default function QuizzAiModal({
     exercise_token,
-    mutate
+    mutate,
+    chapter_token,
+    course_slug
 }: QuizzAiModalProps) {
     const [isLoading, setIsLoading] = useState(false);
     const [isOpen, setIsOpen] = useState(false);
@@ -127,7 +131,9 @@ export default function QuizzAiModal({
                     level: data.level,
                     exercise_token,
                     email: session.data?.user.email,
-                    amount: data.number
+                    amount: data.number,
+                    course_slug,
+                    chapter_token
                 },
                 {
                     headers: {

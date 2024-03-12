@@ -28,6 +28,8 @@ interface QuizzFormProps {
     initialData?: Exercise & { quizz: Quizz[] };
     exercise_token: string;
     mutate: KeyedMutator<any>;
+    chapter_token: string;
+    course_slug: string;
 }
 
 const formSchema = z.object({
@@ -38,6 +40,8 @@ export const QuizzForm = ({
     initialData,
     exercise_token,
     mutate,
+    chapter_token,
+    course_slug
 }: QuizzFormProps) => {
     const [isCreating, setIsCreating] = useState(false);
     const [isUpdating, setIsUpdating] = useState(false);
@@ -66,6 +70,8 @@ export const QuizzForm = ({
                     exercise_token,
                     question: values.question,
                     email: session.data?.user.email,
+                    chapter_token,
+                    course_slug
                 },
                 {
                     headers: {
@@ -93,8 +99,6 @@ export const QuizzForm = ({
             await axios.put(
                 `${BACKEND_URL}/quizz/reorder-quizz`,
                 {
-                    exercise_token,
-                    email: session.data?.user.email,
                     list: updateData,
                 },
                 {
@@ -114,7 +118,7 @@ export const QuizzForm = ({
     };
 
     const onEdit = (token: string) => {
-        router.push(`/instructor/exercise/${exercise_token}/quizz/${token}`);
+        router.push(`/instructor/course/${course_slug}/chapter/${token}/exercise/${exercise_token}/quizz/${token}`);
     };
 
     return (
@@ -126,7 +130,6 @@ export const QuizzForm = ({
             )}
             <div className="font-medium flex items-center justify-between">
                 Quizz question
-                {initialData?.lesson.length === 0 && (
                     <Button onClick={toggleCreating} variant="ghost">
                         {isCreating ? (
                             <>Cancel</>
@@ -137,7 +140,6 @@ export const QuizzForm = ({
                             </>
                         )}
                     </Button>
-                )}
             </div>
             {isCreating && (
                 <Form {...form}>
@@ -174,10 +176,10 @@ export const QuizzForm = ({
                 <div
                     className={cn(
                         'text-sm mt-2',
-                        !initialData?.quizz.length && 'text-slate-500 italic'
+                        !initialData?.quizz?.length && 'text-slate-500 italic'
                     )}
                 >
-                    {!initialData?.quizz.length && 'No chapters'}
+                    {!initialData?.quizz?.length && 'No chapters'}
                     <QuizzList
                         onEdit={onEdit}
                         onReorder={onReorder}

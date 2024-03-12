@@ -6,26 +6,28 @@ import useExerciseDetail from '@/app/hook/useExerciseDetail';
 import LoadingModal from '@/components/modal/loading-modal';
 import { Tabs, TabsContent } from '@/components/ui/tabs';
 import { IconBadge } from '@/components/icon-badge';
-import { LayoutDashboard, ListChecks, Zap } from 'lucide-react';
+import { ArrowLeft, LayoutDashboard, ListChecks, Zap } from 'lucide-react';
 import { TitleForm } from './components/title-form';
 import { Actions } from './components/action';
 import { ExerciseTypeForm } from './components/exercise-type';
 import { QuizzForm } from './components/quizz-form';
 import QuizzAiModal from './components/quiz-ai-form';
 
-const ExerciseDetail = ({ params }: { params: { token: string } }) => {
+const ExerciseDetail = ({ params }: { params: { exerciseToken: string, course_slug: string; chapterToken: string; } }) => {
     const session = useSession();
     const router = useRouter();
     const { data, isLoading, error, mutate } = useExerciseDetail(
         session.data?.user.email,
         session.data?.backendTokens.accessToken,
-        params.token
+        params.exerciseToken,
+        params.course_slug,
+        params.chapterToken
     );
 
     const requiredFields = [
         data?.title,
         data?.type,
-        data?.quizz.length > 0,
+        data?.quizz?.length > 0,
     ];
 
     const totalFields = requiredFields.length;
@@ -40,13 +42,20 @@ const ExerciseDetail = ({ params }: { params: { token: string } }) => {
     }
 
     if (error) {
-        return router.back();
+        return router.push('/instructor/course');
     }
 
     return (
         <>
             <Tabs defaultValue="music" className="h-full space-y-6">
                 <div className="flex items-center bg-black space-between"></div>
+                <a
+                    href={`/instructor/course/${params.course_slug}/chapter/${params.chapterToken}`}
+                    className="flex items-center mb-6 text-sm transition hover:opacity-75"
+                >
+                    <ArrowLeft className="w-4 h-4 mr-2" />
+                    Trở về trang thông tin chương
+                </a>
                 <TabsContent
                     value="music"
                     className="p-0 border-none outline-none"
@@ -61,10 +70,12 @@ const ExerciseDetail = ({ params }: { params: { token: string } }) => {
                             </span>
                         </div>
                         <Actions
+                            course_slug={params.course_slug}
+                            chapter_token={params.chapterToken}
                             disabled={!isComplete}
-                            token={params.token}
+                            token={params.exerciseToken}
                             isOpen={data?.isOpen}
-                            mutate={mutate}
+                            mutates={mutate}
                             isCheck={data?.lesson?.length > 0}
                         />
                     </div>
@@ -77,6 +88,8 @@ const ExerciseDetail = ({ params }: { params: { token: string } }) => {
                                 </h2>
                             </div>
                             <TitleForm
+                                course_slug={params.course_slug}
+                                chapter_token={params.chapterToken}
                                 initialData={data}
                                 token={data?.token}
                                 mutate={mutate}
@@ -90,12 +103,16 @@ const ExerciseDetail = ({ params }: { params: { token: string } }) => {
                                     <h2 className="text-xl">Question list</h2>
                                     <div className="ml-auto">
                                         <QuizzAiModal
+                                            course_slug={params.course_slug}
+                                            chapter_token={params.chapterToken}
                                             exercise_token={data?.token}
                                             mutate={mutate}
                                         />
                                     </div>
                                 </div>
                                 <QuizzForm
+                                    course_slug={params.course_slug}
+                                    chapter_token={params.chapterToken}
                                     initialData={data}
                                     exercise_token={data?.token}
                                     mutate={mutate}

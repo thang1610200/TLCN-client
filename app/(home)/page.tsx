@@ -4,11 +4,11 @@ import React from 'react';
 import SearchInput from '@/components/search-input';
 import { useSearchParams } from 'next/navigation';
 import useAllCoursePublish from '../hook/useAllCoursePublish';
-import useAllTopicHome from '../hook/useAllTopicHome';
 import LoadingModal from '@/components/modal/loading-modal';
 import ErrorModal from '@/components/error';
 import FilterBar from './components/filter-bar';
 import { CoursesList } from '@/components/courses-list';
+import { useAllTopicHome } from '../hook/use-topic';
 
 export default function HomePage() {
     const searchParams = useSearchParams();

@@ -22,29 +22,27 @@ import { BACKEND_URL } from '@/lib/constant';
 import { useSession } from 'next-auth/react';
 import { KeyedMutator } from 'swr';
 
-interface TitleFormProps {
+interface QuestionFormProps {
     initialData?: {
-        title: string;
+        question: string;
     };
-    course_slug: string;
-    chapter_token: string;
+    exercise_token: string;
     token?: string;
     mutate: KeyedMutator<any>;
 }
 
 const formSchema = z.object({
-    title: z.string().min(1, {
-        message: 'Title is required',
+    question: z.string().min(1, {
+        message: 'Question is required',
     }),
 });
 
-export const TitleForm = ({
+export const QuestionForm = ({
     initialData,
+    exercise_token,
     token,
     mutate,
-    course_slug,
-    chapter_token
-}: TitleFormProps) => {
+}: QuestionFormProps) => {
     const [isEditing, setIsEditing] = useState(false);
 
     const toggleEdit = () => setIsEditing((current) => !current);
@@ -62,15 +60,14 @@ export const TitleForm = ({
     const onSubmit = async (values: z.infer<typeof formSchema>) => {
         try {
             await axios.patch(
-                `${BACKEND_URL}/exercise/update-exercise`,
+                `${BACKEND_URL}/quizz/update-quizz`,
                 {
                     token,
+                    exercise_token,
                     value: {
-                        title: values.title,
+                        question: values.question,
                     },
                     email: session.data?.user.email,
-                    course_slug,
-                    chapter_token
                 },
                 {
                     headers: {
@@ -79,7 +76,7 @@ export const TitleForm = ({
                     },
                 }
             );
-            toast.success('Exercise updated');
+            toast.success('Question updated');
             toggleEdit();
             mutate();
             router.refresh();
@@ -91,19 +88,19 @@ export const TitleForm = ({
     return (
         <div className="mt-6 border bg-slate-100 rounded-md p-4">
             <div className="font-medium flex items-center justify-between">
-                Exercise title
+                Question
                 <Button onClick={toggleEdit} variant="ghost">
                     {isEditing ? (
                         <>Cancel</>
                     ) : (
                         <>
                             <Pencil className="h-4 w-4 mr-2" />
-                            Edit title
+                            Edit question
                         </>
                     )}
                 </Button>
             </div>
-            {!isEditing && <p className="text-sm mt-2">{initialData?.title}</p>}
+            {!isEditing && <p className="text-sm mt-2">{initialData?.question}</p>}
             {isEditing && (
                 <Form {...form}>
                     <form
@@ -112,7 +109,7 @@ export const TitleForm = ({
                     >
                         <FormField
                             control={form.control}
-                            name="title"
+                            name="question"
                             render={({ field }) => (
                                 <FormItem>
                                     <FormControl>

@@ -14,10 +14,10 @@ import { DescriptionForm } from '../component/description-form';
 import { LearningOutcomeForm } from '../component/learning-outcome-form';
 import { ImageForm } from '../component/image-form';
 import { CategoryForm } from '../component/category-form';
-import useTopic from '@/app/hook/useTopic';
 import { ChaptersForm } from '../component/chapter-form';
 import { RequirementForm } from '../component/requirement-form';
 import { filter } from 'lodash';
+import { useTopic } from '@/app/hook/use-topic';
 
 const CourseDetail = ({ params }: { params: { course_slug: string } }) => {
     const session = useSession();
