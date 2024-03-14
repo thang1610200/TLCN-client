@@ -32,6 +32,8 @@ interface OptionFormProps {
     token?: string;
     mutate: KeyedMutator<any>;
     isCheck?: boolean;
+    course_slug: string;
+    chapter_token: string;
 }
 
 const formSchema = z.object({
@@ -56,6 +58,8 @@ export const OptionForm = ({
     token,
     mutate,
     isCheck,
+    course_slug,
+    chapter_token
 }: OptionFormProps) => {
     const [isEditing, setIsEditing] = useState(false);
 
@@ -95,13 +99,15 @@ export const OptionForm = ({
             await axios.patch(
                 `${BACKEND_URL}/quizz/update-quizz`,
                 {
-                    token,
+                    quiz_token: token,
                     exercise_token,
                     value: {
                         answer: values.answer,
                         option: optionValue,
                     },
                     email: session.data?.user.email,
+                    course_slug,
+                    chapter_token
                 },
                 {
                     headers: {

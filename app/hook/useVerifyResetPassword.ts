@@ -5,7 +5,7 @@ import { BACKEND_URL } from '@/lib/constant';
 
 const useVerifyResetPassword = (token?: string, email?: string) => {
     const { data, error, isLoading } = useSwr<string, AxiosError>(`${BACKEND_URL}/auth/reset-password/click?token=${token}&email=${email}`, fetcher, {
-        revalidateIfStale: false,
+        revalidateIfStale: true,
         revalidateOnFocus: false,
         revalidateOnReconnect: false,
         shouldRetryOnError: false,       // nếu khi gọi dữ liệu bị lỗi thì sẽ gọi lại (true)

@@ -29,6 +29,8 @@ interface ExplainFormProps {
     exercise_token: string;
     token?: string;
     mutate: KeyedMutator<any>;
+    course_slug: string;
+    chapter_token: string;
 };
 
 const formSchema = z.object({
@@ -41,7 +43,9 @@ export const ExplainForm = ({
     initialData,
     token,
     exercise_token,
-    mutate
+    mutate,
+    course_slug,
+    chapter_token
 }: ExplainFormProps) => {
     const [isEditing, setIsEditing] = useState(false);
 
@@ -62,12 +66,14 @@ export const ExplainForm = ({
     const onSubmit = async (values: z.infer<typeof formSchema>) => {
         try {
             await axios.patch(`${BACKEND_URL}/quizz/update-quizz`, {
-                token,
+                quiz_token: token,
                 exercise_token,
                 value: {
                     explain: values.explain
                 },
-                email: session.data?.user.email
+                email: session.data?.user.email,
+                course_slug,
+                chapter_token
             },{
                 headers: {
                     Authorization: `Bearer ${session.data?.backendTokens.accessToken}`,

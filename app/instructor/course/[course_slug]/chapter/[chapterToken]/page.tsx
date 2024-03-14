@@ -16,7 +16,7 @@ import { ChapterTitleForm } from "./components/chapter-title-form";
 import { ChapterDescriptionForm } from "./components/chapter-description-form";
 import { LessonsForm } from "./components/lesson-form";
 import { filter } from "lodash";
-import CreateExerciseModal from "@/app/instructor/exercise/components/create-modal";
+import CreateExerciseModal from "./components/create-modal";
 
 
 const ChapterToken = ({
@@ -26,16 +26,20 @@ const ChapterToken = ({
 }) => {
     const session = useSession();
     const router = useRouter();
-    const { data, isLoading, error, mutate } = useChapterDetail(params.course_slug, session.data?.user.email, session.data?.backendTokens.accessToken, params.chapterToken);
+    const { data, isLoading, error, mutate, isValidating } = useChapterDetail(params.course_slug, session.data?.user.email, session.data?.backendTokens.accessToken, params.chapterToken);
 
-    const lesson = filter(data?.lessons,{
-        isPublished: true
+    const lesson = filter(data?.contents, function(o){
+        return o?.lesson?.isPublished;
+    });
+
+    const exercise = filter(data?.contents, function(o){
+        return o?.exercise?.isOpen;
     });
 
     const requiredFields = [
         data?.title,
         data?.description,
-        lesson?.length > 0
+        lesson?.length > 0 || exercise?.length > 0
     ];
     
     const totalFields = requiredFields.length;
@@ -45,7 +49,7 @@ const ChapterToken = ({
     
     const isComplete = requiredFields.every(Boolean);
 
-    if (isLoading) {
+    if (isLoading || isValidating) {
         return <LoadingModal />;
     }
 
@@ -58,13 +62,13 @@ const ChapterToken = ({
         <Tabs defaultValue="music" className="h-full space-y-6">
             <div className="flex items-center bg-black space-between">
             </div>
-            <a
+            <Link
                 href={`/instructor/course/${params.course_slug}`}
                 className="flex items-center mb-6 text-sm transition hover:opacity-75"
                 >
                     <ArrowLeft className="w-4 h-4 mr-2" />
                     Trở về trang thông tin khóa học
-            </a>
+            </Link>
             <TabsContent
                 value="music"
                 className="p-0 border-none outline-none"

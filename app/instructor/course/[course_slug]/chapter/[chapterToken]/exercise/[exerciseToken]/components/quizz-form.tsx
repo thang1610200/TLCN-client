@@ -118,7 +118,7 @@ export const QuizzForm = ({
     };
 
     const onEdit = (token: string) => {
-        router.push(`/instructor/course/${course_slug}/chapter/${token}/exercise/${exercise_token}/quizz/${token}`);
+        router.push(`/instructor/course/${course_slug}/chapter/${chapter_token}/exercise/${exercise_token}/quizz/${token}`);
     };
 
     return (

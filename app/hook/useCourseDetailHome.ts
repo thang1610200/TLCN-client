@@ -5,7 +5,7 @@ import fetcher from '@/lib/fetcher';
 import { Course } from '../types';
 
 const useCourseDetailHome = (slug?: string) => {
-    const { data, error, isLoading, mutate} = useSwr<Course, AxiosError>(`${BACKEND_URL}/course/detail-course?slug=${slug}`, fetcher, {
+    const { data, error, isLoading, mutate, isValidating} = useSwr<Course, AxiosError>(`${BACKEND_URL}/course/detail-course?slug=${slug}`, fetcher, {
         revalidateIfStale: true,
         revalidateOnFocus: false,
         revalidateOnReconnect: false,
@@ -17,7 +17,8 @@ const useCourseDetailHome = (slug?: string) => {
         data,
         error,
         isLoading,
-        mutate
+        mutate,
+        isValidating
     }
 }
 

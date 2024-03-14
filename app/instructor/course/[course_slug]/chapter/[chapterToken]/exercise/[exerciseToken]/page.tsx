@@ -12,11 +12,12 @@ import { Actions } from './components/action';
 import { ExerciseTypeForm } from './components/exercise-type';
 import { QuizzForm } from './components/quizz-form';
 import QuizzAiModal from './components/quiz-ai-form';
+import Link from 'next/link';
 
 const ExerciseDetail = ({ params }: { params: { exerciseToken: string, course_slug: string; chapterToken: string; } }) => {
     const session = useSession();
     const router = useRouter();
-    const { data, isLoading, error, mutate } = useExerciseDetail(
+    const { data, isLoading, error, mutate, isValidating } = useExerciseDetail(
         session.data?.user.email,
         session.data?.backendTokens.accessToken,
         params.exerciseToken,
@@ -37,7 +38,7 @@ const ExerciseDetail = ({ params }: { params: { exerciseToken: string, course_sl
 
     const isComplete = requiredFields.every(Boolean);
 
-    if (isLoading) {
+    if (isLoading || isValidating) {
         return <LoadingModal />;
     }
 
@@ -49,13 +50,13 @@ const ExerciseDetail = ({ params }: { params: { exerciseToken: string, course_sl
         <>
             <Tabs defaultValue="music" className="h-full space-y-6">
                 <div className="flex items-center bg-black space-between"></div>
-                <a
+                <Link
                     href={`/instructor/course/${params.course_slug}/chapter/${params.chapterToken}`}
                     className="flex items-center mb-6 text-sm transition hover:opacity-75"
                 >
                     <ArrowLeft className="w-4 h-4 mr-2" />
                     Trở về trang thông tin chương
-                </a>
+                </Link>
                 <TabsContent
                     value="music"
                     className="p-0 border-none outline-none"

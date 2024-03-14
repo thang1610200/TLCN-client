@@ -83,7 +83,7 @@ export const LessonActions = ({
                 }
             );
 
-            mutate([`${BACKEND_URL}/chapter/find-chapter?course_slug=${course_slug}&email=${session.data?.user.email}&token=${chapter_token}`,session.data?.backendTokens.accessToken]);
+            //mutate([`${BACKEND_URL}/chapter/find-chapter?course_slug=${course_slug}&email=${session.data?.user.email}&token=${chapter_token}`,session.data?.backendTokens.accessToken]);
             toast.success('Lesson deleted');
             router.refresh();
             router.push(

@@ -10,11 +10,11 @@ const routes = [
         label: 'Khóa học',
         href: '/instructor/course',
     },
-    {
-        icon: Book,
-        label: 'Bài tập',
-        href: '/instructor/exercise',
-    },
+    // {
+    //     icon: Book,
+    //     label: 'Bài tập',
+    //     href: '/instructor/exercise',
+    // },
     {
         icon: User,
         label: 'Người dùng',

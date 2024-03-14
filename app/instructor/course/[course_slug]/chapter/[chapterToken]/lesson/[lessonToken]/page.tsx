@@ -28,7 +28,7 @@ const LessonToken = ({
 }) => {
     const session = useSession();
     const router = useRouter();
-    const { data, isLoading, error, mutate } = useLessonDetail(
+    const { data, isLoading, error, mutate, isValidating } = useLessonDetail(
         params.course_slug,
         session.data?.user.email,
         session.data?.backendTokens.accessToken,
@@ -43,7 +43,7 @@ const LessonToken = ({
     const completedFields = requiredFields.filter(Boolean).length;
     const completionText = `(${completedFields}/${totalFields})`;
     const isComplete = requiredFields.every(Boolean);
-    if (isLoading) {
+    if (isLoading || isValidating) {
         return <LoadingModal />;
     }
     if (error) {
@@ -53,13 +53,13 @@ const LessonToken = ({
         <>
             <Tabs defaultValue="music" className="h-full space-y-6">
                 <div className="flex items-center bg-black space-between"></div>
-                <a
+                <Link
                     href={`/instructor/course/${params.course_slug}/chapter/${params.chapterToken}`}
                     className="flex items-center mb-6 text-sm transition hover:opacity-75"
                 >
                     <ArrowLeft className="w-4 h-4 mr-2" />
                     Trở về trang thông tin chương
-                </a>
+                </Link>
                 <TabsContent
                     value="music"
                     className="p-0 border-none outline-none"

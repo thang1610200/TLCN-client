@@ -22,7 +22,7 @@ import { useTopic } from '@/app/hook/use-topic';
 const CourseDetail = ({ params }: { params: { course_slug: string } }) => {
     const session = useSession();
     const router = useRouter();
-    const { data, isLoading, error, mutate } = useCourseDetail(
+    const { data, isLoading, error, mutate, isValidating } = useCourseDetail(
         params.course_slug,
         session.data?.user.email,
         session.data?.backendTokens.accessToken
@@ -51,7 +51,7 @@ const CourseDetail = ({ params }: { params: { course_slug: string } }) => {
 
     const isComplete = requiredFields.every(Boolean);
 
-    if (isLoading) {
+    if (isLoading || isValidating) {
         return <LoadingModal />;
     }
 

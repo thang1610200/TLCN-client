@@ -12,7 +12,7 @@ const fetcher = async ([url, token]: [string, string]) => {
 }
 
 const useCourseDetail = (slug?: string, email?: string, token?: string) => {
-    const { data, error, isLoading, mutate} = useSwr<any, AxiosError>(token ? [`${BACKEND_URL}/course/course-slug?slug=${slug}&email=${email}`,token]: null, fetcher, {
+    const { data, error, isLoading, mutate, isValidating} = useSwr<any, AxiosError>(token ? [`${BACKEND_URL}/course/course-slug?slug=${slug}&email=${email}`,token]: null, fetcher, {
         revalidateIfStale: true,
         revalidateOnFocus: false,
         revalidateOnReconnect: false,
@@ -24,7 +24,8 @@ const useCourseDetail = (slug?: string, email?: string, token?: string) => {
         data,
         error,
         isLoading,
-        mutate
+        mutate,
+        isValidating
     }
 }
 

@@ -23,7 +23,7 @@ const useExerciseDetail = (email?: string, token?: string, exercise_token?:strin
         }
     })
 
-    const { data, error, isLoading, mutate} = useSwr<any, AxiosError>(token ? [url,token]: null, fetcher, {
+    const { data, error, isLoading, mutate, isValidating} = useSwr<any, AxiosError>(token ? [url,token]: null, fetcher, {
         revalidateIfStale: true,
         revalidateOnFocus: false,
         revalidateOnReconnect: false,
@@ -34,7 +34,8 @@ const useExerciseDetail = (email?: string, token?: string, exercise_token?:strin
         data,
         error,
         isLoading,
-        mutate
+        mutate,
+        isValidating
     }
 }
 

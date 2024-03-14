@@ -2,6 +2,7 @@ import useSwr from 'swr';
 import axios, { AxiosError } from 'axios';
 import { BACKEND_URL } from '@/lib/constant';
 import { Course } from '../types';
+import qs from 'query-string';
 
 const fetcher = async ([url, token]: [string, string]) => {
     const res = await axios.get(url,{
@@ -13,7 +14,15 @@ const fetcher = async ([url, token]: [string, string]) => {
 }
 
 const useUserProgressCourse = (slug?: string, token?: string, email?: string) => {
-    const { data, error, isLoading, mutate} = useSwr<Course, AxiosError>(token ? [`${BACKEND_URL}/course/progress-course?course_slug=${slug}&email=${email}`,token]: null, fetcher, {
+    const url = qs.stringifyUrl({
+        url: `${BACKEND_URL}/course/progress-course`,
+        query: {
+            course_slug: slug,
+            email
+        }
+    })
+
+    const { data, error, isLoading, mutate} = useSwr<Course, AxiosError>(token ? [url,token]: null, fetcher, {
         revalidateIfStale: false,
         revalidateOnFocus: false,
         revalidateOnReconnect: false,

@@ -29,6 +29,8 @@ interface QuestionFormProps {
     exercise_token: string;
     token?: string;
     mutate: KeyedMutator<any>;
+    course_slug: string;
+    chapter_token: string;
 }
 
 const formSchema = z.object({
@@ -42,6 +44,8 @@ export const QuestionForm = ({
     exercise_token,
     token,
     mutate,
+    course_slug,
+    chapter_token
 }: QuestionFormProps) => {
     const [isEditing, setIsEditing] = useState(false);
 
@@ -62,12 +66,14 @@ export const QuestionForm = ({
             await axios.patch(
                 `${BACKEND_URL}/quizz/update-quizz`,
                 {
-                    token,
+                    quiz_token: token,
                     exercise_token,
                     value: {
                         question: values.question,
                     },
                     email: session.data?.user.email,
+                    chapter_token,
+                    course_slug
                 },
                 {
                     headers: {

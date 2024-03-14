@@ -10,14 +10,17 @@ import { ConfirmModal } from '@/components/modal/confirm-modal';
 import { BACKEND_URL } from '@/lib/constant';
 import { useSession } from 'next-auth/react';
 import { KeyedMutator } from 'swr';
+import qs from "query-string";
 
 interface ActionQuestionProps {
     disabled: boolean;
     exercise_token: string;
     token: string;
     isPublished?: boolean;
-    mutate: KeyedMutator<any>;
-    isCheck?: boolean
+    mutates: KeyedMutator<any>;
+    isCheck?: boolean;
+    course_slug: string;
+    chapter_token: string;
 }
 
 export const ActionQuestion = ({
@@ -25,8 +28,10 @@ export const ActionQuestion = ({
     token,
     exercise_token,
     isPublished,
-    mutate,
-    isCheck
+    mutates,
+    isCheck,
+    course_slug,
+    chapter_token
 }: ActionQuestionProps) => {
     const router = useRouter();
     const session = useSession();
@@ -39,8 +44,10 @@ export const ActionQuestion = ({
                 {
                     exercise_token,
                     status: isPublished,
-                    token,
+                    quiz_token:token,
                     email: session.data?.user.email,
+                    course_slug,
+                    chapter_token
                 },
                 {
                     headers: {
@@ -54,7 +61,7 @@ export const ActionQuestion = ({
             } else {
                 toast.success('Question published');
             }
-            mutate();
+            mutates();
             router.refresh();
         } catch {
             toast.error('Something went wrong');
@@ -67,8 +74,29 @@ export const ActionQuestion = ({
         try {
             setIsLoading(true);
 
+            // const urlExercise = qs.stringifyUrl({
+            //     url: `${BACKEND_URL}/exercise/detail-exercise`,
+            //     query: {
+            //         email: session.data?.user.email,
+            //         token: exercise_token,
+            //         course_slug,
+            //         chapter_token
+            //     }
+            // });
+
+            const url = qs.stringifyUrl({
+                url: `${BACKEND_URL}/quizz/delete-quizz`,
+                query: {
+                    exercise_token,
+                    quiz_token:token,
+                    email: session.data?.user.email,
+                    course_slug,
+                    chapter_token
+                }
+            });
+
             await axios.delete(
-                `${BACKEND_URL}/quizz/delete-quizz?token=${token}&email=${session.data?.user.email}&exercise_token=${exercise_token}`,
+                url,
                 {
                     headers: {
                         Authorization: `Bearer ${session.data?.backendTokens.accessToken}`,
@@ -77,9 +105,10 @@ export const ActionQuestion = ({
                 }
             );
 
+            //mutate([urlExercise, session.data?.backendTokens.accessToken]);
             toast.success('Question deleted');
             router.refresh();
-            router.push(`/instructor/exercise/${exercise_token}`);
+            router.push(`/instructor/course/${course_slug}/chapter/${chapter_token}/exercise/${exercise_token}`);
         } catch {
             toast.error('Something went wrong');
         } finally {

@@ -12,7 +12,7 @@ const fetcher = async ([url, token]: [string, string]) => {
 }
 
 const useChapterDetail = (slug?: string, email?: string, token?: string, chapterToken?: string) => {
-    const { data, error, isLoading, mutate} = useSwr<any, AxiosError>(token ? [`${BACKEND_URL}/chapter/find-chapter?course_slug=${slug}&email=${email}&token=${chapterToken}`,token]: null, fetcher, {
+    const { data, error, isLoading, mutate, isValidating} = useSwr<any, AxiosError>(token ? [`${BACKEND_URL}/chapter/find-chapter?course_slug=${slug}&email=${email}&token=${chapterToken}`,token]: null, fetcher, {
         revalidateIfStale: true,
         revalidateOnFocus: false,
         revalidateOnReconnect: false,
@@ -23,7 +23,8 @@ const useChapterDetail = (slug?: string, email?: string, token?: string, chapter
         data,
         error,
         isLoading,
-        mutate
+        mutate,
+        isValidating
     }
 }
 
