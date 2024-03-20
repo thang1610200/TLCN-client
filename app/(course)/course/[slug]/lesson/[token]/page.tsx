@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button';
 import LoadingModal from '@/components/modal/loading-modal';
 import { useRouter } from 'next/navigation';
 import { ArrowRight, ArrowLeft } from 'lucide-react';
-import { map, flatten, findIndex, shuffle } from 'lodash';
+import { map, flatten, findIndex } from 'lodash';
 import { OverviewNavigation } from '@/app/(course)/component/overview-navigation';
 import QuizzEndModal from '@/app/(course)/component/quizz-modal';
 import CourseSidebar from '@/app/(course)/component/course-sidebar';
@@ -15,6 +15,7 @@ import { Banner } from '@/components/banner';
 import useCourseDetailAuth from '@/app/hook/useCourseDetailAuth';
 import { useCallback, useMemo } from 'react';
 import VideoReview from '@/app/(course)/component/video-review';
+import QuizModal from '@/app/(course)/component/quiz';
 
 const CourseAccessDetail = ({
     params,
@@ -28,7 +29,7 @@ const CourseAccessDetail = ({
         session.data?.user.email,
         session.data?.backendTokens.accessToken
     );
-    const { lesson, loadingLesson, errorLesson, mutate, isValidating } =
+    const { content, loadingContent, errorContent, isValidating, mutate } =
         useLessonDetailUser(
             params.slug,
             session.data?.backendTokens.accessToken,
@@ -36,43 +37,44 @@ const CourseAccessDetail = ({
             session.data?.user.email
         );
 
-    const lessonlist = useMemo(() => {
-        return flatten(map(data?.chapters, 'lessons'));
-    }, [data?.chapters]);
+    const contentlist = useMemo(() => {
+        return flatten(map(data?.chapters, 'contents'));
+    },[data?.chapters]); 
 
     const indexLesson = useMemo(() => {
-        return findIndex(lessonlist, { token: params.token });
-    }, [lessonlist, params.token]);
-
-    const isLocked = lesson?.userProgress.length === 0 ? true : false;
+        return findIndex(contentlist, { token: params.token });
+    },[contentlist, params.token]);
+    
+    const isOwner = data?.owner.email === session.data?.user.email;
+    const isLocked = (content?.userProgress.length === 0 && !isOwner) ? true : false;
 
     const onNextLesson = useCallback(() => {
         let index =
-            findIndex(lessonlist, { token: params.token }) === -1
+            findIndex(contentlist, { token: params.token }) === -1
                 ? 0
-                : findIndex(lessonlist, { token: params.token });
+                : findIndex(contentlist, { token: params.token });
 
-        index = index === lessonlist.length - 1 ? 0 : index + 1;
+        index = index === contentlist.length - 1 ? 0 : index + 1;
 
-        router.push(`/course/${params.slug}/lesson/${lessonlist[index].token}`);
-    }, [params.slug, lessonlist, router]);
+        router.push(`/course/${params.slug}/lesson/${contentlist[index].token}`);
+    }, [params.slug, contentlist, router]);
 
     const onPrevLesson = useCallback(() => {
         let index =
-            findIndex(lessonlist, { token: params.token }) === -1
+            findIndex(contentlist, { token: params.token }) === -1
                 ? 0
-                : findIndex(lessonlist, { token: params.token });
+                : findIndex(contentlist, { token: params.token });
 
-        index = index === 0 ? lessonlist.length - 1 : index - 1;
+        index = index === 0 ? contentlist.length - 1 : index - 1;
 
-        router.push(`/course/${params.slug}/lesson/${lessonlist[index].token}`);
-    }, [params.slug, lessonlist, router]);
+        router.push(`/course/${params.slug}/lesson/${contentlist[index].token}`);
+    }, [params.slug, contentlist, router]);
 
-    if (isLoading || loadingLesson) {
+    if (isLoading || loadingContent) {
         return <LoadingModal />;
     }
 
-    if (error || errorLesson) {
+    if (error || errorContent) {
         return router.push("/");
     }
 
@@ -90,10 +92,26 @@ const CourseAccessDetail = ({
                                     />
                                 )}
                                 <div className="relative aspect-video border rounded-md bg-slate-100 mb-4">
-                                    <VideoReview
-                                        data={lesson}
-                                        isLocked={isLocked}
-                                    />
+                                    { content?.type === "LESSON"  && (
+                                        <VideoReview
+                                            data={content.lesson}
+                                            isLocked={isLocked}
+                                        />
+                                    )}
+                                    { content?.type === "EXERCISE"  && (
+                                        <QuizModal
+                                            content_current={content}
+                                            isValidating={isValidating}
+                                            data={content.exercise}
+                                            isLocked={isLocked}
+                                            course_slug={params.slug}
+                                            mutate={mutate}
+                                            next_content_token={
+                                                contentlist[indexLesson + 1].token
+                                            }
+                                            quiz={content?.userProgress[0].userProgressQuiz}
+                                        />
+                                    )}
                                 </div>
                                 <div className="flex justify-between">
                                     <Button onClick={onPrevLesson}>
@@ -107,32 +125,23 @@ const CourseAccessDetail = ({
                                 </div>
                                 <div className="border rounded-md p-6 flex flex-col lg:flex-row items-center justify-between mt-6">
                                     <h2 className="text-lg lg:text-2xl font-semibold mb-2 lg:mb-0 lg:text-center">
-                                        {lesson?.title}
+                                        {content?.lesson?.title || content?.exercise?.title}
                                     </h2>
                                     {!isLocked && (
                                         <div className="flex items-center space-x-2">
-                                            {lesson?.exercise && (
-                                                <QuizzEndModal
-                                                    initdata={lesson.exercise}
-                                                    lesson={lesson}
-                                                    isValidating={isValidating}
-                                                    mutate={mutate}
-                                                    nextLesson={
-                                                        lessonlist[
-                                                            indexLesson + 1
-                                                        ]
-                                                    }
-                                                    course_slug={params.slug}
-                                                />
-                                            )}
-                                            <CourseProgressButton
-                                                initdata={lesson}
-                                                course_slug={params.slug}
-                                                mutate={mutate}
-                                                next_lesson={
-                                                    lessonlist[indexLesson + 1]
-                                                }
-                                            />
+                                            {
+                                                content?.type === "LESSON" && (
+                                                    <CourseProgressButton
+                                                        isValidating={isValidating}
+                                                        initdata={content}
+                                                        course_slug={params.slug}
+                                                        mutate={mutate}
+                                                        next_lesson={
+                                                            contentlist[indexLesson + 1]
+                                                        }
+                                                    />
+                                                )
+                                            }
                                         </div>
                                     )}
                                 </div>
@@ -140,14 +149,17 @@ const CourseAccessDetail = ({
                             <CourseSidebar
                                 initdata={data}
                                 course_slug={params.slug}
-                                lesson_token={params.token}
+                                content_token={params.token}
                             />
                             <div className="h-full col-span-2 p-4">
-                                <OverviewNavigation
-                                    lesson={lesson}
-                                    course={data}
-                                    course_slug={params.slug}
-                                />
+                                {
+                                    content?.type === "LESSON" && (
+                                        <OverviewNavigation
+                                            lesson={content.lesson}
+                                            course={data}
+                                            course_slug={params.slug}
+                                        />
+                                )}
                             </div>
                         </div>
                     </div>

@@ -1,7 +1,8 @@
 import useSwr from 'swr';
 import axios, { AxiosError } from 'axios';
 import { BACKEND_URL } from '@/lib/constant';
-import { Lesson } from '../types';
+import { Content } from '../types';
+import qs from 'query-string';
 
 const fetcher = async ([url, token]: [string, string]) => {
     const res = await axios.get(url,{
@@ -12,8 +13,17 @@ const fetcher = async ([url, token]: [string, string]) => {
     return res.data;
 }
 
-const useLessonDetailUser = (slug?: string, token?: string, lessonToken?: string, email?: string) => {
-    const { data, error, isLoading, mutate, isValidating} = useSwr<Lesson, AxiosError>(token ? [`${BACKEND_URL}/lesson/detail-lesson?course_slug=${slug}&lesson_token=${lessonToken}&email=${email}`,token]: null, fetcher, {
+const useLessonDetailUser = (slug?: string, token?: string, contentToken?: string, email?: string) => {
+    const url = qs.stringifyUrl({
+        url: `${BACKEND_URL}/lesson/detail-lesson`,
+        query: {
+            course_slug: slug,
+            content_token: contentToken,
+            email
+        }
+    });
+
+    const { data, error, isLoading, mutate, isValidating} = useSwr<Content, AxiosError>(token ? [url,token]: null, fetcher, {
         revalidateIfStale: true,
         revalidateOnFocus: false,
         revalidateOnReconnect: false,
@@ -21,9 +31,9 @@ const useLessonDetailUser = (slug?: string, token?: string, lessonToken?: string
     })
 
     return {
-        lesson: data,
-        errorLesson: error,
-        loadingLesson: isLoading,
+        content: data,
+        errorContent: error,
+        loadingContent: isLoading,
         mutate,
         isValidating
     }

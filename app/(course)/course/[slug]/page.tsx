@@ -5,27 +5,20 @@ import LoadingModal from '@/components/modal/loading-modal';
 import { CheckIcon, ChevronUpIcon, PlaySquare, ClipboardPaste } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { Disclosure } from '@headlessui/react';
 import VideoReview from '../../component/video-review';
 import { cn } from '@/lib/utils';
-import { map, flatten, sumBy, find, sortBy} from 'lodash';
+import { map, flatten, sumBy, find, filter} from 'lodash';
 import { useSession } from 'next-auth/react';
-import useUserProgressCourse from '@/app/hook/useGetUserProgressCourse';
 import axios from 'axios';
 import toast from 'react-hot-toast';
 import { BACKEND_URL } from '@/lib/constant';
-import { Lesson } from '@/app/types';
 
 const DetailCourse = ({ params }: { params: { slug: string } }) => {
     const session = useSession();
     const [ isSubmit, setIsSubmit ] = useState(false);
     const { data, isLoading, error, isValidating } = useCourseDetailHome(params.slug);
-    // const { progress, loadingProgress, errorProgress } = useUserProgressCourse(
-    //     params.slug,
-    //     session.data?.backendTokens.accessToken,
-    //     session.data?.user.email
-    // );
     const [tokenLesson, setTokenLesson] = useState<string>('');
 
     const router = useRouter();
@@ -39,20 +32,10 @@ const DetailCourse = ({ params }: { params: { slug: string } }) => {
     }
 
     const course_content = flatten(map(data?.chapters, 'contents'));
-    const lesson = flatten(map(course_content, function(o) {
-        if(o.type === "LESSON") return o.lesson;
-    }));
 
-    // const lesson = flatten(filter(course_content, function(o) {
-    //     if(o.type === "LESSON") return o.lesson;
-    // }));
-
-    const test = flatten(map(sortBy(course_content, function(o) {
-        if(o.type === "LESSON") return o.lesson;
+    const lesson = flatten(map(filter(course_content, function(o) {
+        if(o.type === "LESSON") return o;
     }),'lesson'));
-
-    console.log(test);
-    //const user_progress = flatten(map(progress?.chapters, 'lessons'));
 
     function onClick (){
         if(session.status === "unauthenticated"){
@@ -71,7 +54,7 @@ const DetailCourse = ({ params }: { params: { slug: string } }) => {
             })
             .then(() => {
                 toast.success('Welcome',{id: toastId});
-                return router.push(`/course/${params.slug}/lesson/${data?.chapters[0].contents[0].lesson?.token || data?.chapters[0].contents[0].exercise?.token}`);
+                return router.push(`/course/${params.slug}/lesson/${data?.chapters[0].contents[0].token}`);
             })
             .catch(() => {
                 toast.error('Something went wrong',{id: toastId});
@@ -213,13 +196,9 @@ const DetailCourse = ({ params }: { params: { slug: string } }) => {
                                                 item,
                                                 index
                                             ) => {
-                                                const sumTimeChapter = lesson.reduce(function (total, currentValue) {
-                                                    if(currentValue?.content?.chapterId === item.id){
-                                                        return total + (currentValue?.duration || 0)
-                                                    }
-                                                    return total;
-                                                },0);
-
+                                                const sumTimeChapter = sumBy(item.contents, function(o) {
+                                                    return o.lesson?.duration || 0;
+                                                });
 
                                                 return (
                                                     <Disclosure
@@ -263,23 +242,24 @@ const DetailCourse = ({ params }: { params: { slug: string } }) => {
                                                                         content_index
                                                                     ) => (
                                                                         <Disclosure.Panel
-                                                                            onClick={() => {
+                                                                            onClick={useCallback(() => {
                                                                                     if(content.type === 'LESSON') {
                                                                                         setTokenLesson(
                                                                                             content.lesson?.token || ""
                                                                                         )
                                                                                     }
-                                                                                }
+                                                                                },[tokenLesson, content])
                                                                             }
                                                                             key={
                                                                                 content_index
                                                                             }
                                                                             className={cn(
-                                                                                'w-full px-4 pt-4 pb-2 cursor-pointer transition-all rounded-lg',
+                                                                                'w-full px-4 pt-4 pb-2 transition-all rounded-lg',
                                                                                 (content.lesson?.token ===
                                                                                     tokenLesson ||
                                                                                     (tokenLesson === '' && content.lesson?.token === lesson[0]?.token)) &&
-                                                                                    'bg-slate-300'
+                                                                                    'bg-slate-300',
+                                                                                content.type === 'LESSON' && 'cursor-pointer'
                                                                             )}
                                                                         >
                                                                             <div className="flex items-center justify-between">

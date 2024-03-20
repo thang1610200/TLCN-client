@@ -20,7 +20,8 @@ export async function middleware(req: NextRequest) {
         (req.nextUrl.pathname.startsWith('/profile') ||
             req.nextUrl.pathname.startsWith('/lesson') ||
             req.nextUrl.pathname.startsWith('/change-password') ||
-            req.nextUrl.pathname.startsWith('/thread'))
+            req.nextUrl.pathname.startsWith('/thread') || 
+            req.nextUrl.pathname.startsWith("/instructor"))
     ) {
         return NextResponse.redirect(new URL('/login', req.url));
         // const url = new URL(`/signin`, request.url);

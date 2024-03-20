@@ -84,12 +84,14 @@ export enum ContentType {
 
 export interface Content {
     id: string;
+    token: string;
     type: ContentType;
     chapterId: string;
     chapter: Chapter;
     position: number;
     lesson?: Lesson;
     exercise?: Exercise;
+    userProgress: UserProgress[];
 }
 
 export interface Exercise {
@@ -101,6 +103,7 @@ export interface Exercise {
     content: Content;
     create_at: Date;
     update_at: Date;
+    number_correct: number;
     isOpen: boolean;
     quizz: Quizz[];
 }
@@ -141,8 +144,8 @@ export interface UserProgress {
     user: User;
     courseId: string;
     course: Course;
-    lessonId: string;
-    lesson: Lesson;
+    contentId: string;
+    content: Content;
     isCompleted: boolean;
     isPassed: boolean;
     userProgressQuiz: UserProgressQuiz[];

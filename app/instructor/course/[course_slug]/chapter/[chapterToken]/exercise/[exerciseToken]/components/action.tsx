@@ -9,7 +9,6 @@ import { Button } from '@/components/ui/button';
 import { ConfirmModal } from '@/components/modal/confirm-modal';
 import { BACKEND_URL } from '@/lib/constant';
 import { useSession } from 'next-auth/react';
-import { useConfettiStore } from '@/app/hook/useConfettiStore';
 import { KeyedMutator, mutate } from 'swr';
 import qs from 'query-string';
 
@@ -34,7 +33,7 @@ export const Actions = ({
 }: ActionsProps) => {
     const router = useRouter();
     const session = useSession();
-    const confetti = useConfettiStore();
+    //const confetti = useConfettiStore();
     const [isLoading, setIsLoading] = useState(false);
     const onClick = async () => {
         try {
@@ -59,7 +58,7 @@ export const Actions = ({
                 toast.success('Exercise unpublished');
             } else {
                 toast.success('Exercise published');
-                confetti.onOpen();
+                //confetti.onOpen();
             }
             mutates();
             router.refresh();

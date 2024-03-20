@@ -1,24 +1,28 @@
 "use client";
 
 import { Disclosure } from "@headlessui/react";
-import { ChevronUpIcon, PlaySquare, LockIcon } from "lucide-react";
+import { ChevronUpIcon, PlaySquare, LockIcon, ClipboardPaste  } from "lucide-react";
 import { sumBy } from 'lodash';
 import { useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { Course } from "@/app/types";
+import { useSession } from "next-auth/react";
 
 interface CourseSidebarProp {
     initdata?: Course
     course_slug: string;
-    lesson_token: string;
+    content_token: string;
 }
 
 const CourseSidebar: React.FC<CourseSidebarProp> = ({
     initdata,
     course_slug,
-    lesson_token
+    content_token
 }) => {
     const router = useRouter();
+    const session = useSession();
+
+    const isOwner = session.data?.user.email === initdata?.owner.email;
 
     function convertTime(second: number): string {
         let hour: number = Math.floor(second / 3600);
@@ -42,10 +46,9 @@ const CourseSidebar: React.FC<CourseSidebarProp> = ({
         <div className="w-full">
             <div className="w-full mt-[20px] mx-auto bg-white rounded-2xl">
                 {initdata?.chapters.map((item, index) => {
-                    const sumTimeChapter = sumBy(
-                        item.lessons,
-                        'duration'
-                    );
+                    const sumTimeChapter = sumBy(item.contents, function(o) {
+                        return o.lesson?.duration || 0;
+                    });
 
                     return (
                         <Disclosure
@@ -75,7 +78,7 @@ const CourseSidebar: React.FC<CourseSidebarProp> = ({
                                         <h5 className="text-black">
                                             {
                                                 item
-                                                    .lessons
+                                                    .contents
                                                     .length
                                             }{' '}
                                             lesson •{' '}
@@ -84,28 +87,28 @@ const CourseSidebar: React.FC<CourseSidebarProp> = ({
                                             )}{' '}
                                         </h5>
                                     </Disclosure.Button>
-                                    {item.lessons.map(
+                                    {item.contents.map(
                                         (
-                                            lesson,
-                                            lesson_index
+                                            content,
+                                            content_index
                                         ) => (
                                             <Disclosure.Panel
                                                 onClick={() =>
-                                                   router.push(`/course/${course_slug}/lesson/${lesson.token}`)     
+                                                   router.push(`/course/${course_slug}/lesson/${content.token}`)     
                                                 }
                                                 key={
-                                                    lesson_index
+                                                    content_index
                                                 }
                                                 className={cn(
                                                     'w-full px-4 pt-4 pb-2 cursor-pointer transition-all rounded-lg',
-                                                    (lesson_token === lesson.token &&
+                                                    (content_token === content.token &&
                                                     'bg-slate-300')
                                                 )}
                                             >
                                                 <div className="flex items-center justify-between">
                                                     <div className="flex items-start">
                                                         {
-                                                            lesson?.userProgress.length === 0 ? (
+                                                            (content?.userProgress.length === 0 && !isOwner)? (
                                                                 <LockIcon
                                                                     size={
                                                                         25
@@ -114,26 +117,40 @@ const CourseSidebar: React.FC<CourseSidebarProp> = ({
                                                                     color="#1cdada" 
                                                                 />
                                                             ): (
-                                                                <PlaySquare
-                                                                    size={
-                                                                        25
-                                                                    }
-                                                                    className="mr-2"
-                                                                    color="#1cdada"
-                                                                />
+                                                                content.type === "LESSON" ? (
+                                                                    <PlaySquare
+                                                                        size={
+                                                                                25
+                                                                        }
+                                                                        className="mr-2"
+                                                                        color="#1cdada"
+                                                                        />
+                                                                    ) : (
+                                                                        <ClipboardPaste 
+                                                                            size={
+                                                                                25
+                                                                            }
+                                                                            className="mr-2"
+                                                                            color="#1cdada"
+                                                                        />
+                                                                    )
                                                             )
                                                         }
                                                         <h1 className="text-[18px] inline-block break-words text-black">
                                                             {
-                                                                lesson.title
+                                                                content.lesson?.title || content.exercise?.title
                                                             }
                                                         </h1>
                                                     </div>
-                                                    <h5 className="text-black">
-                                                        {convertTime(
-                                                            lesson.duration
-                                                        )}
-                                                    </h5>
+                                                    {
+                                                        content.type === "LESSON" && (
+                                                            <h5 className="text-black">
+                                                                {convertTime(
+                                                                    content.lesson?.duration || 0
+                                                                )}
+                                                            </h5>
+                                                        )
+                                                    }
                                                 </div>
                                             </Disclosure.Panel>
                                         )
