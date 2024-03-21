@@ -6,7 +6,6 @@ import { useRouter } from 'next/navigation';
 import { ArrowRight, ArrowLeft } from 'lucide-react';
 import { map, flatten, findIndex } from 'lodash';
 import { OverviewNavigation } from '@/app/(course)/component/overview-navigation';
-import QuizzEndModal from '@/app/(course)/component/quizz-modal';
 import CourseSidebar from '@/app/(course)/component/course-sidebar';
 import useLessonDetailUser from '@/app/hook/useLessonDetailUser';
 import { useSession } from 'next-auth/react';
@@ -91,26 +90,30 @@ const CourseAccessDetail = ({
                                         label="You need to complete the previous lesson."
                                     />
                                 )}
-                                <div className="relative aspect-video border rounded-md bg-slate-100 mb-4">
+                                <div>
                                     { content?.type === "LESSON"  && (
-                                        <VideoReview
-                                            data={content.lesson}
-                                            isLocked={isLocked}
-                                        />
+                                        <div className="relative aspect-video border rounded-md bg-slate-100 mb-4">
+                                            <VideoReview
+                                                data={content.lesson}
+                                                isLocked={isLocked}
+                                            />
+                                        </div>
                                     )}
                                     { content?.type === "EXERCISE"  && (
-                                        <QuizModal
-                                            content_current={content}
-                                            isValidating={isValidating}
-                                            data={content.exercise}
-                                            isLocked={isLocked}
-                                            course_slug={params.slug}
-                                            mutate={mutate}
-                                            next_content_token={
-                                                contentlist[indexLesson + 1].token
-                                            }
-                                            quiz={content?.userProgress[0].userProgressQuiz}
-                                        />
+                                        <div className="relative aspect-video border rounded-md mb-4">
+                                            <QuizModal
+                                                content_current={content}
+                                                isValidating={isValidating}
+                                                data={content.exercise}
+                                                isLocked={isLocked}
+                                                course_slug={params.slug}
+                                                mutateProgress={mutate}
+                                                next_content_token={
+                                                    contentlist[indexLesson + 1].token
+                                                }
+                                                quiz={content?.userProgress[0]?.userProgressQuiz}
+                                            />
+                                        </div>
                                     )}
                                 </div>
                                 <div className="flex justify-between">

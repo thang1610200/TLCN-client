@@ -13,6 +13,7 @@ import { ExerciseTypeForm } from './components/exercise-type';
 import { QuizzForm } from './components/quizz-form';
 import QuizzAiModal from './components/quiz-ai-form';
 import Link from 'next/link';
+import { NumberAnswerCorrectForm } from './components/answer-correct-quiz';
 
 const ExerciseDetail = ({ params }: { params: { exerciseToken: string, course_slug: string; chapterToken: string; } }) => {
     const session = useSession();
@@ -93,6 +94,13 @@ const ExerciseDetail = ({ params }: { params: { exerciseToken: string, course_sl
                                 chapter_token={params.chapterToken}
                                 initialData={data}
                                 token={data?.token}
+                                mutate={mutate}
+                            />
+                            <NumberAnswerCorrectForm
+                                course_slug={params.course_slug}
+                                chapter_token={params.chapterToken}
+                                initialData={data}
+                                exercise_token={data?.token}
                                 mutate={mutate}
                             />
                             <ExerciseTypeForm initialData={data} />

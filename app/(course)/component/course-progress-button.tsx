@@ -53,14 +53,14 @@ const CourseProgressButton = ({
                 }
             );
 
-            toast.success('Progress updated');
             mutate();
             if (next_lesson?.token) {
-                toast.success('New lesson has been opened', { id: toastId });
+                //toast.success('New lesson has been opened', { id: toastId });
                 router.push(
                     `/course/${course_slug}/lesson/${next_lesson.token}`
                 );
             }
+            toast.success('Progress updated', { id: toastId });
         } catch {
             toast.error('Something went wrong', { id: toastId });
         } finally {
