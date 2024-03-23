@@ -79,6 +79,7 @@ const LessonToken = ({
                             course_slug={params.course_slug}
                             chapter_token={params.chapterToken}
                             lesson_token={params.lessonToken}
+                            isPreview={data?.isPreview}
                             isPublished={data?.isPublished}
                             mutates={mutate}
                         />

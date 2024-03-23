@@ -67,6 +67,7 @@ export interface Lesson {
     title: string;
     description?: string
     isPublished: boolean;
+    isPreview: boolean;
     videoUrl?: string;
     duration?: number;
     isCompleteVideo: boolean;

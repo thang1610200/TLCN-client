@@ -1,7 +1,7 @@
 "use client";
 
 import { Disclosure } from "@headlessui/react";
-import { ChevronUpIcon, PlaySquare, LockIcon, ClipboardPaste  } from "lucide-react";
+import { ChevronUpIcon, PlaySquare, LockIcon, Lightbulb  } from "lucide-react";
 import { sumBy } from 'lodash';
 import { useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
@@ -126,7 +126,7 @@ const CourseSidebar: React.FC<CourseSidebarProp> = ({
                                                                         color="#1cdada"
                                                                         />
                                                                     ) : (
-                                                                        <ClipboardPaste 
+                                                                        <Lightbulb 
                                                                             size={
                                                                                 25
                                                                             }

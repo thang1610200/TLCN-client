@@ -101,6 +101,13 @@ export const LessonsList = ({
                             </div>
                             {(content.lesson?.title || content.exercise?.title)}
                             <div className="ml-auto pr-2 flex items-center gap-x-2">
+                            {
+                                (content.lesson?.isPreview) && (
+                                    <Badge className="bg-sky-700">
+                                        Preview
+                                    </Badge>
+                                )
+                            }
                             <Badge
                                 className={cn(
                                 "bg-slate-500",

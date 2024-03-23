@@ -2,7 +2,7 @@
 
 import useCourseDetailHome from '@/app/hook/useCourseDetailHome';
 import LoadingModal from '@/components/modal/loading-modal';
-import { CheckIcon, ChevronUpIcon, PlaySquare, ClipboardPaste } from 'lucide-react';
+import { CheckIcon, ChevronUpIcon, PlaySquare, ClipboardPaste, Lightbulb } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useCallback, useMemo, useState } from 'react';
@@ -14,6 +14,7 @@ import { useSession } from 'next-auth/react';
 import axios from 'axios';
 import toast from 'react-hot-toast';
 import { BACKEND_URL } from '@/lib/constant';
+import { Badge } from '@/components/ui/badge';
 
 const DetailCourse = ({ params }: { params: { slug: string } }) => {
     const session = useSession();
@@ -151,12 +152,7 @@ const DetailCourse = ({ params }: { params: { slug: string } }) => {
                                     <div className="top-[100px] left-0 z-50 w-full">
                                         {/* Video Course */}
                                         <VideoReview
-                                            data={find(lesson, {
-                                                token:
-                                                    tokenLesson === ''
-                                                        ? lesson[0]?.token
-                                                        : tokenLesson,
-                                            })}
+                                            data={!tokenLesson ? find(lesson,"isPreview") : find(lesson, {token: tokenLesson})}
                                         />
                                     </div>
                                 </div>
@@ -243,7 +239,7 @@ const DetailCourse = ({ params }: { params: { slug: string } }) => {
                                                                     ) => (
                                                                         <Disclosure.Panel
                                                                             onClick={useCallback(() => {
-                                                                                    if(content.type === 'LESSON') {
+                                                                                    if(content.type === 'LESSON' && content.lesson?.isPreview) {
                                                                                         setTokenLesson(
                                                                                             content.lesson?.token || ""
                                                                                         )
@@ -255,11 +251,11 @@ const DetailCourse = ({ params }: { params: { slug: string } }) => {
                                                                             }
                                                                             className={cn(
                                                                                 'w-full px-4 pt-4 pb-2 transition-all rounded-lg',
-                                                                                (content.lesson?.token ===
-                                                                                    tokenLesson ||
-                                                                                    (tokenLesson === '' && content.lesson?.token === lesson[0]?.token)) &&
+                                                                                ((content.lesson?.token ===
+                                                                                    tokenLesson) ||
+                                                                                    (!tokenLesson && content.lesson?.token === find(lesson, "isPreview")?.token && content.type === 'LESSON')) &&
                                                                                     'bg-slate-300',
-                                                                                content.type === 'LESSON' && 'cursor-pointer'
+                                                                                (content.type === 'LESSON' && content.lesson?.isPreview) && 'cursor-pointer'
                                                                             )}
                                                                         >
                                                                             <div className="flex items-center justify-between">
@@ -274,7 +270,7 @@ const DetailCourse = ({ params }: { params: { slug: string } }) => {
                                                                                                 color="#1cdada"
                                                                                             />
                                                                                         ) : (
-                                                                                            <ClipboardPaste 
+                                                                                            <Lightbulb 
                                                                                                 size={
                                                                                                     25
                                                                                                 }
@@ -289,15 +285,24 @@ const DetailCourse = ({ params }: { params: { slug: string } }) => {
                                                                                         }
                                                                                     </h1>
                                                                                 </div>
+                                                                                <div className="ml-auto pr-2 flex items-center gap-x-2">
+                                                                                    {
+                                                                                        content.lesson?.isPreview && (
+                                                                                            <Badge className="bg-sky-700">
+                                                                                                Preview
+                                                                                            </Badge>
+                                                                                        )
+                                                                                    }
                                                                                 {
                                                                                     content.type === "LESSON" && (
                                                                                         <h5 className="text-black">
                                                                                         {convertTime(
                                                                                             content.lesson?.duration || 0
                                                                                         )}
-                                                                                    </h5>
+                                                                                        </h5>
                                                                                     )
                                                                                 }
+                                                                                </div>
                                                                             </div>
                                                                         </Disclosure.Panel>
                                                                     )

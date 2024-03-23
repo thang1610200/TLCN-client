@@ -19,6 +19,7 @@ interface LessonActionsProps {
     chapter_token: string;
     lesson_token: string;
     isPublished: boolean;
+    isPreview: boolean;
     mutates: KeyedMutator<any>;
     coursePublished?: boolean;
 }
@@ -29,6 +30,7 @@ export const LessonActions = ({
     chapter_token,
     lesson_token,
     isPublished,
+    isPreview,
     mutates,
     coursePublished
 }: LessonActionsProps) => {
@@ -96,12 +98,49 @@ export const LessonActions = ({
         }
     };
 
+    const onPreview = async () => {
+        try {
+            setIsLoading(true);
+            await axios.patch(
+                `${BACKEND_URL}/lesson/update-preview`,
+                {
+                    status: isPreview,
+                    course_slug: course_slug,
+                    chapter_token,
+                    lesson_token,
+                    email: session.data?.user.email,
+                },
+                {
+                    headers: {
+                        Authorization: `Bearer ${session.data?.backendTokens.accessToken}`,
+                        'Content-Type': 'application/json',
+                    },
+                }
+            );
+            toast.success('Lesson updated');
+            mutates();
+            router.refresh();
+        } catch {
+            toast.error('Something went wrong');
+        } finally {
+            setIsLoading(false);
+        }
+    }
+
     if(isLoading){
         return (<LoadingModal />);
     }
 
     return (
         <div className="flex items-center gap-x-2">
+            <Button
+                onClick={onPreview}
+                disabled={disabled || isLoading || coursePublished}
+                variant="outline"
+                size="sm"
+            >
+                {isPreview ? 'Hidden' : 'Preview'}
+            </Button>
             <Button
                 onClick={onClick}
                 disabled={disabled || isLoading || coursePublished}
