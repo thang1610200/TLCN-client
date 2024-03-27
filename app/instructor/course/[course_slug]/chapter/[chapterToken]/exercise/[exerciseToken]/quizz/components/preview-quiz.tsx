@@ -12,7 +12,7 @@ import {
 import { useState } from 'react';
 import PreviewResultQuiz from './preview-result-quiz';
 import toast from 'react-hot-toast';
-import { useReviewQuizStore } from '@/app/hook/useReviewQuizStore';
+import { useReviewQuizStore } from '@/app/hook/use-review-quiz-store';
 
 interface PreviewQuizProps {
     initdata?: Quizz;

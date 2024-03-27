@@ -1,4 +1,4 @@
-import { useReviewQuizStore } from '@/app/hook/useReviewQuizStore';
+import { useReviewQuizStore } from '@/app/hook/use-review-quiz-store';
 import { Quizz } from '@/app/types';
 import { Button } from '@/components/ui/button';
 import {

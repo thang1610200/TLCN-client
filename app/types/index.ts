@@ -76,7 +76,19 @@ export interface Lesson {
     content: Content;
     userProgress: UserProgress[]
     attachment: Attachment[]
+    subtitles: Subtitle[]
 }
+
+export interface Subtitle {
+    id: string;
+    language: string
+    language_code: string;
+    file: string;
+    lessonId: string
+    lesson: Lesson;
+    create_at: Date;
+    update_at: Date;
+  }
 
 export enum ContentType {
     Lesson = 'LESSON',
@@ -273,3 +285,34 @@ export interface Conversation {
     memberGuestId: string;
     memberGuest: Member;
 }
+
+export const Language = [
+    {
+        language: "Vietnamese",
+        language_code: 'vi'
+    },
+    {
+        language: "English",
+        language_code: 'en'
+    },
+    {
+        language: "US",
+        language_code: 'en_us'
+    },
+    {
+        language: "Australian",
+        language_code: 'en_au'
+    },
+    {
+        language: "Spanish",
+        language_code: 'es'
+    },
+    {
+        language: "French",
+        language_code: 'fr'
+    },
+    {
+        language: "German",
+        language_code: 'de'
+    }
+] 

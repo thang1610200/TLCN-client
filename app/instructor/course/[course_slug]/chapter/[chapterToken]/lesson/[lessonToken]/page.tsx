@@ -10,7 +10,8 @@ import {
     LayoutDashboard,
     Video,
     ClipboardCheck,
-    File
+    File,
+    Subtitles
 } from 'lucide-react';
 import Link from 'next/link';
 import useLessonDetail from '@/app/hook/useLessonDetail';
@@ -20,6 +21,7 @@ import { LessonVideoForm } from './components/lesson-video';
 import { LessonActions } from './components/lesson-action';
 import { ThumbnailForm } from './components/thumbnail-video';
 import { AttachmentForm } from './components/attachment-form';
+import { SubtitleForm } from './components/subtitle-form';
 
 const LessonToken = ({
     params,
@@ -104,6 +106,20 @@ const LessonToken = ({
                                 chapter_token={params.chapterToken}
                                 lesson_token={params.lessonToken}
                                 mutate={mutate}
+                            />
+
+                            <div className="flex items-center gap-x-2 mt-12">
+                                <IconBadge icon={Subtitles} />
+                                <h2 className="text-xl">
+                                Subtitles
+                                </h2>
+                            </div>
+                            <SubtitleForm
+                                mutate={mutate}
+                                initialData={data}
+                                lesson_token={params.lessonToken}
+                                course_slug={params.course_slug}
+                                chapter_token={params.chapterToken}
                             />
 
                             <div className="flex items-center gap-x-2 mt-12">

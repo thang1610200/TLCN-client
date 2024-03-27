@@ -1,5 +1,5 @@
 import { Lesson } from '@/app/types';
-import ReactPlayer from 'react-player/lazy';
+import ReactPlayer from 'react-player';
 import { Lock } from 'lucide-react';
 
 interface VideoListProps {
@@ -25,7 +25,17 @@ const VideoReview: React.FC<VideoListProps> = ({ data, isLocked }) => {
                                 light={data?.thumbnail}
                                 url={data?.videoUrl}
                                 controls
-                                playing={true}
+                                playing
+                                config={{
+                                    file: {
+                                        attributes: {
+                                            crossOrigin: "true"
+                                        },
+                                        tracks: [
+                                            {kind: 'subtitles', src: 'https://tlcn-upload.s3.ap-southeast-1.amazonaws.com/video.vtt', srcLang: 'vi', label: 'Vietnamese', default: true}
+                                        ]
+                                    }
+                                }}
                             />
                         )}
                     </div>

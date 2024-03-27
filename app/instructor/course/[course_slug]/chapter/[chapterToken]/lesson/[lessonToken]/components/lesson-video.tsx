@@ -10,7 +10,7 @@ import {
     FormMessage,
 } from '@/components/ui/form';
 import { Pencil, PlusCircle, Video } from 'lucide-react';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
@@ -22,6 +22,8 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import ReactPlayer from 'react-player';
 import { Input } from '@/components/ui/input';
 import { BACKEND_URL } from '@/lib/constant';
+import { TrackProps } from 'react-player/file';
+import GenerateSubtitleModal from './generate-subtitle';
 
 interface LessonVideoFormProps {
     initialData: Lesson;
@@ -99,6 +101,17 @@ export const LessonVideoForm = ({
         }
     };
 
+    const tracks: TrackProps[] = useMemo(() => {
+        return initialData?.subtitles.map((item) => {
+            return {
+                kind: "subtitles",
+                src: item.file,
+                srcLang: item.language_code,
+                label: item.language
+            }
+        })
+    },[initialData])
+
     const { isSubmitting, isValid } = form.formState;
 
     return (
@@ -131,6 +144,7 @@ export const LessonVideoForm = ({
                         {
                             <ReactPlayer
                                 width="100%"
+                                height="100%"
                                 controls
                                 light={initialData.thumbnail ? initialData.thumbnail : ""}
                                 url={
@@ -138,8 +152,22 @@ export const LessonVideoForm = ({
                                         ? initialData?.videoUrl
                                         : ''
                                 }
+                                config={{ 
+                                    file: {
+                                        attributes: {
+                                            crossOrigin: "true",
+                                        },
+                                        tracks 
+                                    }
+                                }}
                             />
                         }
+                        <GenerateSubtitleModal
+                            course_slug={course_slug}
+                            chapter_token={chapter_token}
+                            lesson_token={lesson_token}
+                            mutate={mutate} 
+                        />
                     </div>
                 ))}
             {isEditing && (
