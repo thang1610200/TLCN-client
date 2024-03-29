@@ -102,6 +102,7 @@ export const LessonVideoForm = ({
     };
 
     const tracks: TrackProps[] = useMemo(() => {
+        if(!initialData?.subtitles) return [];
         return initialData?.subtitles.map((item) => {
             return {
                 kind: "subtitles",

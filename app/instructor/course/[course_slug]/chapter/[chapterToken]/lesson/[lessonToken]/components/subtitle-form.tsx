@@ -43,7 +43,8 @@ import {
     TooltipContent,
     TooltipProvider,
     TooltipTrigger,
-} from "@/components/ui/tooltip"
+} from "@/components/ui/tooltip";
+import TranslateSubtitleModal from './translate-subtitle';
 
 interface SubtitleFormProps {
     initialData: Lesson;
@@ -200,29 +201,21 @@ export const SubtitleForm = ({
                                     )}
 
                                     <div className='ml-auto flex gap-3'>
-                                        <TooltipProvider>
-                                            <Tooltip>
-                                                <TooltipTrigger>
-                                                    <Languages className="h-4 w-4 hover:opacity-75 transition"  />
-                                                </TooltipTrigger>
-                                                <TooltipContent>
-                                                    Dịch
-                                                </TooltipContent>
-                                            </Tooltip>
-                                        </TooltipProvider>
+                                        <TranslateSubtitleModal
+                                            subtitle={subtitle} 
+                                            course_slug={course_slug}
+                                            chapter_token={chapter_token}
+                                            lesson_token={lesson_token}
+                                            mutate={mutate} 
+                                        />
 
                                         {deletingId !== subtitle.id && (
                                         <TooltipProvider>
                                             <Tooltip>
-                                                <TooltipTrigger>
-                                                    <button
-                                                    onClick={() =>
+                                                <TooltipTrigger className='hover:opacity-75 transition' onClick={() =>
                                                         onDelete(subtitle.id)
-                                                    }
-                                                    className="hover:opacity-75 transition"
-                                                >
+                                                    }>
                                                     <X className="h-4 w-4" />
-                                                </button>
                                                 </TooltipTrigger>
                                                 <TooltipContent>
                                                     Xóa

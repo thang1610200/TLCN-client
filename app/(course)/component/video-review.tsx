@@ -1,6 +1,8 @@
 import { Lesson } from '@/app/types';
 import ReactPlayer from 'react-player';
 import { Lock } from 'lucide-react';
+import { TrackProps } from 'react-player/file';
+import { useMemo } from 'react';
 
 interface VideoListProps {
     data?: Lesson;
@@ -8,6 +10,18 @@ interface VideoListProps {
 }
 
 const VideoReview: React.FC<VideoListProps> = ({ data, isLocked }) => {
+    const tracks: TrackProps[] = useMemo(() => {
+        if(!data?.subtitles) return [];
+        return data?.subtitles.map((item) => {
+            return {
+                kind: "subtitles",
+                src: item.file,
+                srcLang: item.language_code,
+                label: item.language
+            }
+        })
+    },[data])
+
     return (
         <div>
             {isLocked ? (
@@ -31,9 +45,7 @@ const VideoReview: React.FC<VideoListProps> = ({ data, isLocked }) => {
                                         attributes: {
                                             crossOrigin: "true"
                                         },
-                                        tracks: [
-                                            {kind: 'subtitles', src: 'https://tlcn-upload.s3.ap-southeast-1.amazonaws.com/video.vtt', srcLang: 'vi', label: 'Vietnamese', default: true}
-                                        ]
+                                        tracks
                                     }
                                 }}
                             />

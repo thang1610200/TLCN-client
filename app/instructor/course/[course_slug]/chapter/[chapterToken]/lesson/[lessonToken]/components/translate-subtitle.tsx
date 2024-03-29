@@ -33,56 +33,66 @@ import { BACKEND_URL } from '@/lib/constant';
 import toast from 'react-hot-toast';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
-import { Language } from '@/app/types';
+import { Language, Subtitle } from '@/app/types';
 import { cn } from '@/lib/utils';
-import { Check, ChevronsUpDown } from 'lucide-react';
+import { Check, ChevronsUpDown, Languages } from 'lucide-react';
 import { KeyedMutator } from 'swr';
 import { find } from 'lodash';
+import {
+    Tooltip,
+    TooltipContent,
+    TooltipProvider,
+    TooltipTrigger,
+} from '@/components/ui/tooltip';
 
-const GenerateSubtitleSchema = z.object({
+const TranslateSubtitleSchema = z.object({
     language: z.string(),
 });
 
-type GenerateSubtitleFormValues = z.infer<typeof GenerateSubtitleSchema>;
+type TranslateSubtitleFormValues = z.infer<typeof TranslateSubtitleSchema>;
 
-interface GenerateSubtitleModalProps {
+interface TranslateSubtitleModalProps {
+    subtitle: Subtitle;
     lesson_token: string;
     mutate: KeyedMutator<any>;
     chapter_token: string;
     course_slug: string;
 }
 
-export default function GenerateSubtitleModal({
+export default function TranslateSubtitleModal({
+    subtitle,
     lesson_token,
     mutate,
     chapter_token,
     course_slug,
-}: GenerateSubtitleModalProps) {
+}: TranslateSubtitleModalProps) {
     const [isOpen, setIsOpen] = useState(false);
     const router = useRouter();
     const session = useSession();
 
-    const options: { language: string; language_code: string }[] = Language;
+    const options: { language: string; language_code: string }[] = Language.filter((item) => {
+        return item.language_code !== subtitle.language_code;
+    });
 
-    const form = useForm<GenerateSubtitleFormValues>({
-        resolver: zodResolver(GenerateSubtitleSchema),
+    const form = useForm<TranslateSubtitleFormValues>({
+        resolver: zodResolver(TranslateSubtitleSchema),
     });
 
     const { isValid, isSubmitting } = form.formState;
 
-    function onSubmit(values: GenerateSubtitleFormValues) {
-        const item = find(options,{language_code: values.language});
-
+    function onSubmit(values: TranslateSubtitleFormValues) {
+        const item = find(options, { language_code: values.language });
         axios
             .post(
-                `${BACKEND_URL}/lesson/generate-subtitle`,
+                `${BACKEND_URL}/lesson/translate-subtitle`,
                 {
                     lesson_token,
                     course_slug,
                     chapter_token,
                     language: item?.language,
                     language_code: item?.language_code,
-                    email: session.data?.user.email
+                    email: session.data?.user.email,
+                    subtitleId: subtitle.id
                 },
                 {
                     headers: {
@@ -92,8 +102,11 @@ export default function GenerateSubtitleModal({
                 }
             )
             .then(() => {
-                toast.success('Generate success');
-                mutate();
+                toast('Quá trình này có thể diễn ra trong vài phút',{
+                    position: 'top-left',
+                    duration: 2000
+                })
+                //mutate();
                 handleCancel();
                 router.refresh();
             })
@@ -109,9 +122,14 @@ export default function GenerateSubtitleModal({
 
     return (
         <div>
-            <Button className="absolute right-4 top-4 bg-blue-500 text-white" onClick={() => setIsOpen(true)}>
-                Tạo phụ đề tự động
-            </Button>
+            <TooltipProvider>
+                <Tooltip>
+                    <TooltipTrigger onClick={() => setIsOpen(true)}>
+                        <Languages className="h-4 w-4 hover:opacity-75 transition" />
+                    </TooltipTrigger>
+                    <TooltipContent>Dịch</TooltipContent>
+                </Tooltip>
+            </TooltipProvider>
             <Transition appear show={isOpen} as={Fragment}>
                 <Dialog
                     as="div"
@@ -148,7 +166,7 @@ export default function GenerateSubtitleModal({
                                         as="h2"
                                         className="flex justify-center p-4 text-3xl font-medium leading-6 text-gray-900"
                                     >
-                                        Tạo phụ đề tự động
+                                        Dịch phụ đề
                                     </Dialog.Title>
                                     <div className="p-5">
                                         <Form {...form}>
@@ -165,7 +183,8 @@ export default function GenerateSubtitleModal({
                                                         render={({ field }) => (
                                                             <FormItem>
                                                                 <FormLabel>
-                                                                    Ngôn ngữ trong video
+                                                                    Ngôn ngữ
+                                                                    muốn dịch
                                                                 </FormLabel>
                                                                 <Popover>
                                                                     <PopoverTrigger
