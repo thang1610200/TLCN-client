@@ -1,6 +1,6 @@
 import React from "react";
 import { Sidebar } from "./components/sidebar";
-import { Navbar } from "@/components/Navbar";
+import { Navbar } from "@/components/navigation-bar/Navbar";
 
 
 export default function InstructorLayout({

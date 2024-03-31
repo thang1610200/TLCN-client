@@ -2,7 +2,7 @@ import { Metadata } from 'next';
 import Image from 'next/image';
 import { Separator } from '@/components/ui/separator';
 import { SidebarNav } from '@/components/sidebar-nav';
-import { Navbar } from '@/components/Navbar';
+import { Navbar } from '@/components/navigation-bar/Navbar';
 
 export const metadata: Metadata = {
     title: 'Forms',
@@ -18,6 +18,10 @@ const sidebarNavItems = [
         title: 'Change password',
         href: '/change-password',
     },
+    {
+        title: 'Notification',
+        href: '/notification'
+    }
 ];
 
 interface SettingsLayoutProps {

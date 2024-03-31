@@ -23,6 +23,7 @@ import { useRouter } from 'next/navigation';
 import { UploadCloud } from 'lucide-react';
 import useRegisterInstructor from '@/app/hook/useRegisterInstructor';
 import LoadingModal from './modal/loading-modal';
+import Image from 'next/image';
 
 const MAX_FILE_SIZE: number = 1000000;
 const ACCEPTED_IMAGE_TYPES = ["image/jpeg", "image/jpg", "image/png", "image/webp"];
@@ -62,20 +63,20 @@ export default function RegisterInsModal() {
     }
 
     const onHandleClick = () => {
-        if(!error){
-            switch(data?.status) {
+        if (!error) {
+            switch (data?.status) {
                 case 'PROGRESSING':
-                    toast('Chứng chỉ của bạn đang được xem xét. Vui lòng kiểm tra email',{
+                    toast('Chứng chỉ của bạn đang được xem xét. Vui lòng kiểm tra email', {
                         duration: 5000,
                         position: 'top-right'
                     })
                     break;
                 case 'SUCCESS':
-                    toast('Chứng chỉ đã được chấp thuận. Vui lòng đăng nhập lại để tiếp tục',{
+                    toast('Chứng chỉ đã được chấp thuận. Vui lòng đăng nhập lại để tiếp tục', {
                         duration: 5000,
                         position: 'top-right'
                     })
-                    signOut({callbackUrl: '/login'})
+                    signOut({ callbackUrl: '/login' })
                     break;
                 default:
                     setIsOpen(true);
@@ -120,7 +121,7 @@ export default function RegisterInsModal() {
         setImageCertificate("");
     }
 
-    if(isLoadingRegister){
+    if (isLoadingRegister) {
         return (
             <LoadingModal />
         )
@@ -128,7 +129,7 @@ export default function RegisterInsModal() {
 
     return (
         <div>
-            <Button onClick={() => { onHandleClick() }} className='relative flex items-center justify-center focus-visible::ring-0 focus-visible::ring-offset-0'>Trở thành giảng viên</Button>
+            <Button onClick={() => { onHandleClick() }} variant="outline" className='relative flex items-center justify-center focus-visible::ring-0 focus-visible::ring-offset-0'>Trở thành giảng viên</Button>
             <Transition appear show={isOpen} as={Fragment}>
                 <Dialog as="div" className="relative z-10" onClose={() => { setIsOpen(false) }}>
                     <Transition.Child
@@ -178,11 +179,11 @@ export default function RegisterInsModal() {
                                                             <div className="flex items-center justify-center max-w-[500px] min-w-[500px] max-h-[500px] min-h-[500px]">
                                                                 <label htmlFor="dropzone-file" className="flex flex-col items-center justify-center w-full h-full border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-bray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600 max-w-[500px] min-w-[500px] max-h-[500px] min-h-[500px]">
                                                                     {!imageCertificate && <div className="flex flex-col items-center justify-center pt-5 pb-6">
-                                                                        <UploadCloud className="w-8 h-8 mb-4 text-gray-500 dark:text-gray-400"/>
+                                                                        <UploadCloud className="w-8 h-8 mb-4 text-gray-500 dark:text-gray-400" />
                                                                         <p className="mb-2 text-sm text-gray-500 dark:text-gray-400"><span className="font-semibold">Click to upload</span> or drag and drop</p>
                                                                         <p className="text-xs text-gray-500 dark:text-gray-400">PG, JPEG, PNG or WEBP (Max image size is 10MB)</p>
                                                                     </div>}
-                                                                    {imageCertificate && <img
+                                                                    {imageCertificate && <Image
                                                                         src={imageCertificate}
                                                                         alt="User image"
                                                                         className="relative justify-center object-scale-down p-4 bg-no-repeat  max-w-[500px] min-w-[500px] max-h-[500px] min-h-[500px]"
@@ -197,18 +198,12 @@ export default function RegisterInsModal() {
                                                     </FormItem>
                                                 )}
                                             />
-                                            {/* <Input onChange={handleOnChange} accept="image/*" type="file" /> */}
-
                                             <div className="grid w-full grid-cols-2 gap-10 pt-6">
                                                 <Button disabled={isLoading} type="submit">{isLoading ? <Loader /> : 'Lưu lại'}</Button>
                                                 <Button type="button" onClick={() => { CancelImage() }}>Hủy bỏ</Button>
                                             </div>
                                         </form>
                                     </Form>
-                                    {/* <div className='grid grid-cols-2 gap-10'>
-                                        <Button onClick={() => setLearnerToInstructor()}>Chấp nhận</Button>
-                                        <Button onClick={() => setIsOpen(false)}>Hủy bỏ</Button>
-                                    </div> */}
                                 </Dialog.Panel>
                             </Transition.Child>
                         </div>
