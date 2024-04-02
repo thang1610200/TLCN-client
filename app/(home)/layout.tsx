@@ -1,4 +1,4 @@
-import { Navbar } from '@/components/Navbar';
+import { Navbar } from '@/components/navigation-bar/Navbar';
 import React from 'react';
 
 

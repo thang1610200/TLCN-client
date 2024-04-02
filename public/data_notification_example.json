@@ -1,0 +1,57 @@
+[
+    {
+        "id": 1,
+        "UserSend_Id": "UserSend_1",
+        "UserSend_Name": "UserSend_Name1",
+        "UserSend_Image": "/avatars/01.png",
+        "UserGet_Id": "UserGet_1",
+        "UserGet_Name": "UserGet_Name1",
+        "Message": "Nulla cupidatat cupidatat excepteur labore consequat ullamco ex consectetur.",
+        "isReaded": true,
+        "SendAt": "2022-10-31"
+    },
+    {
+        "id": 2,
+        "UserSend_Id": "UserSend_2",
+        "UserSend_Name": "UserSend_Name2",
+        "UserSend_Image": "/avatars/02.png",
+        "UserGet_Id": "UserGet_2",
+        "UserGet_Name": "UserGet_Name2",
+        "Message": "Ullamco amet commodo cupidatat Lorem id dolore ipsum irure cillum nulla.",
+        "isReaded": false,
+        "SendAt": "2022-10-31"
+    },
+    {
+        "id": 3,
+        "UserSend_Id": "UserSend_3",
+        "UserSend_Name": "UserSend_Name3",
+        "UserSend_Image": "/avatars/03.png",
+        "UserGet_Id": "UserGet_3",
+        "UserGet_Name": "UserGet_Name3",
+        "Message": "Proident aliqua sint ullamco ad pariatur ullamco.",
+        "isReaded": true,
+        "SendAt": "2022-10-31"
+    },
+    {
+        "id": 4,
+        "UserSend_Id": "UserSend_4",
+        "UserSend_Name": "UserSend_Name4",
+        "UserSend_Image": "/avatars/04.png",
+        "UserGet_Id": "UserGet_4",
+        "UserGet_Name": "UserGet_Name4",
+        "Message": "Consequat culpa ea proident exercitation ullamco amet velit ex quis exercitation.",
+        "isReaded": false,
+        "SendAt": "2022-10-31"
+    },
+    {
+        "id": 5,
+        "UserSend_Id": "UserSend_5",
+        "UserSend_Name": "UserSend_Name5",
+        "UserSend_Image": "/avatars/05.png",
+        "UserGet_Id": "UserGet_5",
+        "UserGet_Name": "UserGet_Name5",
+        "Message": "Tempor exercitation ut non est et excepteur.",
+        "isReaded": true,
+        "SendAt": "2022-10-31"
+    }
+]
