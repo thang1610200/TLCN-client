@@ -14,6 +14,7 @@ import { QuizzForm } from './components/quizz-form';
 import QuizzAiModal from './components/quiz-ai-form';
 import Link from 'next/link';
 import { NumberAnswerCorrectForm } from './components/answer-correct-quiz';
+import { CodeTitleForm } from './components/code-title-form';
 
 const ExerciseDetail = ({ params }: { params: { exerciseToken: string, course_slug: string; chapterToken: string; } }) => {
     const session = useSession();
@@ -96,37 +97,62 @@ const ExerciseDetail = ({ params }: { params: { exerciseToken: string, course_sl
                                 token={data?.token}
                                 mutate={mutate}
                             />
-                            <NumberAnswerCorrectForm
-                                course_slug={params.course_slug}
-                                chapter_token={params.chapterToken}
-                                initialData={data}
-                                exercise_token={data?.token}
-                                mutate={mutate}
-                            />
+                            {
+                                data?.type === 'QUIZZ' && (
+                                    <NumberAnswerCorrectForm
+                                        course_slug={params.course_slug}
+                                        chapter_token={params.chapterToken}
+                                        initialData={data}
+                                        exercise_token={data?.token}
+                                        mutate={mutate}
+                                    />
+                                )
+                            }
                             <ExerciseTypeForm initialData={data} />
                         </div>
                         <div className="space-y-6">
-                            <div>
-                                <div className="flex items-center gap-x-2">
-                                    <IconBadge icon={ListChecks} />
-                                    <h2 className="text-xl">Question list</h2>
-                                    <div className="ml-auto">
-                                        <QuizzAiModal
+                            {
+                                data?.type === 'QUIZZ' && (
+                                    <div>
+                                        <div className="flex items-center gap-x-2">
+                                            <IconBadge icon={ListChecks} />
+                                            <h2 className="text-xl">Question list</h2>
+                                            <div className="ml-auto">
+                                                <QuizzAiModal
+                                                    course_slug={params.course_slug}
+                                                    chapter_token={params.chapterToken}
+                                                    exercise_token={data?.token}
+                                                    mutate={mutate}
+                                                />
+                                            </div>
+                                        </div>
+                                        <QuizzForm
                                             course_slug={params.course_slug}
                                             chapter_token={params.chapterToken}
+                                            initialData={data}
                                             exercise_token={data?.token}
                                             mutate={mutate}
                                         />
                                     </div>
-                                </div>
-                                <QuizzForm
-                                    course_slug={params.course_slug}
-                                    chapter_token={params.chapterToken}
-                                    initialData={data}
-                                    exercise_token={data?.token}
-                                    mutate={mutate}
-                                />
-                            </div>
+                                )
+                            }
+                            {
+                                data?.type === 'CODE' && (
+                                    <div>
+                                        <div className="flex items-center gap-x-2">
+                                            <IconBadge icon={ListChecks} />
+                                            <h2 className="text-xl">Code</h2>
+                                        </div>
+                                        <CodeTitleForm 
+                                            course_slug={params.course_slug}
+                                            chapter_token={params.chapterToken}
+                                            initialData={data}
+                                            exercise_token={data?.token}
+                                            mutate={mutate}
+                                        />
+                                    </div>
+                                )
+                            }
                         </div>
                     </div>
                 </TabsContent>

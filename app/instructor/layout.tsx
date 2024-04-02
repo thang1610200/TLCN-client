@@ -2,7 +2,6 @@ import React from "react";
 import { Sidebar } from "./components/sidebar";
 import { Navbar } from "@/components/Navbar";
 
-
 export default function InstructorLayout({
     children,
 }: {
@@ -24,7 +23,7 @@ export default function InstructorLayout({
                         </div>
                     </div>
                 </div>
-            </div >
+            </div>
         </>
     );
 }

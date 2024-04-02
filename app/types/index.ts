@@ -95,6 +95,28 @@ export enum ContentType {
     Exercise = 'EXERCISE'
 }
 
+export enum LanguageType {
+    Html = 'html',
+    Python = 'python',
+    Cpp = 'cpp',
+    C = 'c',
+    Javascript = 'javascript',
+    Typescript = 'typescript',
+    Css = 'css',
+    Java = 'java'
+}
+
+export enum MimeFileType {
+    html = 'html',
+    css = 'css',
+    javascript = 'js',
+    typescript = 'ts',
+    cpp = 'cpp',
+    c = 'c',
+    java = 'java',
+    python = 'py'
+  }
+
 export interface Content {
     id: string;
     token: string;
@@ -119,6 +141,45 @@ export interface Exercise {
     number_correct: number;
     isOpen: boolean;
     quizz: Quizz[];
+    code: Code
+}
+
+export interface LabCode {
+    id: string;
+    lab: string;
+    language: LanguageType[];
+    mime: MimeFileType[]
+    code: Code[]
+}
+
+export interface FileCode {
+    id: string;
+    fileName: string;
+    language: LanguageType;
+    mime: MimeFileType;
+    default_content: string;
+    codeId: string;
+    code: Code
+}
+
+export interface Code {
+    id: string;
+    token: string;
+    question: string;
+    labCodeId: string;
+    labCode: LabCode
+    exerciseId: string;
+    exercise: Exercise;
+    file: FileCode[]
+    testcase: TestCase[]
+}
+
+export interface TestCase {
+    id: string;
+    input: string;
+    output: string;
+    codeId: string;
+    code: Code;
 }
 
 export interface Quizz {
