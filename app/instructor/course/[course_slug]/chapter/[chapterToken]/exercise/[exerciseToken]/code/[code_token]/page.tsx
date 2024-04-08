@@ -31,15 +31,6 @@ const CodeDetailPage = ({
 
     const { data: language = [], languageCodeError, languageCodeLoading } = useLanguageCode(session.data?.user.email, session.data?.backendTokens.accessToken);
 
-    const requiredFields = [data?.question, data?.labCodeId, data?.file];
-
-    const totalFields = requiredFields.length;
-    const completedFields = requiredFields.filter(Boolean).length;
-
-    const completionText = `(${completedFields}/${totalFields})`;
-
-    const isComplete = requiredFields.every(Boolean);
-
     if (isLoading || isValidating || languageCodeLoading) {
         return <LoadingModal />;
     }
@@ -68,9 +59,6 @@ const CodeDetailPage = ({
                             <h1 className="text-2xl font-medium">
                                 Code setup
                             </h1>
-                            <span className="text-sm text-slate-700">
-                                Complete all fields {completionText}
-                            </span>
                         </div>
                     </div>
                     <div className="grid grid-cols-1 gap-6 mt-16 md:grid-cols-3">

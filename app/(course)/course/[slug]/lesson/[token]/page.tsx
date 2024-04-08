@@ -15,6 +15,7 @@ import useCourseDetailAuth from '@/app/hook/useCourseDetailAuth';
 import { useCallback, useMemo } from 'react';
 import VideoReview from '@/app/(course)/component/video-review';
 import QuizModal from '@/app/(course)/component/quiz';
+import CodeModal from '@/app/(course)/component/code';
 
 const CourseAccessDetail = ({
     params,
@@ -101,18 +102,33 @@ const CourseAccessDetail = ({
                                     )}
                                     { content?.type === "EXERCISE"  && (
                                         <div className="relative aspect-video border rounded-md mb-4">
-                                            <QuizModal
-                                                content_current={content}
-                                                isValidating={isValidating}
-                                                data={content.exercise}
-                                                isLocked={isLocked}
-                                                course_slug={params.slug}
-                                                mutateProgress={mutate}
-                                                next_content_token={
-                                                    contentlist[indexLesson + 1].token
-                                                }
-                                                quiz={content?.userProgress[0]?.userProgressQuiz}
-                                            />
+                                            {
+                                                content.exercise?.type === 'QUIZZ' && (
+                                                    <QuizModal
+                                                        content_current={content}
+                                                        isValidating={isValidating}
+                                                        data={content.exercise}
+                                                        isLocked={isLocked}
+                                                        course_slug={params.slug}
+                                                        mutateProgress={mutate}
+                                                        next_content_token={
+                                                            contentlist[indexLesson + 1].token
+                                                        }
+                                                        quiz={content?.userProgress[0]?.userProgressQuiz}
+                                                    />
+                                                )
+                                            }
+                                            {
+                                                content.exercise?.type === 'CODE' && (
+                                                    <CodeModal 
+                                                        isValidating={isValidating}
+                                                        data={content.exercise}
+                                                        isLocked={isLocked}
+                                                        mutateProgress={mutate}
+                                                        course_slug={params.slug}
+                                                    />
+                                                )
+                                            }
                                         </div>
                                     )}
                                 </div>

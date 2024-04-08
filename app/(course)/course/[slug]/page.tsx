@@ -2,7 +2,7 @@
 
 import useCourseDetailHome from '@/app/hook/useCourseDetailHome';
 import LoadingModal from '@/components/modal/loading-modal';
-import { CheckIcon, ChevronUpIcon, PlaySquare, ClipboardPaste, Lightbulb } from 'lucide-react';
+import { CheckIcon, ChevronUpIcon, PlaySquare, ClipboardPaste, Lightbulb, Code } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useCallback, useMemo, useState } from 'react';
@@ -270,13 +270,23 @@ const DetailCourse = ({ params }: { params: { slug: string } }) => {
                                                                                                 color="#1cdada"
                                                                                             />
                                                                                         ) : (
-                                                                                            <Lightbulb 
-                                                                                                size={
-                                                                                                    25
-                                                                                                }
-                                                                                                className="mr-2"
-                                                                                                color="#1cdada"
-                                                                                            />
+                                                                                            content.exercise?.type === 'QUIZZ' ? (
+                                                                                                <Lightbulb 
+                                                                                                    size={
+                                                                                                        25
+                                                                                                    }
+                                                                                                    className="mr-2"
+                                                                                                    color="#1cdada"
+                                                                                                />
+                                                                                            ) : (
+                                                                                                <Code 
+                                                                                                    size={
+                                                                                                        25
+                                                                                                    }
+                                                                                                    className="mr-2"
+                                                                                                    color="#1cdada"
+                                                                                                />
+                                                                                            )
                                                                                         )
                                                                                     }
                                                                                     <h1 className="text-[18px] inline-block break-words text-black">

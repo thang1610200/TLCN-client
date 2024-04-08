@@ -1,7 +1,7 @@
 "use client";
 
 import { Disclosure } from "@headlessui/react";
-import { ChevronUpIcon, PlaySquare, LockIcon, Lightbulb  } from "lucide-react";
+import { ChevronUpIcon, PlaySquare, LockIcon, Lightbulb, Code  } from "lucide-react";
 import { sumBy } from 'lodash';
 import { useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
@@ -126,13 +126,23 @@ const CourseSidebar: React.FC<CourseSidebarProp> = ({
                                                                         color="#1cdada"
                                                                         />
                                                                     ) : (
-                                                                        <Lightbulb 
-                                                                            size={
-                                                                                25
-                                                                            }
-                                                                            className="mr-2"
-                                                                            color="#1cdada"
-                                                                        />
+                                                                        content.exercise?.type === 'QUIZZ' ? (
+                                                                            <Lightbulb 
+                                                                                size={
+                                                                                    25
+                                                                                }
+                                                                                className="mr-2"
+                                                                                color="#1cdada"
+                                                                            />
+                                                                        ) : (
+                                                                            <Code 
+                                                                                size={
+                                                                                    25
+                                                                                }
+                                                                                className="mr-2"
+                                                                                color="#1cdada"
+                                                                            />
+                                                                        )
                                                                     )
                                                             )
                                                         }

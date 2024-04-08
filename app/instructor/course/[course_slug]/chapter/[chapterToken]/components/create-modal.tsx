@@ -49,11 +49,7 @@ const ExerciseFormSchema = z.object({
         .max(100, {
             message: 'Title must not be longer than 100 characters.',
         }),
-    type: z.enum([
-        TypeExercise.Quizz,
-        TypeExercise.Image,
-        TypeExercise.Code
-    ])
+    type: z.enum(Object.values(TypeExercise) as [string, ...string[]])
 });
 
 type ExerciseFormValues = z.infer<typeof ExerciseFormSchema>;
@@ -79,20 +75,12 @@ export default function CreateExerciseModal({
         type: TypeExercise.Quizz
     };
 
-    const options: { label: string; value: TypeExercise }[] = [
-        {
-            label: 'Quizz',
-            value: TypeExercise.Quizz
-        },
-        {
-            label: 'Image',
-            value: TypeExercise.Image
-        },
-        {
-            label: 'Code',
-            value: TypeExercise.Code
-        },
-    ];
+    const options: { label: string; value: TypeExercise }[] = Object.entries(TypeExercise).map((item) => {
+            return {
+                label: item[0],
+                value: item[1]
+            };
+        });
 
     const form = useForm<ExerciseFormValues>({
         resolver: zodResolver(ExerciseFormSchema),

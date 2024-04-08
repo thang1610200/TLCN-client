@@ -1,4 +1,3 @@
-
 export interface User {
     id: string;
     email: string;
@@ -12,7 +11,7 @@ export interface User {
     role: string;
     registration_date: string;
     verify_date?: Date;
-    register_instructor:  RegisterInstructor[];
+    register_instructor: RegisterInstructor[];
     course: Course[];
     userProgress: UserProgress[];
     review: Review[];
@@ -31,22 +30,22 @@ export interface Topic {
 
 export interface Course {
     id: string;
-    topic_id: string
+    topic_id: string;
     topic: Topic;
-    owner_id : string;
+    owner_id: string;
     owner: User;
     title: string;
-    description?: string
+    description?: string;
     learning_outcome: string[];
     requirement: string[];
-    slug: string
-    picture?: string
+    slug: string;
+    picture?: string;
     chapters: Chapter[];
     isPublished: boolean;
     create_at: Date;
     update_at: Date;
-    userProgress: UserProgress[]
-    review: Review[]
+    userProgress: UserProgress[];
+    review: Review[];
 }
 
 export interface Chapter {
@@ -56,7 +55,7 @@ export interface Chapter {
     description?: string;
     position: number;
     isPublished: boolean;
-    contents: Content[]
+    contents: Content[];
     courseId: string;
     course: Course;
 }
@@ -65,34 +64,34 @@ export interface Lesson {
     id: string;
     token: string;
     title: string;
-    description?: string
+    description?: string;
     isPublished: boolean;
     isPreview: boolean;
     videoUrl?: string;
     duration?: number;
     isCompleteVideo: boolean;
     thumbnail?: string;
-    contentId: string
+    contentId: string;
     content: Content;
-    userProgress: UserProgress[]
-    attachment: Attachment[]
-    subtitles: Subtitle[]
+    userProgress: UserProgress[];
+    attachment: Attachment[];
+    subtitles: Subtitle[];
 }
 
 export interface Subtitle {
     id: string;
-    language: string
+    language: string;
     language_code: string;
     file: string;
-    lessonId: string
+    lessonId: string;
     lesson: Lesson;
     create_at: Date;
     update_at: Date;
-  }
+}
 
 export enum ContentType {
     Lesson = 'LESSON',
-    Exercise = 'EXERCISE'
+    Exercise = 'EXERCISE',
 }
 
 export enum LanguageType {
@@ -103,7 +102,7 @@ export enum LanguageType {
     Javascript = 'javascript',
     Typescript = 'typescript',
     Css = 'css',
-    Java = 'java'
+    Java = 'java',
 }
 
 export enum MimeFileType {
@@ -114,8 +113,8 @@ export enum MimeFileType {
     cpp = 'cpp',
     c = 'c',
     java = 'java',
-    python = 'py'
-  }
+    python = 'py',
+}
 
 export interface Content {
     id: string;
@@ -141,15 +140,15 @@ export interface Exercise {
     number_correct: number;
     isOpen: boolean;
     quizz: Quizz[];
-    code: Code
+    code: Code;
 }
 
 export interface LabCode {
     id: string;
     lab: string;
     language: LanguageType[];
-    mime: MimeFileType[]
-    code: Code[]
+    mime: MimeFileType[];
+    code: Code[];
 }
 
 export interface FileCode {
@@ -159,7 +158,7 @@ export interface FileCode {
     mime: MimeFileType;
     default_content: string;
     codeId: string;
-    code: Code
+    code: Code;
 }
 
 export interface Code {
@@ -167,11 +166,11 @@ export interface Code {
     token: string;
     question: string;
     labCodeId: string;
-    labCode: LabCode
+    labCode: LabCode;
     exerciseId: string;
     exercise: Exercise;
-    file: FileCode[]
-    testcase: TestCase[]
+    file: FileCode[];
+    testcase: TestCase[];
 }
 
 export interface TestCase {
@@ -197,7 +196,6 @@ export interface Quizz {
 
 export enum TypeExercise {
     Quizz = 'QUIZZ',
-    Image = 'IMAGE',
     Code = 'CODE',
 }
 
@@ -214,7 +212,7 @@ export enum LevelQuizz {
 
 export interface UserProgress {
     id: string;
-    userId: string
+    userId: string;
     user: User;
     courseId: string;
     course: Course;
@@ -309,8 +307,8 @@ export interface Server {
     user: User;
     createAt: Date;
     updateAt: Date;
-    members: Member[]
-    channels: Channel[]
+    members: Member[];
+    channels: Channel[];
 }
 
 export enum MemberRole {
@@ -349,31 +347,184 @@ export interface Conversation {
 
 export const Language = [
     {
-        language: "Vietnamese",
-        language_code: 'vi'
+        language: 'Vietnamese',
+        language_code: 'vi',
     },
     {
-        language: "English",
-        language_code: 'en'
+        language: 'English',
+        language_code: 'en',
     },
     {
-        language: "US",
-        language_code: 'en_us'
+        language: 'US',
+        language_code: 'en_us',
     },
     {
-        language: "Australian",
-        language_code: 'en_au'
+        language: 'Australian',
+        language_code: 'en_au',
     },
     {
-        language: "Spanish",
-        language_code: 'es'
+        language: 'Spanish',
+        language_code: 'es',
     },
     {
-        language: "French",
-        language_code: 'fr'
+        language: 'French',
+        language_code: 'fr',
     },
     {
-        language: "German",
-        language_code: 'de'
-    }
-] 
+        language: 'German',
+        language_code: 'de',
+    },
+];
+
+export const LanguageOptions = [
+    {
+        id: 63,
+        value: 'javascript',
+    },
+    {
+        id: 45,
+        value: 'assembly',
+    },
+    {
+        id: 46,
+        value: 'bash',
+    },
+    {
+        id: 47,
+        value: 'basic',
+    },
+    {
+        id: 50,
+        value: 'c',
+    },
+    {
+        id: 54,
+        value: 'cpp',
+    },
+    {
+        id: 86,
+        value: 'clojure',
+    },
+    {
+        id: 51,
+        value: 'csharp',
+    },
+    {
+        id: 77,
+        value: 'cobol',
+    },
+    {
+        id: 55,
+        value: 'lisp',
+    },
+    {
+        id: 56,
+        value: 'd',
+    },
+    {
+        id: 57,
+        value: 'elixir',
+    },
+    {
+        id: 58,
+        value: 'erlang',
+    },
+    {
+        id: 44,
+        value: 'exe',
+    },
+    {
+        id: 87,
+        value: 'fsharp',
+    },
+    {
+        id: 59,
+        value: 'fortran',
+    },
+    {
+        id: 60,
+        value: 'go',
+    },
+    {
+        id: 88,
+        value: 'groovy',
+    },
+    {
+        id: 61,
+        value: 'haskell',
+    },
+    {
+        id: 62,
+        value: 'java',
+    },
+
+    {
+        id: 78,
+        value: 'kotlin',
+    },
+    {
+        id: 64,
+        value: 'lua',
+    },
+
+    {
+        id: 79,
+        value: 'objectivec',
+    },
+    {
+        id: 65,
+        value: 'ocaml',
+    },
+    {
+        id: 66,
+        value: 'octave',
+    },
+    {
+        id: 67,
+        value: 'pascal',
+    },
+    {
+        id: 85,
+        value: 'perl',
+    },
+    {
+        id: 68,
+        value: 'php',
+    },
+    {
+        id: 69,
+        value: 'prolog',
+    },
+    {
+        id: 71,
+        value: 'python',
+    },
+    {
+        id: 80,
+        value: 'r',
+    },
+    {
+        id: 72,
+        value: 'ruby',
+    },
+    {
+        id: 73,
+        value: 'rust',
+    },
+    {
+        id: 81,
+        value: 'scala',
+    },
+    {
+        id: 83,
+        value: 'swift',
+    },
+    {
+        id: 74,
+        value: 'typescript',
+    },
+    {
+        id: 84,
+        value: 'vbnet',
+    },
+];

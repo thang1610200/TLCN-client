@@ -30,7 +30,7 @@ const ExerciseDetail = ({ params }: { params: { exerciseToken: string, course_sl
     const requiredFields = [
         data?.title,
         data?.type,
-        data?.quizz?.length > 0,
+        data?.quizz?.length > 0 || (data?.code?.question && data?.code?.labCodeId && data?.code?.file.length > 0)
     ];
 
     const totalFields = requiredFields.length;

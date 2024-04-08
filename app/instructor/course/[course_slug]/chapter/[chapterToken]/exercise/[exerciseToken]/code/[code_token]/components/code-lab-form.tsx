@@ -91,12 +91,12 @@ export const CodeLabForm = ({
     const onSubmit = async (values: z.infer<typeof formSchema>) => {
         try {
             await axios.patch(
-                `${BACKEND_URL}/code/update-code`,
+                `${BACKEND_URL}/code/update-lab-code`,
                 {
                     code_token,
                     exercise_token,
                     value: {
-                        languageId: values.languageCodeId
+                        labCodeId: values.languageCodeId
                     },
                     email: session.data?.user.email,
                     chapter_token,
