@@ -110,8 +110,7 @@ const CodeModal: React.FC<QuizModalProps> = ({
             const response = await axios.request(options);
             const token = response.data.token;
             checkStatus(token);
-        } catch(err) {
-            console.log(err);
+        } catch {
             toast.error('Something went error!');
         } finally {
             setProcessing(false);
