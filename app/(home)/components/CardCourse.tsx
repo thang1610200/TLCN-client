@@ -4,6 +4,7 @@ import { BookOpen, Timer } from 'lucide-react';
 import { IconBadge } from '@/components/icon-badge';
 import { sumBy } from 'lodash';
 import { Chapter } from '@/app/types';
+import { Separator } from '@/components/ui/separator';
 
 interface CourseCardProps {
     slug: string;
@@ -44,22 +45,25 @@ export const CourseCard = ({
 
     return (
         <Link href={`/course/${slug}`}>
-            <div className="w-full h-full p-3 overflow-hidden transition border rounded-lg group hover:shadow-sm">
-                <div className="relative w-full overflow-hidden rounded-md aspect-video">
+            <div className="flex items-start justify-start w-full h-full gap-4 p-4 overflow-hidden rounded-lg group">
+                <div className="relative w-64 overflow-hidden rounded-md h-36">
                     <Image
                         priority={true}
                         fill
-                        className="object-cover"
+                        className="object-cover object-center aspect-video"
                         alt={title}
                         src={imageUrl}
-                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                        
                     />
+                    {/* <Image src="/images/learning.jpg" alt='image product' width={100} height={100} className='mix-blend-multiply' /> */}
                 </div>
-                <div className="flex flex-col pt-2">
-                    <div className="text-lg font-medium transition md:text-base group-hover:text-sky-700 line-clamp-2">
+                <div className="flex flex-col">
+                    <div className="text-lg font-bold transition line-clamp-2 ">
                         {title}
                     </div>
-                    <p className="text-xs text-muted-foreground">{category}</p>
+                    <div className="text-sm font-light line-clamp-2"> Description Reprehenderit dolore laboris aliqua sit non aliqua dolor.</div> {/*Thêm description */}
+                    {/* <p className="text-xs text-muted-foreground">{category}</p> */}
+                    <p className="text-sm text-muted-foreground">Tác giả</p> {/*Thêm tác giả*/}
                     <div className="flex items-center my-3 text-sm gap-x-5 md:text-xs">
                         <div className="flex items-center gap-x-1 text-slate-500">
                             <IconBadge size="sm" icon={BookOpen} />
@@ -75,6 +79,7 @@ export const CourseCard = ({
                     </div>
                 </div>
             </div>
+            <Separator orientation='vertical'/>
         </Link>
     );
 };

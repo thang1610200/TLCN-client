@@ -26,6 +26,8 @@ interface FilterBarProps {
     topic: Topic[];
 }
 
+
+
 export default function FilterBar({ topic }: FilterBarProps) {
     const [open, setOpen] = React.useState(false);
     const router = useRouter();
@@ -49,7 +51,7 @@ export default function FilterBar({ topic }: FilterBarProps) {
     };
 
     return (
-        <div className="pb-12 flex w-full h-full col-span-1">
+        <div className="flex w-64 h-full pb-12 bg-green-400"> {/*Làm thành dropdown menu bỏ vào trong thanh search*/}
             <div className="space-y-4 ">
                 <div className="px-3 ">
                     <Popover open={open} onOpenChange={setOpen}>

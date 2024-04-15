@@ -35,7 +35,7 @@ const SearchInput = () => {
             type="search"
             value={value}
             placeholder="Tìm kiếm khóa học"
-            className="flex w-full h-full text-sm rounded-xl bg-slate-100 focus-visible:ring-slate-200"
+            className="w-full h-full text-sm rounded-xl bg-slate-100 focus-visible:ring-slate-200"
         />
     );
 };

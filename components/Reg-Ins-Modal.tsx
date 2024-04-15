@@ -128,8 +128,8 @@ export default function RegisterInsModal() {
     }
 
     return (
-        <div>
-            <Button onClick={() => { onHandleClick() }} variant="outline" className='relative flex items-center justify-center focus-visible::ring-0 focus-visible::ring-offset-0'>Trở thành giảng viên</Button>
+        <>
+            <Button onClick={() => { onHandleClick() }} variant="link" className='relative flex items-center justify-center w-2/3 p-0 text-center text-balance focus-visible::ring-0 focus-visible::ring-offset-0'>Trở thành giảng viên</Button>
             <Transition appear show={isOpen} as={Fragment}>
                 <Dialog as="div" className="relative z-10" onClose={() => { setIsOpen(false) }}>
                     <Transition.Child
@@ -210,6 +210,6 @@ export default function RegisterInsModal() {
                     </div>
                 </Dialog>
             </Transition>
-        </div>
+        </>
     )
 }

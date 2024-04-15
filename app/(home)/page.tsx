@@ -7,8 +7,14 @@ import useAllCoursePublish from '../hook/useAllCoursePublish';
 import LoadingModal from '@/components/modal/loading-modal';
 import ErrorModal from '@/components/error';
 import FilterBar from './components/filter-bar';
-import { CoursesList } from '@/components/courses-list';
+
+
 import { useAllTopicHome } from '../hook/use-topic';
+
+
+// import { CoursesList } from '@/components/courses-list';
+import { CoursesList } from './components/ListCourse'
+import DropBarFilter from './components/DropBarFilter';
 
 export default function HomePage() {
     const searchParams = useSearchParams();
@@ -31,20 +37,15 @@ export default function HomePage() {
 
     return (
         <>
-            <div className="container p-0">
-                <div className="w-full h-full space-y-10">
-                    <div className="w-full h-20 py-4 space-y-4 ">
+            <div className="flex items-center justify-center w-full h-full ">
+                <div className="container flex flex-col items-center justify-center w-full h-full gap-10">
+                    <div className="flex items-end justify-center w-full h-20 gap-4 py-4">
                         <SearchInput />
+                        <DropBarFilter/>
                     </div>
-                    <div className="flex">
-                        <div className="w-full h-full">
-                            <div className="w-full h-full bg-background">
-                                <div className="grid grid-cols-6 place-content-center">
-                                    <FilterBar topic={topic} />
-                                    <CoursesList items={data} />
-                                </div>
-                            </div>
-                        </div>
+                    <div className="flex items-start justify-center w-full h-full">
+                        {/* <FilterBar topic={topic} />  */}
+                        <CoursesList items={data} />
                     </div>
                 </div>
             </div>

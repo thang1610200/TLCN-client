@@ -4,6 +4,7 @@ import { Inter } from 'next/font/google';
 import ToasterContext from './context/ToasterContext';
 import AuthContext from './context/AuthContext';
 import { ConfettiProvider } from '@/components/provider/confetti-provider';
+import { Toaster } from "@/components/ui/toaster"
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -23,6 +24,7 @@ export default function RootLayout({
                 <AuthContext>
                     <ConfettiProvider />
                     <ToasterContext />
+                    <Toaster />
                     {children}
                 </AuthContext>
             </body>

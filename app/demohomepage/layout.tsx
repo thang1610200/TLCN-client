@@ -9,7 +9,7 @@ export default function InstructorLayout({
 }) {
     return (
         <>
-            <Navbar/>
+            {/* <Navbar/> */}
             <div className="w-full h-full overflow-x-hidden overflow-y-hidden scroll-smooth">
                 {children}
             </div >

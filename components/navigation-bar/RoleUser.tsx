@@ -10,7 +10,7 @@ export default function RoleUser() {
     if (role === 'LEARNER' && session.status === "authenticated") {
         return (
             <>
-                <div className='relative flex items-center justify-center '>
+                <div className='relative flex items-center justify-end '>
                     <RegisterInsModal />
                 </div>
             </>

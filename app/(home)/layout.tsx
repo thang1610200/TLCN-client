@@ -1,5 +1,6 @@
 import { Navbar } from '@/components/navigation-bar/Navbar';
 import React from 'react';
+import SideBar from './components/SideBar';
 
 
 export default function HomeLayout({
@@ -10,10 +11,9 @@ export default function HomeLayout({
     return (
         <>
             <Navbar />
-            <div>
-                <div className="flex flex-col w-full h-full">
-                    <div className="flex-1 w-full h-full p-6 pt-20">{children}</div>
-                </div>
+            <div className='flex items-center justify-center w-screen h-screen '>
+                <SideBar/>
+                <div className="flex items-center justify-center w-full h-full pt-20">{children}</div>
             </div>
         </>
     );
