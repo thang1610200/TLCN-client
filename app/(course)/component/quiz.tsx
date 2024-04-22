@@ -102,6 +102,7 @@ const QuizModal: React.FC<QuizModalProps> = ({
             setQuestionIndex((item) => item + 1);
             setSelectedChoice(0);
         } catch (err: any) {
+            console.log(err);
             toast.error('Something went wrong');
         } finally {
             setIsLoading(false);

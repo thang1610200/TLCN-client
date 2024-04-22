@@ -12,6 +12,7 @@ import { CodeQuestionForm } from './components/code-question-form';
 import { CodeLabForm } from './components/code-lab-form';
 import { FileForm } from './components/file-form';
 import { TestCaseForm } from './components/test-case-form';
+import { FunctionForm } from './components/function-form';
 
 const CodeDetailPage = ({
     params,
@@ -101,6 +102,18 @@ const CodeDetailPage = ({
                                 <IconBadge icon={FileCode} />
                                 <h2 className="text-xl">File</h2>
                             </div>
+                            {
+                                data?.labCode.lab !== 'WebDev' && (
+                                    <FunctionForm
+                                        initialData={data}
+                                        code_token={params.code_token}
+                                        chapter_token={params.chapterToken}
+                                        course_slug={params.course_slug}
+                                        exercise_token={params.exerciseToken}
+                                        mutate={mutate} 
+                                    />
+                                )
+                            }
                             <FileForm 
                                 code_token={params.code_token}
                                 chapter_token={params.chapterToken}

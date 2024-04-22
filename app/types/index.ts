@@ -156,6 +156,7 @@ export interface FileCode {
     fileName: string;
     language: LanguageType;
     mime: MimeFileType;
+    functionName: string;
     default_content: string;
     codeId: string;
     code: Code;
@@ -221,6 +222,7 @@ export interface UserProgress {
     isCompleted: boolean;
     isPassed: boolean;
     userProgressQuiz: UserProgressQuiz[];
+    userProgressCode: UserProgressCode[];
 }
 
 export interface UserProgressQuiz {
@@ -232,6 +234,15 @@ export interface UserProgressQuiz {
     isCorrect: boolean;
     createdAt: Date;
 }
+
+export interface UserProgressCode {
+    id: string;
+    codeId: string;
+    fileCodeId: string;
+    answer: string;
+    userProgressId: string;
+    userProgress: UserProgress
+  }
 
 export interface Review {
     id: string;

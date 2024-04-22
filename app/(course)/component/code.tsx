@@ -2,6 +2,7 @@ import {
     Content,
     Exercise,
     LanguageOptions,
+    UserProgressCode,
     UserProgressQuiz,
 } from '@/app/types';
 import { Button } from '@/components/ui/button';
@@ -26,6 +27,9 @@ interface QuizModalProps {
     isValidating: boolean;
     mutateProgress: KeyedMutator<any>;
     course_slug: string;
+    content_current: Content;
+    next_content_token: string;
+    codeProgress: UserProgressCode[];
 }
 
 const CodeModal: React.FC<QuizModalProps> = ({
@@ -34,6 +38,9 @@ const CodeModal: React.FC<QuizModalProps> = ({
     isValidating,
     mutateProgress,
     course_slug,
+    content_current,
+    next_content_token,
+    codeProgress
 }) => {
     const session = useSession();
     const router = useRouter();
@@ -43,7 +50,7 @@ const CodeModal: React.FC<QuizModalProps> = ({
 
     useEffect(() => {
         if (!data?.code) return;
-        return editorCode(data.code.file[0].default_content);
+        return editorCode(codeProgress[0]?.answer || data.code.file[0].default_content);
     }, [data?.code]);
 
     const checkStatus = async (token: string) => {
@@ -80,7 +87,7 @@ const CodeModal: React.FC<QuizModalProps> = ({
         }
     };
 
-    const hanldeComplie = async () => {
+    const handleComplie = async () => {
         setProcessing(true);
 
         const languageCode = LanguageOptions.find((item) => {
@@ -110,6 +117,55 @@ const CodeModal: React.FC<QuizModalProps> = ({
             const response = await axios.request(options);
             const token = response.data.token;
             checkStatus(token);
+        } catch {
+            toast.error('Something went error!');
+        } finally {
+            setProcessing(false);
+        }
+    };
+
+    const handleSubmit = async () => {
+        setProcessing(true);
+
+        const languageCode = LanguageOptions.find((item) => {
+            return item.value === data?.code.labCode.language[0];
+        });
+
+        const url = qs.stringifyUrl({
+            url: `${BACKEND_URL}/course/detail-course-auth`,
+            query: {
+                course_slug,
+                email: session.data?.user.email,
+            },
+        });
+
+        const formData = {
+            language_id: languageCode?.id,
+            code: valueCode,
+            email: session.data?.user.email,
+            exercise_token: data?.token,
+            course_slug,
+            content_token: content_current.token,
+            next_content_token
+        };
+
+        const options = {
+            method: 'POST',
+            url: `${BACKEND_URL}/code/submit-code`,
+            headers: {
+                Authorization: `Bearer ${session.data?.backendTokens.accessToken}`,
+                'content-type': 'application/json',
+                'Content-Type': 'application/json',
+            },
+            data: formData,
+        };
+
+        try {
+            await axios.request(options);
+            mutate([url, session.data?.backendTokens.accessToken]);
+            mutateProgress();
+            router.refresh();
+            //console.log(response);
         } catch {
             toast.error('Something went error!');
         } finally {
@@ -164,7 +220,7 @@ const CodeModal: React.FC<QuizModalProps> = ({
                                     >
                                         <CodeInputEditor
                                             language={item.language}
-                                            defaultValue={item.default_content}
+                                            defaultValue={codeProgress[index]?.answer || item.default_content}
                                         />
                                     </TabsContent>
                                 ))}
@@ -174,13 +230,14 @@ const CodeModal: React.FC<QuizModalProps> = ({
                             <OutputWindow outputDetails={outputDetails} />
                             <div className="flex row gap-2 flex-row-reverse">
                                 <Button
+                                    onClick={handleSubmit}
                                     disabled={processing}
                                     variant={'success'}
                                 >
                                     Submit
                                 </Button>
                                 <Button
-                                    onClick={hanldeComplie}
+                                    onClick={handleComplie}
                                     disabled={processing}
                                     variant={'outline'}
                                 >

@@ -121,11 +121,16 @@ const CourseAccessDetail = ({
                                             {
                                                 content.exercise?.type === 'CODE' && (
                                                     <CodeModal 
+                                                        content_current={content}
                                                         isValidating={isValidating}
                                                         data={content.exercise}
                                                         isLocked={isLocked}
                                                         mutateProgress={mutate}
                                                         course_slug={params.slug}
+                                                        next_content_token={
+                                                            contentlist[indexLesson + 1].token
+                                                        }
+                                                        codeProgress={content?.userProgress[0]?.userProgressCode || []}
                                                     />
                                                 )
                                             }
