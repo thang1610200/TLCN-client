@@ -152,7 +152,8 @@ export const FileForm = ({
                         course_slug={course_slug}
                         exercise_token={exercise_token} 
                         mutate={mutate}
-                        initialData={initialData.file}
+                        initialData={initialData}
+                        fileType='SOLUTION'
                     />
                 )
             )}

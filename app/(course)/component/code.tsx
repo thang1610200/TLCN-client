@@ -18,8 +18,7 @@ import qs from 'query-string';
 import Split from 'react-split';
 import OutputWindow from './output-code';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { CodeInputEditor } from './code-input-editor';
-import { useComplie } from '@/app/hook/use-editor-complie';
+import { Editor } from '@monaco-editor/react';
 
 interface QuizModalProps {
     data?: Exercise;
@@ -30,6 +29,10 @@ interface QuizModalProps {
     content_current: Content;
     next_content_token: string;
     codeProgress: UserProgressCode[];
+}
+
+interface CodeProps {
+    value: string;
 }
 
 const CodeModal: React.FC<QuizModalProps> = ({
@@ -44,92 +47,103 @@ const CodeModal: React.FC<QuizModalProps> = ({
 }) => {
     const session = useSession();
     const router = useRouter();
-    const { editorCode, valueCode } = useComplie();
     const [processing, setProcessing] = useState(false);
-    const [outputDetails, setOutputDetails] = useState(null);
+    const [outputDetails, setOutputDetails] = useState('');
+    const [inputValues, setInputValues] = useState<CodeProps[]>([]);
 
     useEffect(() => {
-        if (!data?.code) return;
-        return editorCode(codeProgress[0]?.answer || data.code.file[0].default_content);
-    }, [data?.code]);
-
-    const checkStatus = async (token: string) => {
-        const options = {
-            method: 'GET',
-            url: process.env.NEXT_PUBLIC_RAPID_API_URL_SUBMISSION + '/' + token,
-            params: { base64_encoded: 'true', fields: '*' },
-            headers: {
-                'X-RapidAPI-Host': process.env.NEXT_PUBLIC_RAPID_API_HOST,
-                'X-RapidAPI-Key': process.env.NEXT_PUBLIC_RAPID_API_KEY,
-            },
-        };
-        try {
-            let response = await axios.request(options);
-            let statusId = response.data.status?.id;
-
-            // Processed - we have a result
-            if (statusId === 1 || statusId === 2) {
-                // still processing
-                setTimeout(() => {
-                    checkStatus(token);
-                }, 2000);
-                return;
-            } else {
-                setProcessing(false);
-                toast.success(`Compiled Successfully!`, {
-                    position: 'top-right',
-                });
-                setOutputDetails(response.data);
-                return;
-            }
-        } catch {
-            setProcessing(false);
+        if(content_current.userProgress[0].isCompleted) {
+            setOutputDetails('3');
         }
-    };
 
-    const handleComplie = async () => {
-        setProcessing(true);
+        const initialInputValues = data?.code?.file.map((item, index) => {
+            const data: CodeProps = {
+                value: codeProgress[index]?.answer || item.default_content
+            };
 
-        const languageCode = LanguageOptions.find((item) => {
-            return item.value === data?.code.labCode.language[0];
+            return data;
         });
 
-        const formData = {
-            language_id: languageCode?.id,
-            source_code: btoa(valueCode),
-            //stdin: btoa(),
-        };
+        setInputValues(initialInputValues || []);
+    }, []);
+    //     const options = {
+    //         method: 'GET',
+    //         url: process.env.NEXT_PUBLIC_RAPID_API_URL_SUBMISSION + '/' + token,
+    //         params: { base64_encoded: 'true', fields: '*' },
+    //         headers: {
+    //             'X-RapidAPI-Host': process.env.NEXT_PUBLIC_RAPID_API_HOST,
+    //             'X-RapidAPI-Key': process.env.NEXT_PUBLIC_RAPID_API_KEY,
+    //         },
+    //     };
+    //     try {
+    //         let response = await axios.request(options);
+    //         let statusId = response.data.status?.id;
 
-        const options = {
-            method: 'POST',
-            url: process.env.NEXT_PUBLIC_RAPID_API_URL_SUBMISSION,
-            params: { base64_encoded: 'true', fields: '*' },
-            headers: {
-                'content-type': 'application/json',
-                'Content-Type': 'application/json',
-                'X-RapidAPI-Host': process.env.NEXT_PUBLIC_RAPID_API_HOST,
-                'X-RapidAPI-Key': process.env.NEXT_PUBLIC_RAPID_API_KEY,
-            },
-            data: formData,
-        };
+    //         // Processed - we have a result
+    //         if (statusId === 1 || statusId === 2) {
+    //             // still processing
+    //             setTimeout(() => {
+    //                 checkStatus(token);
+    //             }, 2000);
+    //             return;
+    //         } else {
+    //             setProcessing(false);
+    //             toast.success(`Compiled Successfully!`, {
+    //                 position: 'top-right',
+    //             });
+    //             setOutputDetails(response.data);
+    //             return;
+    //         }
+    //     } catch {
+    //         setProcessing(false);
+    //     }
+    // };
 
-        try {
-            const response = await axios.request(options);
-            const token = response.data.token;
-            checkStatus(token);
-        } catch {
-            toast.error('Something went error!');
-        } finally {
-            setProcessing(false);
-        }
-    };
+    // const handleComplie = async () => {
+    //     setProcessing(true);
+
+    //     const languageCode = LanguageOptions.find((item) => {
+    //         return item.value === data?.code.labCode.language[0];
+    //     });
+
+    //     const formData = {
+    //         language_id: languageCode?.id,
+    //         source_code: btoa(valueCode),
+    //         //stdin: btoa(),
+    //     };
+
+    //     const options = {
+    //         method: 'POST',
+    //         url: process.env.NEXT_PUBLIC_RAPID_API_URL_SUBMISSION,
+    //         params: { base64_encoded: 'true', fields: '*' },
+    //         headers: {
+    //             'content-type': 'application/json',
+    //             'Content-Type': 'application/json',
+    //             'X-RapidAPI-Host': process.env.NEXT_PUBLIC_RAPID_API_HOST,
+    //             'X-RapidAPI-Key': process.env.NEXT_PUBLIC_RAPID_API_KEY,
+    //         },
+    //         data: formData,
+    //     };
+
+    //     try {
+    //         const response = await axios.request(options);
+    //         const token = response.data.token;
+    //         checkStatus(token);
+    //     } catch {
+    //         toast.error('Something went error!');
+    //     } finally {
+    //         setProcessing(false);
+    //     }
+    // };
 
     const handleSubmit = async () => {
         setProcessing(true);
 
-        const languageCode = LanguageOptions.find((item) => {
-            return item.value === data?.code.labCode.language[0];
-        });
+        const codeFile: string[] = [];
+
+        inputValues.forEach((item) => {
+            codeFile.push(btoa(item.value));
+        })
 
         const url = qs.stringifyUrl({
             url: `${BACKEND_URL}/course/detail-course-auth`,
@@ -140,12 +154,12 @@ const CodeModal: React.FC<QuizModalProps> = ({
         });
 
         const formData = {
-            language_id: languageCode?.id,
-            code: valueCode,
-            email: session.data?.user.email,
+            code_token: data?.code.token,
             exercise_token: data?.token,
             course_slug,
             content_token: content_current.token,
+            email: session.data?.user.email,
+            codeFile,
             next_content_token
         };
 
@@ -161,11 +175,16 @@ const CodeModal: React.FC<QuizModalProps> = ({
         };
 
         try {
-            await axios.request(options);
+            const response = await axios.request(options);
             mutate([url, session.data?.backendTokens.accessToken]);
             mutateProgress();
             router.refresh();
-            //console.log(response);
+            if(response.data) {
+                setOutputDetails('2')
+            }
+            else {
+                setOutputDetails('1');
+            }
         } catch {
             toast.error('Something went error!');
         } finally {
@@ -218,9 +237,17 @@ const CodeModal: React.FC<QuizModalProps> = ({
                                         value={item.id}
                                         className="aspect-video"
                                     >
-                                        <CodeInputEditor
+                                        <Editor
+                                            value={inputValues[index]?.value}
+                                            height="100px"
                                             language={item.language}
-                                            defaultValue={codeProgress[index]?.answer || item.default_content}
+                                            theme="oceanic-next"
+                                            defaultValue={item.default_content}
+                                            onChange={(data: any) => {
+                                                const updatedInputValues = [...inputValues];
+                                                updatedInputValues[index].value = data;
+                                                setInputValues(updatedInputValues);
+                                            }}
                                         />
                                     </TabsContent>
                                 ))}
@@ -236,13 +263,13 @@ const CodeModal: React.FC<QuizModalProps> = ({
                                 >
                                     Submit
                                 </Button>
-                                <Button
+                                {/* <Button
                                     onClick={handleComplie}
                                     disabled={processing}
                                     variant={'outline'}
                                 >
                                     Run
-                                </Button>
+                                </Button> */}
                             </div>
                         </div>
                     </Split>

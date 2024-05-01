@@ -2,41 +2,47 @@ import { Button } from '@/components/ui/button';
 import React from 'react';
 
 interface OutputWindowProps {
-    outputDetails?: any;
+    outputDetails: string;
 }
 
 const OutputWindow: React.FC<OutputWindowProps> = ({ outputDetails }) => {
     const getOutput = () => {
-        let statusId = outputDetails?.status?.id;
+        let statusId = outputDetails;
 
-        if (statusId === 6) {
+        if (statusId === '1') {
             // compilation error
             return (
                 <pre className="px-2 py-1 font-normal text-xs text-red-500">
-                    {atob(outputDetails?.compile_output)}
+                    Fail
                 </pre>
             );
-        } else if (statusId === 3) {
+        } else if (statusId === '2') {
             return (
                 <pre className="px-2 py-1 font-normal text-xs text-green-500">
-                    {atob(outputDetails.stdout) !== null
-                        ? `${atob(outputDetails.stdout)}`
-                        : null}
-                </pre>
-            );
-        } else if (statusId === 5) {
-            return (
-                <pre className="px-2 py-1 font-normal text-xs text-red-500">
-                    {`Time Limit Exceeded`}
-                </pre>
-            );
-        } else {
-            return (
-                <pre className="px-2 py-1 font-normal text-xs text-red-500">
-                    {atob(outputDetails?.stderr)}
+                    Success
                 </pre>
             );
         }
+        else if (statusId === '3') {
+            return (
+                <pre className="px-2 py-1 font-normal text-xs text-green-500">
+                    Complete exercise
+                </pre>
+            );
+        }
+        // } else if (statusId === 5) {
+        //     return (
+        //         <pre className="px-2 py-1 font-normal text-xs text-red-500">
+        //             {`Time Limit Exceeded`}
+        //         </pre>
+        //     );
+        // } else {
+        //     return (
+        //         <pre className="px-2 py-1 font-normal text-xs text-red-500">
+        //             {atob(outputDetails?.stderr)}
+        //         </pre>
+        //     );
+        // }
     };
     return (
         <>

@@ -38,6 +38,7 @@ import { cn } from '@/lib/utils';
 import { Check, ChevronsUpDown } from 'lucide-react';
 import { KeyedMutator } from 'swr';
 import { find } from 'lodash';
+import LoadingGenerateModal from '@/components/modal/loading-generate-modal';
 
 const GenerateSubtitleSchema = z.object({
     language: z.string(),
@@ -59,6 +60,7 @@ export default function GenerateSubtitleModal({
     course_slug,
 }: GenerateSubtitleModalProps) {
     const [isOpen, setIsOpen] = useState(false);
+    const [isLoading, setIsLoading] = useState<boolean>(false);
     const router = useRouter();
     const session = useSession();
 
@@ -72,6 +74,8 @@ export default function GenerateSubtitleModal({
 
     function onSubmit(values: GenerateSubtitleFormValues) {
         const item = find(options,{language_code: values.language});
+
+        setIsLoading(true);
 
         axios
             .post(
@@ -99,6 +103,9 @@ export default function GenerateSubtitleModal({
             })
             .catch((e) => {
                 toast.error('Generate failed!');
+            })
+            .finally(() => {
+                setIsLoading(true);
             });
     }
 
@@ -106,6 +113,12 @@ export default function GenerateSubtitleModal({
         form.reset();
         setIsOpen(false);
     };
+
+    if(isLoading){
+        return (
+            <LoadingGenerateModal />
+        )
+    }
 
     return (
         <div>

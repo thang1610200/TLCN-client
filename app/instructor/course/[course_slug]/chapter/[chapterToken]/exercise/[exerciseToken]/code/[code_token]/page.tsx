@@ -11,8 +11,8 @@ import { useDetailCode, useLanguageCode } from '@/app/hook/use-code';
 import { CodeQuestionForm } from './components/code-question-form';
 import { CodeLabForm } from './components/code-lab-form';
 import { FileForm } from './components/file-form';
-import { TestCaseForm } from './components/test-case-form';
-import { FunctionForm } from './components/function-form';
+import { EvaluationFileForm } from './components/test-file';
+import { PreviewForm } from './components/preview-form';
 
 const CodeDetailPage = ({
     params,
@@ -62,7 +62,7 @@ const CodeDetailPage = ({
                             </h1>
                         </div>
                     </div>
-                    <div className="grid grid-cols-1 gap-6 mt-16 md:grid-cols-3">
+                    <div className="grid grid-cols-1 gap-6 mt-16 md:grid-cols-2">
                         <div>
                             <div className="flex items-center gap-x-2">
                                 <IconBadge icon={LayoutDashboard} />
@@ -88,32 +88,26 @@ const CodeDetailPage = ({
                                 language={language}
                             />
 
-                            <TestCaseForm
+                            <div className="flex items-center gap-x-2 mt-12">
+                                <IconBadge icon={Eye} />
+                                <h2 className="text-xl">
+                                Preview
+                                </h2>
+                            </div>
+                            <PreviewForm
                                 code_token={params.code_token}
                                 chapter_token={params.chapterToken}
                                 course_slug={params.course_slug}
                                 exercise_token={params.exerciseToken}
-                                initialData={data?.testcase || []}
+                                initialData={data}
                                 mutate={mutate} 
                             />
                         </div>
-                        <div className="space-y-6 col-span-2">
+                        <div className="space-y-6">
                             <div className="flex items-center gap-x-2 ">
                                 <IconBadge icon={FileCode} />
                                 <h2 className="text-xl">File</h2>
                             </div>
-                            {
-                                data?.labCode.lab !== 'WebDev' && (
-                                    <FunctionForm
-                                        initialData={data}
-                                        code_token={params.code_token}
-                                        chapter_token={params.chapterToken}
-                                        course_slug={params.course_slug}
-                                        exercise_token={params.exerciseToken}
-                                        mutate={mutate} 
-                                    />
-                                )
-                            }
                             <FileForm 
                                 code_token={params.code_token}
                                 chapter_token={params.chapterToken}
@@ -121,7 +115,16 @@ const CodeDetailPage = ({
                                 exercise_token={params.exerciseToken}
                                 initialData={data}
                                 mutate={mutate} 
-                                languageLab={data?.labCode.language || []}
+                                languageLab={data?.labCode?.language || []}
+                            />
+
+                            <EvaluationFileForm 
+                                code_token={params.code_token}
+                                chapter_token={params.chapterToken}
+                                course_slug={params.course_slug}
+                                exercise_token={params.exerciseToken}
+                                initialData={data}
+                                mutate={mutate} 
                             />
                         </div>
                     </div>

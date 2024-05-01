@@ -2,7 +2,7 @@
 const nextConfig = {
     images: {
         domains: [
-            'tlcn-upload.s3.ap-southeast-1.amazonaws.com',
+            'tlcn-uploads.s3.ap-southeast-1.amazonaws.com',
           //  'ute.tlcn-server.store',
             'ui-avatars.com'
         ],

@@ -112,7 +112,7 @@ const CourseAccessDetail = ({
                                                         course_slug={params.slug}
                                                         mutateProgress={mutate}
                                                         next_content_token={
-                                                            contentlist[indexLesson + 1].token
+                                                            contentlist[indexLesson + 1]?.token
                                                         }
                                                         quiz={content?.userProgress[0]?.userProgressQuiz}
                                                     />
@@ -128,7 +128,7 @@ const CourseAccessDetail = ({
                                                         mutateProgress={mutate}
                                                         course_slug={params.slug}
                                                         next_content_token={
-                                                            contentlist[indexLesson + 1].token
+                                                            contentlist[indexLesson + 1]?.token
                                                         }
                                                         codeProgress={content?.userProgress[0]?.userProgressCode || []}
                                                     />

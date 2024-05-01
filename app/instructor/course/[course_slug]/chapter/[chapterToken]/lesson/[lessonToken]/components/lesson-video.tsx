@@ -163,12 +163,16 @@ export const LessonVideoForm = ({
                                 }}
                             />
                         }
-                        <GenerateSubtitleModal
-                            course_slug={course_slug}
-                            chapter_token={chapter_token}
-                            lesson_token={lesson_token}
-                            mutate={mutate} 
-                        />
+                        {
+                            initialData?.isCompleteVideo && (
+                                <GenerateSubtitleModal
+                                    course_slug={course_slug}
+                                    chapter_token={chapter_token}
+                                    lesson_token={lesson_token}
+                                    mutate={mutate} 
+                                />
+                            )
+                        }
                     </div>
                 ))}
             {isEditing && (

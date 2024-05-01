@@ -103,6 +103,7 @@ export enum LanguageType {
     Typescript = 'typescript',
     Css = 'css',
     Java = 'java',
+    Php = 'php'
 }
 
 export enum MimeFileType {
@@ -114,6 +115,7 @@ export enum MimeFileType {
     c = 'c',
     java = 'java',
     python = 'py',
+    php = 'php'
 }
 
 export interface Content {
@@ -156,8 +158,17 @@ export interface FileCode {
     fileName: string;
     language: LanguageType;
     mime: MimeFileType;
-    functionName: string;
     default_content: string;
+    codeId: string;
+    code: Code;
+}
+
+export interface FileTest {
+    id: string;
+    fileName: string;
+    language: LanguageType;
+    mime: MimeFileType;
+    content: string;
     codeId: string;
     code: Code;
 }
@@ -171,16 +182,18 @@ export interface Code {
     exerciseId: string;
     exercise: Exercise;
     file: FileCode[];
-    testcase: TestCase[];
+    fileTest: FileTest;
 }
 
-export interface TestCase {
-    id: string;
-    input: string;
-    output: string;
-    codeId: string;
-    code: Code;
-}
+
+
+// export interface TestCase {
+//     id: string;
+//     input: string;
+//     output: string;
+//     codeId: string;
+//     code: Code;
+// }
 
 export interface Quizz {
     id: string;

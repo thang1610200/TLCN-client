@@ -7,6 +7,7 @@ import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import toast from 'react-hot-toast';
 import { KeyedMutator } from 'swr';
+import qs from 'query-string';
 
 interface EditorFormProps {
     language: string;
@@ -17,6 +18,7 @@ interface EditorFormProps {
     course_slug: string;
     chapter_token: string;
     fileId: string;
+    fileType: 'SOLUTION' | 'EVALUATION'
 }
 
 export const EditorForm: React.FC<EditorFormProps> = ({
@@ -27,7 +29,8 @@ export const EditorForm: React.FC<EditorFormProps> = ({
     mutate,
     course_slug,
     chapter_token,
-    fileId
+    fileId,
+    fileType
 }) => {
     const session = useSession();
     const router = useRouter();
@@ -38,10 +41,19 @@ export const EditorForm: React.FC<EditorFormProps> = ({
         setValue(data);
     }
 
-    const onSubmit = async () => {
+    const onSave = async () => {
         setIsLoading(true);
+        let url: string = '';
+
+        if(fileType === 'SOLUTION') {
+            url = `${BACKEND_URL}/code/update-file-code`;
+        }
+        else if(fileType === 'EVALUATION') {
+            url = `${BACKEND_URL}/code/update-file-test`
+        }
+
         try {
-            await axios.patch(`${BACKEND_URL}/code/update-file-code`, {
+            await axios.patch(url, {
                 code_token,
                 exercise_token,
                 email: session.data?.user.email,
@@ -68,6 +80,41 @@ export const EditorForm: React.FC<EditorFormProps> = ({
         }
     }
 
+    const onDelete = async () => {
+        setIsLoading(true);
+
+        const url = qs.stringifyUrl({
+            url: `${BACKEND_URL}/code/delete-file`,
+            query: {
+                code_token,
+                exercise_token,
+                email: session.data?.user.email,
+                chapter_token,
+                course_slug,
+                fileId,
+            }
+        });
+
+        try {
+            await axios.delete(url,{
+                headers: {
+                    Authorization: `Bearer ${session.data?.backendTokens.accessToken}`,
+                    'Content-Type': 'application/json',
+                },
+            });
+
+            toast.success('File deleted');
+            mutate();
+            router.refresh();
+        }
+        catch {
+            toast.error('Something went wrong');
+        }
+        finally {
+            setIsLoading(false);
+        }
+    }
+
     return (
         <div className="space-y-4 mt-4">
             <Editor
@@ -79,7 +126,14 @@ export const EditorForm: React.FC<EditorFormProps> = ({
                 onChange={handleEditorChange}
             />
             <div className="flex items-center gap-x-2">
-                <Button disabled={isLoading} type="button" onClick={onSubmit}>
+                {
+                    fileType === 'SOLUTION' && (
+                        <Button disabled={isLoading} type="button" variant={'outline'} onClick={onDelete}>
+                            Delete
+                        </Button>
+                    )
+                }
+                <Button disabled={isLoading} type="button" onClick={onSave}>
                     Save
                 </Button>
             </div>
