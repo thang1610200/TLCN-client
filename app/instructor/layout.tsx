@@ -9,9 +9,9 @@ export default function InstructorLayout({
 }) {
     return (
         <>
-            <div className="h-full">
+            <div className="w-screen h-full">
                 <Navbar />
-                <div className="border-t pt-14">
+                <div className="border-t">
                     <div className="bg-background">
                         <div className="grid lg:grid-cols-5">
                             <Sidebar />

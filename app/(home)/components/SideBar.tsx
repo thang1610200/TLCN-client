@@ -5,19 +5,40 @@ import { Separator } from '@/components/ui/separator'
 import { Bell, ChevronUpIcon, Home, LineChart, Menu, Package, Package2, ShoppingCart, Users, X } from 'lucide-react'
 import Link from 'next/link'
 import React, { useState } from 'react'
-import { CheckboxReactHookFormMultiple } from './filter'
+
 import { cn } from '@/lib/utils'
 import { motion, AnimatePresence, stagger } from "framer-motion"
 import { Transition } from '@headlessui/react'
 
 
-const items = ["Studio", "Projects", "Products", "About us", "Contact"] as const
+const items : {href: string, label: string}[] = [
+    {
+        href: "/",
+        label: "Trang chính",
+    },
+    {
+        href: "/about",
+        label: "Thông tin",
+    },
+    {
+        href: "#",
+        label: "Studio", 
+    },
+    {
+        href: "#",
+        label: "Projects",
+    },
+    {
+        href: "#",
+        label: "Products",
+    }
+]
 
 export default function SideBar() {
     const [isOpen, setIsOpen] = useState(false)
     const animationVariants = {
         initial: {
-            x:"-20vw",
+            x: "-20vw",
             opacity: 0,
             scale: 0.3,
             filter: "blur(10px)"
@@ -38,13 +59,13 @@ export default function SideBar() {
 
     return (
         <>
-            <Button variant="outline" size="icon" className="absolute top-0 left-0 m-8 w-14 h-14" onClick={() => (setIsOpen(!isOpen))}>
+            <Button variant="ghost" size="icon" className="m-8 w-14 h-14" onClick={() => (setIsOpen(!isOpen))}>
                 <Menu className="w-8 h-8" />
                 <span className="sr-only">Toggle notifications</span>
             </Button>
             <AnimatePresence>
                 {isOpen && (
-                    <motion.div  initial={{ x: "-20vw" }} animate={{ x: 0 }} exit={{ x: "-20vw" }} transition={{ duration: 1, ease: "easeInOut" }} className="absolute top-0 left-0 z-50 flex flex-col h-full text-white bg-black border-r-4 w-72">
+                    <motion.div initial={{ x: "-20vw" }} animate={{ x: 0 }} exit={{ x: "-20vw" }} transition={{ duration: 1, ease: "easeInOut" }} className="absolute z-50 flex flex-col h-screen text-white bg-black border-r-4 -top-4 -left-6 w-72">
                         <Button variant="ghost" size="icon" className="m-8 w-14 h-14" onClick={() => (setIsOpen(!isOpen))}>
                             <X className="w-8 h-8" />
                             <span className="sr-only">Toggle notifications</span>
@@ -54,17 +75,17 @@ export default function SideBar() {
                                 <div className="flex-1">
                                     <nav className="grid items-start gap-6 px-2 text-3xl font-medium tracking-wider font-beauSans lg:px-4">
                                         {items.map((item, index) => (
-                                            <motion.div custom={index} variants={animationVariants} initial="initial" animate="animate" key={item} className="">
+                                            <motion.div custom={index} variants={animationVariants} initial="initial" animate="animate" key={item.label} className="">
                                                 <Link
 
-                                                    href="#"
+                                                    href={item.href}
                                                     className="flex items-center gap-3 px-3 py-2 text-white transition-all rounded-lg"
                                                 >
-                                                    {item}
+                                                    {item.label}
                                                 </Link>
                                             </motion.div>
                                         ))}
-                                        
+
                                     </nav>
                                 </div>
                             </div >

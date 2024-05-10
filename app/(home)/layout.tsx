@@ -12,8 +12,7 @@ export default function HomeLayout({
         <>
             <Navbar />
             <div className='flex items-center justify-center w-screen h-screen '>
-                <SideBar/>
-                <div className="flex items-center justify-center w-full h-full pt-20">{children}</div>
+                <div className="flex items-center justify-center w-full h-full ">{children}</div>
             </div>
         </>
     );

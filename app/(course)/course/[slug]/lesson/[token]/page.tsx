@@ -16,12 +16,9 @@ import { useCallback, useMemo } from 'react';
 import VideoReview from '@/app/(course)/component/video-review';
 import QuizModal from '@/app/(course)/component/quiz';
 import CodeModal from '@/app/(course)/component/code';
+import BentoGridCoursePage from './lesson-bento-grid';
 
-const CourseAccessDetail = ({
-    params,
-}: {
-    params: { slug: string; token: string };
-}) => {
+export default function CourseAccessDetail({params}: {params: { slug: string; token: string }}) {
     const session = useSession();
     const router = useRouter();
     const { data, isLoading, error } = useCourseDetailAuth(
@@ -57,7 +54,7 @@ const CourseAccessDetail = ({
         index = index === contentlist.length - 1 ? 0 : index + 1;
 
         router.push(`/course/${params.slug}/lesson/${contentlist[index].token}`);
-    }, [params.slug, contentlist, router]);
+    }, [params.slug, contentlist, router, params.token]);
 
     const onPrevLesson = useCallback(() => {
         let index =
@@ -68,7 +65,7 @@ const CourseAccessDetail = ({
         index = index === 0 ? contentlist.length - 1 : index - 1;
 
         router.push(`/course/${params.slug}/lesson/${contentlist[index].token}`);
-    }, [params.slug, contentlist, router]);
+    }, [params.slug, contentlist, router, params.token]);
 
     if (isLoading || loadingContent) {
         return <LoadingModal />;
@@ -79,8 +76,9 @@ const CourseAccessDetail = ({
     }
 
     return (
-        <div>
-            <div className="hidden md:block">
+        <div className='w-screen h-full dark:bg-black bg-white  dark:bg-dot-white/[0.2] bg-dot-black/[0.2]'>
+            <BentoGridCoursePage params={params}/>
+            {/* <div className="hidden md:block">
                 <div className="border-t">
                     <div className="bg-background">
                         <div className="grid grid-cols-3 mt-4">
@@ -93,7 +91,7 @@ const CourseAccessDetail = ({
                                 )}
                                 <div>
                                     { content?.type === "LESSON"  && (
-                                        <div className="relative aspect-video border rounded-md bg-slate-100 mb-4">
+                                        <div className="relative mb-4 border rounded-md aspect-video bg-slate-100">
                                             <VideoReview
                                                 data={content.lesson}
                                                 isLocked={isLocked}
@@ -101,7 +99,7 @@ const CourseAccessDetail = ({
                                         </div>
                                     )}
                                     { content?.type === "EXERCISE"  && (
-                                        <div className="relative aspect-video border rounded-md mb-4">
+                                        <div className="relative mb-4 border rounded-md aspect-video">
                                             {
                                                 content.exercise?.type === 'QUIZZ' && (
                                                     <QuizModal
@@ -147,8 +145,8 @@ const CourseAccessDetail = ({
                                         <ArrowRight className="ml-2" />
                                     </Button>
                                 </div>
-                                <div className="border rounded-md p-6 flex flex-col lg:flex-row items-center justify-between mt-6">
-                                    <h2 className="text-lg lg:text-2xl font-semibold mb-2 lg:mb-0 lg:text-center">
+                                <div className="flex flex-col items-center justify-between p-6 mt-6 border rounded-md lg:flex-row">
+                                    <h2 className="mb-2 text-lg font-semibold lg:text-2xl lg:mb-0 lg:text-center">
                                         {content?.lesson?.title || content?.exercise?.title}
                                     </h2>
                                     {!isLocked && (
@@ -188,9 +186,7 @@ const CourseAccessDetail = ({
                         </div>
                     </div>
                 </div>
-            </div>
+            </div> */}
         </div>
     );
 };
-
-export default CourseAccessDetail;
