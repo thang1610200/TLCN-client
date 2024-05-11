@@ -1,44 +1,126 @@
 "use client"
-
-import Link from 'next/link';
-
-import {
-    NavigationMenu,
-    NavigationMenuList,
-    NavigationMenuItem,
-    NavigationMenuLink,
-
-} from '@/components/ui/navigation-menu';
-
-import DetailsDialog from '../detail-dialog';
-import LoginButton from './LoginButton';
-import RoleUser from './RoleUser';
-import Notification from './Notification';
-import SideBar from '@/app/(home)/components/SideBar';
-
+import Link from 'next/link'
+import React from 'react'
+import { AnimatePresence, MotionValue, motion, useMotionValue } from "framer-motion";
+import LoginButton from '@/components/navigation-bar/LoginButton';
+import RoleUser from '@/components/navigation-bar/RoleUser';
+import Notification from '@/components/navigation-bar/Notification';
+import SideBar from './SideBar';
+import { useSession } from 'next-auth/react';
+import RegisterInsModal from '../Reg-Ins-Modal';
 
 export const Navbar = () => {
-
     return (
-        <div>
-            <NavigationMenu className=" z-10 flex items-center justify-between w-[calc(100%_-_2rem)] h-16 m-4 px-2 space-x-2 text-center bg-white max-w-none bg-opacity-25  border rounded-[10px] border-solid border-[rgba(_255,255,255,0.18_)]">
-                <SideBar />
-                <h2 className="text-xl font-bold md:text-3xl">
-                    LEARNER
-                </h2>
-                {/* <NavigationMenuList className="flex space-x-8 ">
-                    <NavigationMenuItem>
-                        <DetailsDialog />
-                    </NavigationMenuItem>
-                </NavigationMenuList> */}
-                <div className="flex items-center justify-center gap-4 px-4">
-                    <RoleUser />
-                    {/* <Notification/> */}
+        <div className='sticky w-full h-20 border-2'>
+            {/* <SideBar/> */}
+            <div className="container flex items-center justify-between w-full h-full ">
+                <div className="relative flex items-center justify-center w-fit h-fit">
+                    <h2 className="z-10 text-xl font-bold drop-shadow-2xl md:text-4xl">
+                        LEARNER
+                    </h2>
+                </div>
+                <HomeMenu />
+                <div className="flex items-center justify-center gap-4">
+                    {/* <RoleUser /> */}
+                    {/* <Notification /> */}
                     <div className="flex justify-center space-x-2 cursor-pointer ">
                         <LoginButton />
                     </div>
                 </div>
-            </NavigationMenu>
+            </div>
         </div>
-    );
+    )
 }
+
+
+function HomeMenu() {
+    const links = [
+        {
+            path: "/",
+            name: "Trang chính"
+        },
+        {
+            path: "/about",
+            name: "Thông tin"
+        },
+        {
+            path: "/thread",
+            name: "Phòng học tập"
+        },
+    ]
+    const session = useSession();
+    const role = session.data?.user.role;
+    const instructor = {
+        path: "/instructor/course",
+        name: "Giảng viên"
+    }
+    return (
+        <>
+            <nav className='p-8'>
+                <ul className='flex gap-12'>
+                    <AnimatePresence>
+                        {links.map((link) => {
+                            return (
+                                <MoveHomeMenu key={link.name} data={link} />
+                            )
+                        })}
+                        {role === 'LEARNER' && session.status === "authenticated" &&
+                            <div className='relative flex items-center justify-end '>
+                                <RegisterInsModal />
+                            </div>
+                        }
+                        {role === "INSTRUCTOR" && session.status === "authenticated" &&
+                            <MoveHomeMenu data={instructor} />
+                        }
+                    </AnimatePresence>
+                </ul>
+            </nav>
+        </>
+    )
+}
+
+function MoveHomeMenu(link: any) {
+    const MotionLink = motion(Link)
+
+    const mapRange = (
+        inputLower: number,
+        inputUpper: number,
+        outputLower: number,
+        outputUpper: number
+    ) => {
+        const INPUT_RANGE = inputUpper - inputLower
+        const OUTPUT_RANGE = outputUpper - outputLower
+
+        return (value: number) => outputLower + (((value - inputLower) / INPUT_RANGE) * OUTPUT_RANGE || 0)
+    }
+
+    const setTransform = (item: HTMLElement & EventTarget, event: React.PointerEvent, x: MotionValue, y: MotionValue) => {
+        const bounds = item.getBoundingClientRect();
+        const relativeX = event.clientX - bounds.left;
+        const relativeY = event.clientY - bounds.top;
+        const xRange = mapRange(0, bounds.width, -1, 1)(relativeX)
+        const yRange = mapRange(0, bounds.height, -1, 1)(relativeY)
+        x.set(xRange * 10)
+        y.set(yRange * 10)
+    }
+
+    const x = useMotionValue(0);
+    const y = useMotionValue(0);
+    return <>
+        <motion.li onPointerMove={(event) => {
+            const item = event.currentTarget;
+            setTransform(item, event, x, y)
+        }}
+            key={link.data.path}
+            onPointerLeave={(event) => {
+                x.set(0)
+                y.set(0)
+            }}
+            style={{ x, y }}>
+            <MotionLink href={link.data.path} className='px-4 py-2 font-medium transition-all duration-500 ease-out rounded-md hover:text-slate-100 hover:bg-slate-950'>
+                <motion.span>{link.data.name}</motion.span>
+            </MotionLink>
+        </motion.li>
+    </>
+}
+

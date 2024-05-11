@@ -54,18 +54,19 @@ export const CourseCard = ({
                         className="object-cover object-center aspect-video"
                         alt={title}
                         src={imageUrl}
+                        sizes="(max-width: 1200px) 13rem"
 
                     />
                     {/* <Image src="/images/learning.jpg" alt='image product' width={100} height={100} className='mix-blend-multiply' /> */}
                 </div>
-                <div className="flex flex-col">
-                    <div className="text-lg font-bold transition line-clamp-2 ">
+                <div className="flex flex-col ">
+                    <div className="text-xs font-bold transition lg:text-lg line-clamp-2 ">
                         {title}
                     </div>
-                    <div className="text-sm font-light line-clamp-2"> Description Reprehenderit dolore laboris aliqua sit non aliqua dolor.</div> {/*Thêm description */}
+                    <div className="text-xs font-light lg:text-sm line-clamp-2"> Description Reprehenderit dolore laboris aliqua sit non aliqua dolor.</div> {/*Thêm description */}
                     {/* <p className="text-xs text-muted-foreground">{category}</p> */}
-                    <p className="text-sm text-muted-foreground">Tác giả</p> {/*Thêm tác giả*/}
-                    <div className="flex items-center my-3 text-sm gap-x-5 md:text-xs">
+                    <p className="text-xs lg:text-smtext-muted-foreground">Tác giả</p> {/*Thêm tác giả*/}
+                    <div className="flex items-center my-3 text-xs lg:text-sm gap-x-5 ">
                         <div className="flex items-center gap-x-1 text-slate-500">
                             <IconBadge size="sm" icon={BookOpen} />
                             <span>

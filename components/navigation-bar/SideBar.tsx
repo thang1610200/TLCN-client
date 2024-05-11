@@ -21,12 +21,12 @@ const items : {href: string, label: string}[] = [
         label: "Thông tin",
     },
     {
-        href: "#",
-        label: "Studio", 
+        href: "/instructor/course",
+        label: "Giảng viên", 
     },
     {
-        href: "#",
-        label: "Projects",
+        href: "/thread",
+        label: "Phòng học tập",
     },
     {
         href: "#",
@@ -59,14 +59,14 @@ export default function SideBar() {
 
     return (
         <>
-            <Button variant="ghost" size="icon" className="m-8 w-14 h-14" onClick={() => (setIsOpen(!isOpen))}>
+            <Button variant="outline" size="icon" className="m-8 rounded-full w-14 h-14 " onClick={() => (setIsOpen(!isOpen))}>
                 <Menu className="w-8 h-8" />
                 <span className="sr-only">Toggle notifications</span>
             </Button>
             <AnimatePresence>
                 {isOpen && (
-                    <motion.div initial={{ x: "-20vw" }} animate={{ x: 0 }} exit={{ x: "-20vw" }} transition={{ duration: 1, ease: "easeInOut" }} className="absolute z-50 flex flex-col h-screen text-white bg-black border-r-4 -top-4 -left-6 w-72">
-                        <Button variant="ghost" size="icon" className="m-8 w-14 h-14" onClick={() => (setIsOpen(!isOpen))}>
+                    <motion.div initial={{ x: "-20rem" }} animate={{ x: 0 }} exit={{ x: "-20rem" }} transition={{ duration: 1, ease: "easeInOut" }} className="absolute z-50 flex flex-col h-screen text-white bg-black border-r-4 -top-4 -left-6 w-80">
+                        <Button variant="ghost" size="icon" className="m-8 rounded-full w-14 h-14" onClick={() => (setIsOpen(!isOpen))}>
                             <X className="w-8 h-8" />
                             <span className="sr-only">Toggle notifications</span>
                         </Button>
