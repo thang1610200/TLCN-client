@@ -30,6 +30,7 @@ const SearchInput = () => {
 
     return (
         <Input
+            autoFocus
             onChange={(e: React.ChangeEvent<HTMLInputElement>) => setValue(e.target.value)}
             onKeyDown={onSubmit}
             type="search"

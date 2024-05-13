@@ -17,7 +17,7 @@ const LoadingModal = () => {
           leaveFrom="opacity-100"
           leaveTo="opacity-0"
         >
-          <div 
+          <div autoFocus
             className="fixed inset-0 transition-opacity bg-gray-100 bg-opacity-50 "
           />
         </Transition.Child>
@@ -35,8 +35,8 @@ const LoadingModal = () => {
               leaveFrom="opacity-100 translate-y-0 sm:scale-100"
               leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
             >
-              <Dialog.Panel>
-                <ClipLoader  size={40} color="#0284c7" />
+              <Dialog.Panel >
+                <ClipLoader   size={40} color="#0284c7" />
               </Dialog.Panel>
             </Transition.Child>
           </div>
