@@ -23,6 +23,7 @@ import ResourcesLesson from '@/app/(course)/component/resources';
 import ReviewCourse from '@/app/(course)/component/review-course';
 import { Button } from '@/components/ui/button';
 import CourseProgressButton from '@/app/(course)/component/course-progress-button';
+import { Preview } from '@/components/preview';
 
 
 
@@ -116,8 +117,9 @@ export function MoreInformation({ data, params, contentlist, indexLesson, isLock
 
 		router.push(`/course/${params.slug}/lesson/${contentlist[index].token}`);
 	}, [params.slug, contentlist, router, params.token]);
+
 	if (data && content) {
-		if (content?.type === "LESSON") {
+		//if (content?.type === "LESSON") {
 			return (
 				<div className='w-full h-full max-w-full max-h-full'>
 					<div className="flex justify-between">
@@ -132,7 +134,14 @@ export function MoreInformation({ data, params, contentlist, indexLesson, isLock
 					</div>
 					<div className="flex flex-col items-center justify-between p-6 mt-6 border rounded-md lg:flex-row">
 						<h2 className="mb-2 text-lg font-semibold lg:text-2xl lg:mb-0 lg:text-center">
-							{content?.lesson?.title || content?.exercise?.title}
+							{!content?.exercise?.code && (
+								content?.lesson?.title || content?.exercise?.title
+							)}
+							{content?.exercise?.code && (
+								<Preview
+								value={content?.exercise?.code.question}
+								/>
+							)}
 						</h2>
 						{!isLocked && (
 							<div className="flex items-center space-x-2">
@@ -187,7 +196,7 @@ export function MoreInformation({ data, params, contentlist, indexLesson, isLock
 					</Tabs>
 				</div>
 			)
-		}
+		//}
 	}
 }
 
@@ -207,6 +216,11 @@ export function MainContent({ data, params, contentlist, indexLesson, isLocked }
 			params.token,
 			session.data?.user.email
 		);
+	
+	// if (loadingContent) {
+	// 	return <LoadingModal />;
+	// }
+	
 	if (isLocked) {
 		return (
 			<Banner

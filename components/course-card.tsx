@@ -38,9 +38,9 @@ export const CourseCard = ({
     }
 
     var sumTimeCourse = 0;
-    chapter?.map((item) => {
-        sumTimeCourse += sumBy(item.lessons,'duration');
-    })
+    // chapter?.map((item) => {
+    //     sumTimeCourse += sumBy(item.lessons,'duration');
+    // })
 
     return (
         <Link href={`/course/${slug}`}>

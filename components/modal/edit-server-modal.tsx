@@ -142,8 +142,19 @@ export const EditServerModal = () => {
     };
 
     useEffect(() => {
-        setValueForm();
-    },[server]);
+        if (server) {
+            form.setValue('name', server.name);
+            fetch(server.imageUrl)
+                .then(async response => {
+                    const blob = await response.blob()
+                    const file = new File([blob], 'image.jpg', {
+                        type: 'image/jpeg'
+                    })
+                    form.setValue('imageUrl', file);
+                });
+            setImage(server.imageUrl);
+        }
+    },[server, form]);
 
     const isLoading = form.formState.isSubmitting;
 

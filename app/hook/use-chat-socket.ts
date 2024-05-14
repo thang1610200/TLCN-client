@@ -39,5 +39,5 @@ export const useChatSocket = ({
             socket.off(addKey);
             socket.off(updateKey);
         };
-    }, [addKey, queryKey, socket, updateKey]);
+    }, [addKey, queryKey, socket, updateKey, mutate]);
 };

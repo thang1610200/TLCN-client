@@ -46,7 +46,7 @@ export const PreviewForm = ({
         });
 
         setInputValues(initialInputValues || []);
-    }, []);
+    }, [initialData?.file]);
 
     const onSubmit = async () => {
         setIsLoading(true);

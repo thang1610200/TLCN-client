@@ -33,6 +33,7 @@ const ACCEPTED_IMAGE_TYPES = [
     'application/pdf',
     'application/msword',
     'text/plain',
+    'application/x-zip-compressed'
 ];
 
 const formSchema = z.object({

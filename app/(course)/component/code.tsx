@@ -65,76 +65,7 @@ const CodeModal: React.FC<QuizModalProps> = ({
         });
 
         setInputValues(initialInputValues || []);
-    }, []);
-    //     const options = {
-    //         method: 'GET',
-    //         url: process.env.NEXT_PUBLIC_RAPID_API_URL_SUBMISSION + '/' + token,
-    //         params: { base64_encoded: 'true', fields: '*' },
-    //         headers: {
-    //             'X-RapidAPI-Host': process.env.NEXT_PUBLIC_RAPID_API_HOST,
-    //             'X-RapidAPI-Key': process.env.NEXT_PUBLIC_RAPID_API_KEY,
-    //         },
-    //     };
-    //     try {
-    //         let response = await axios.request(options);
-    //         let statusId = response.data.status?.id;
-
-    //         // Processed - we have a result
-    //         if (statusId === 1 || statusId === 2) {
-    //             // still processing
-    //             setTimeout(() => {
-    //                 checkStatus(token);
-    //             }, 2000);
-    //             return;
-    //         } else {
-    //             setProcessing(false);
-    //             toast.success(`Compiled Successfully!`, {
-    //                 position: 'top-right',
-    //             });
-    //             setOutputDetails(response.data);
-    //             return;
-    //         }
-    //     } catch {
-    //         setProcessing(false);
-    //     }
-    // };
-
-    // const handleComplie = async () => {
-    //     setProcessing(true);
-
-    //     const languageCode = LanguageOptions.find((item) => {
-    //         return item.value === data?.code.labCode.language[0];
-    //     });
-
-    //     const formData = {
-    //         language_id: languageCode?.id,
-    //         source_code: btoa(valueCode),
-    //         //stdin: btoa(),
-    //     };
-
-    //     const options = {
-    //         method: 'POST',
-    //         url: process.env.NEXT_PUBLIC_RAPID_API_URL_SUBMISSION,
-    //         params: { base64_encoded: 'true', fields: '*' },
-    //         headers: {
-    //             'content-type': 'application/json',
-    //             'Content-Type': 'application/json',
-    //             'X-RapidAPI-Host': process.env.NEXT_PUBLIC_RAPID_API_HOST,
-    //             'X-RapidAPI-Key': process.env.NEXT_PUBLIC_RAPID_API_KEY,
-    //         },
-    //         data: formData,
-    //     };
-
-    //     try {
-    //         const response = await axios.request(options);
-    //         const token = response.data.token;
-    //         checkStatus(token);
-    //     } catch {
-    //         toast.error('Something went error!');
-    //     } finally {
-    //         setProcessing(false);
-    //     }
-    // };
+    }, [codeProgress, data?.code?.file, content_current.userProgress]);
 
     const handleSubmit = async () => {
         setProcessing(true);

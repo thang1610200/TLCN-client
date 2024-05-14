@@ -28,7 +28,7 @@ const QuizReview = ({ initdata, user_progress_quiz }: QuizReviewProps) => {
             return;
         }
         setQuestionIndex((index) => index + 1);
-    }, [questionIndex, initdata?.quizz]);
+    }, [questionIndex, initdata?.quizz, review]);
 
     const currentQuestion = useMemo(() => {
         if (!initdata?.quizz) return;
@@ -38,7 +38,7 @@ const QuizReview = ({ initdata, user_progress_quiz }: QuizReviewProps) => {
     const currentAnswer = useMemo(() => {
         if (!user_progress_quiz) return;
         return find(user_progress_quiz, { quizzId: currentQuestion?.id });
-    }, [questionIndex, user_progress_quiz]);
+    }, [user_progress_quiz, currentQuestion?.id]);
 
     const options = useMemo(() => {
         if (!currentQuestion) return [];
