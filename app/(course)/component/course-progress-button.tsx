@@ -30,6 +30,7 @@ const CourseProgressButton = ({
 }: CourseProgressButtonProps) => {
     const isCompleted = !!initdata?.userProgress[0]?.isCompleted;
     const [isLoading, setIsLoading] = useState(false);
+    const [isLoadingSummary, setIsLoadingSummary] = useState(false);
     const session = useSession();
     const router = useRouter();
     const [isOpen, setIsOpen] = useState(false);
@@ -48,6 +49,8 @@ const CourseProgressButton = ({
             }
         })
 
+        setIsLoadingSummary(true);
+
         try {
             const response = await axios.get(url,{
                 headers: {
@@ -61,6 +64,9 @@ const CourseProgressButton = ({
         }
         catch {
             toast.error('Something went wrong!');
+        }
+        finally {
+            setIsLoadingSummary(false);
         }
     }
 
@@ -148,6 +154,7 @@ const CourseProgressButton = ({
             </Transition>
             <Button
                 onClick={openModal}
+                disabled={isLoadingSummary}
                 className="relative inline-flex items-center justify-center p-4 px-5 py-3 overflow-hidden font-medium text-indigo-600 rounded-lg shadow-2xl group"
             >
                 <span className="absolute top-0 left-0 w-40 h-40 -mt-10 -ml-3 transition-all duration-700 bg-red-500 rounded-full blur-md ease"></span>
@@ -155,7 +162,7 @@ const CourseProgressButton = ({
                     <span className="absolute bottom-0 left-0 w-24 h-24 -ml-10 bg-purple-500 rounded-full blur-md"></span>
                     <span className="absolute bottom-0 right-0 w-24 h-24 -mr-10 bg-pink-500 rounded-full blur-md"></span>
                 </span>
-                <span className="relative text-white">SUMMARY</span>
+                <span className="relative text-white">{ isLoadingSummary ? 'LOADING' : "SUMMARY"}</span>
             </Button>
             <Button
                 onClick={onClick}

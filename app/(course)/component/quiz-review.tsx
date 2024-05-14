@@ -28,7 +28,7 @@ const QuizReview = ({ initdata, user_progress_quiz }: QuizReviewProps) => {
             return;
         }
         setQuestionIndex((index) => index + 1);
-    }, [questionIndex, initdata?.quizz]);
+    }, [questionIndex, initdata?.quizz, review]);
 
     const currentQuestion = useMemo(() => {
         if (!initdata?.quizz) return;

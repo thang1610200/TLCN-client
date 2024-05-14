@@ -4,12 +4,7 @@ services:
     build:
       context: .
       dockerfile: ./Dockerfile
-    environment:
-      NEXT_AUTH_SECRET: "CbUGH6tgv67otWAYtBOSfWnEHMlV57YKBJ7hCuOdO80HsLUdWshZWeJEP/2mGJBGPjWXO6rHulGpoBlJ8h3CNQ=="
-      NEXTAUTH_URL: "https://ute.tlcn-server.store"
-      GITHUB_CLIENT_ID: 64f78387f542d1033123
-      GITHUB_CLIENT_SECRET: 339d503359b2d0f384208016eb19aa1ebdba8f74
-      CLIENT_ID_GOOGLE: 395152672010-7l6jp91o2ee5dqn83ite5el6bmlipmov.apps.googleusercontent.com
-      CLIENT_SECRET_GOOGLE: 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
+    env_file:
+      - ./.env
     ports:
       - '3000:3000'

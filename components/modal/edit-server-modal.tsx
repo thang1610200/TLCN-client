@@ -143,7 +143,7 @@ export const EditServerModal = () => {
 
     useEffect(() => {
         setValueForm();
-    },[server]);
+    },[setValueForm]);
 
     const isLoading = form.formState.isSubmitting;
 

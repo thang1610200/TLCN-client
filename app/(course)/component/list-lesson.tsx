@@ -88,7 +88,7 @@ export default function ListLesson() {
                                                         content.lesson?.token || ""
                                                     )
                                                 }
-                                            }, [tokenLesson, content])
+                                            }, [content])
                                             }
                                             key={
                                                 content_index

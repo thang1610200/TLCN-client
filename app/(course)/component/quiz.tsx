@@ -62,7 +62,7 @@ const QuizModal: React.FC<QuizModalProps> = ({
 
     const answer_correct = useMemo(() => {
         return countBy(quiz, ({ isCorrect }) => (isCorrect ? 'true' : 'false'));
-    }, [content_current]);
+    }, [content_current, quiz]);
 
     const handleNext = async () => {
         setIsLoading(true);

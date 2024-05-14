@@ -39,7 +39,7 @@ export const MediaRoom = ({ chatToken, video, audio }: MediaRoomProps) => {
                 toast.error('Something went wrong');
             }
         })();
-    }, [session.data?.user.name, chatToken]);
+    }, [session.data?.user.name, chatToken, session.data?.backendTokens.accessToken]);
 
     if (token === '') {
         return (
