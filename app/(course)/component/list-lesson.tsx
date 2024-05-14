@@ -82,13 +82,13 @@ export default function ListLesson() {
                                         content_index
                                     ) => (
                                         <Disclosure.Panel
-                                            onClick={useCallback(() => {
+                                            onClick={() => {
                                                 if (content.type === 'LESSON' && content.lesson?.isPreview) {
                                                     setTokenLesson(
                                                         content.lesson?.token || ""
                                                     )
                                                 }
-                                            }, [content])
+                                            }
                                             }
                                             key={
                                                 content_index
