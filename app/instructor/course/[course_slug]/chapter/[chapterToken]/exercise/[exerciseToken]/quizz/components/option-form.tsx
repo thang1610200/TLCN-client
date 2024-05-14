@@ -43,7 +43,7 @@ const formSchema = z.object({
     option: z
         .array(
             z.object({
-                value: z.string().min(5, {
+                value: z.string().min(1, {
                     message: 'Option is required',
                 }),
             })

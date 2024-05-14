@@ -103,7 +103,8 @@ export enum LanguageType {
     Typescript = 'typescript',
     Css = 'css',
     Java = 'java',
-    Php = 'php'
+    Php = 'php',
+    Cpp_header = 'cpp_header'
 }
 
 export enum MimeFileType {
@@ -115,7 +116,8 @@ export enum MimeFileType {
     c = 'c',
     java = 'java',
     python = 'py',
-    php = 'php'
+    php = 'php',
+    cpp_header = 'h'
 }
 
 export interface Content {

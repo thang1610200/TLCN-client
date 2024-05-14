@@ -31,7 +31,7 @@ interface ThumbnailFormProps {
     mutate: KeyedMutator<any>;
 }
 
-const MAX_FILE_SIZE = 1000000;
+const MAX_FILE_SIZE = 20000000;
 const ACCEPTED_IMAGE_TYPES = [
     'image/jpeg',
     'image/jpg',
@@ -44,7 +44,7 @@ const formSchema = z.object({
         .any()
         .refine(
             (files) => files?.[0]?.size <= MAX_FILE_SIZE,
-            `Max image size is 1MB.`
+            `Max image size is 20MB.`
         )
         .refine(
             (files) => ACCEPTED_IMAGE_TYPES.includes(files?.[0]?.type),

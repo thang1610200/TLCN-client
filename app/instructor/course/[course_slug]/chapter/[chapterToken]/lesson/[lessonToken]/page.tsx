@@ -38,7 +38,7 @@ const LessonToken = ({
         params.lessonToken
     );
     const requiredFields = [data?.title, 
-                            data?.description, 
+                            //data?.description, 
                             data?.videoUrl,
                             data?.thumbnail];
     const totalFields = requiredFields.length;
