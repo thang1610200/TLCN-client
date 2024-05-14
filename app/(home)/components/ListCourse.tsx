@@ -25,8 +25,8 @@ export const CoursesList = ({ items }: CoursesListProps) => {
     }
     return (
         <div className='flex flex-row flex-wrap items-start justify-start w-full overflow-hidden h-fit'>
-            <div className="flex items-center justify-center w-1/2 h-48">
-                {items?.map((item, index) => (
+            {items?.map((item, index) => (
+                <div key={index} className="flex items-center justify-center w-1/2 h-48">
                     <CourseCard
                         key={index}
                         slug={item.slug}
@@ -36,9 +36,8 @@ export const CoursesList = ({ items }: CoursesListProps) => {
                         category={item?.topic?.title}
                         chapter={item.chapters}
                     />
-                ))}
-
-            </div>
+                </div>
+            ))}
         </div>
     );
 };

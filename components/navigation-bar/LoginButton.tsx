@@ -78,17 +78,9 @@ export default function LoginButton() {
                     </DropdownMenuLabel>
                     <DropdownMenuSeparator />
                     <DropdownMenuGroup>
-                        <Link
-                            href="/profile"
-                            legacyBehavior
-                            passHref
-                        >
-                            <DropdownMenuItem>
-                                <NavigationMenuLink>
-                                    Trang cá nhân
-                                </NavigationMenuLink>
-                            </DropdownMenuItem>
-                        </Link>
+                        <DropdownMenuItem>
+                            <Link href="/profile" legacyBehavior passHref>Trang cá nhân</Link>
+                        </DropdownMenuItem>
                     </DropdownMenuGroup>
                     <DropdownMenuSeparator />
                     <DropdownMenuItem

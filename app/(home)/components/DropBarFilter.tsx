@@ -35,24 +35,20 @@ import qs from 'query-string';
     
 const ratings: { id: string, label: string }[] = [
     {
-        id: "nextjs",
-        label: "NextJS",
+        id: "4.5",
+        label: "Từ 4.5 sao trở lên",
     },
     {
-        id: "javascript",
-        label: "Javascript",
+        id: "4.0",
+        label: "Từ 4 sao trở lên",
     },
     {
-        id: "html",
-        label: "HTML",
+        id: "3.5",
+        label: "Từ 3.5 sao trở lên",
     },
     {
-        id: "css",
-        label: "CSS",
-    },
-    {
-        id: "reactjs",
-        label: "ReactJS",
+        id: "3.0",
+        label: "Từ 3 sao trở lên",
     },
 ]
 
@@ -123,9 +119,9 @@ const levels: { id: string, label: string }[] = [
 
 const FormSchema = z.object({
     rating: z.array(z.string()).optional().default([]),
-    // duration: z.array(z.object({id: z.string(), label: z.string()})).optional().default([]),
+    duration: z.array(z.string()).optional().default([]),
     topic: z.array(z.string()).optional().default([]),
-    // level: z.array(z.object({id: z.string(), label: z.string()})).optional().default([]),
+    level: z.array(z.string()).optional().default([]),
 })
 
 
@@ -133,15 +129,20 @@ export default function DropBarFilter() {
     const router = useRouter()
     const searchParams = useSearchParams();
 
-    const initialTopic = searchParams.getAll('topic') || null;
+    const currentTitle = searchParams.get('title');
     const currentRating = searchParams.getAll('rating');
     const currentTopic = searchParams.getAll('topic');
+    const currentDuration = searchParams.getAll('duration');
+    const currentLevel = searchParams.getAll('level');
 
     const form = useForm<z.infer<typeof FormSchema>>({
         resolver: zodResolver(FormSchema),
         defaultValues: {
             rating: currentRating ? currentRating : [],
-            topic: currentTopic ? currentTopic : []
+            topic: currentTopic ? currentTopic : [],
+            duration: currentDuration ? currentDuration : [],
+            level: currentLevel ? currentLevel : [],
+
         }
     })
 
@@ -151,8 +152,11 @@ export default function DropBarFilter() {
                 {
                     url: "",
                     query: {
+                        title: currentTitle,
                         rating: data.rating ? data.rating : null,
-                        topic: data.topic ? data.topic : null
+                        topic: data.topic ? data.topic : null,
+                        duration: data.duration ? data.duration : null,
+                        level: data.level ? data.level : null,
                     },
                 },
                 { skipNull: true, skipEmptyString: true }
@@ -162,7 +166,7 @@ export default function DropBarFilter() {
         )
         return () => subscription.unsubscribe()
 
-    }, [form, router, currentRating])
+    }, [form, router, currentTitle])
 
     return (
         <Form {...form} >
@@ -232,6 +236,104 @@ export default function DropBarFilter() {
                                                         key={item.id}
                                                         control={form.control}
                                                         name="topic"
+                                                        render={({ field }) => {
+                                                            return (
+                                                                <FormItem
+                                                                    key={item.id}
+                                                                    className="flex flex-row items-start space-x-3 space-y-0"
+                                                                >
+                                                                    <FormControl>
+                                                                        <Checkbox
+                                                                            checked={field.value?.includes(item.id)}
+                                                                            onCheckedChange={(checked) => {
+                                                                                return checked
+                                                                                    ? field.onChange([...field.value, item.id])
+                                                                                    : field.onChange(
+                                                                                        field.value?.filter(
+                                                                                            (value) => value !== item.id
+                                                                                        )
+                                                                                    )
+                                                                            }}
+                                                                        />
+                                                                    </FormControl>
+                                                                    <FormLabel className="text-sm font-normal">
+                                                                        {item.label}
+                                                                    </FormLabel>
+                                                                </FormItem>
+                                                            )
+                                                        }}
+                                                    />
+                                                ))}
+                                                <FormMessage />
+                                            </FormItem>
+                                        )}
+                                    />
+                                </ul>
+                            </NavigationMenuContent>
+                        </NavigationMenuItem>
+                        <NavigationMenuItem>
+                            <NavigationMenuTrigger type="button">Thời lượng</NavigationMenuTrigger>
+                            <NavigationMenuContent>
+                                <ul className="grid w-[430px] gap-3 p-4 ">
+                                    <FormField
+                                        control={form.control}
+                                        name="duration"
+                                        render={() => (
+                                            <FormItem>
+                                                {durations.map((item: any) => (
+                                                    <FormField
+                                                        key={item.id}
+                                                        control={form.control}
+                                                        name="duration"
+                                                        render={({ field }) => {
+                                                            return (
+                                                                <FormItem
+                                                                    key={item.id}
+                                                                    className="flex flex-row items-start space-x-3 space-y-0"
+                                                                >
+                                                                    <FormControl>
+                                                                        <Checkbox
+                                                                            checked={field.value?.includes(item.id)}
+                                                                            onCheckedChange={(checked) => {
+                                                                                return checked
+                                                                                    ? field.onChange([...field.value, item.id])
+                                                                                    : field.onChange(
+                                                                                        field.value?.filter(
+                                                                                            (value) => value !== item.id
+                                                                                        )
+                                                                                    )
+                                                                            }}
+                                                                        />
+                                                                    </FormControl>
+                                                                    <FormLabel className="text-sm font-normal">
+                                                                        {item.label}
+                                                                    </FormLabel>
+                                                                </FormItem>
+                                                            )
+                                                        }}
+                                                    />
+                                                ))}
+                                                <FormMessage />
+                                            </FormItem>
+                                        )}
+                                    />
+                                </ul>
+                            </NavigationMenuContent>
+                        </NavigationMenuItem>
+                        <NavigationMenuItem>
+                            <NavigationMenuTrigger type="button">Cấp độ</NavigationMenuTrigger>
+                            <NavigationMenuContent>
+                                <ul className="grid w-[430px] gap-3 p-4 ">
+                                    <FormField
+                                        control={form.control}
+                                        name="level"
+                                        render={() => (
+                                            <FormItem>
+                                                {levels.map((item: any) => (
+                                                    <FormField
+                                                        key={item.id}
+                                                        control={form.control}
+                                                        name="level"
                                                         render={({ field }) => {
                                                             return (
                                                                 <FormItem

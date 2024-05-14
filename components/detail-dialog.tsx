@@ -18,7 +18,7 @@ const DetailsDialog = () => {
             <DialogTrigger>
                 <h2 className="text-lg">Thông tin</h2>
             </DialogTrigger>
-            <DialogContent className="w-[70vw] max-w-[100vw] md:w-[50vw]">
+            <DialogContent autoFocus className="w-[70vw] max-w-[100vw] md:w-[50vw]">
                 <DialogHeader>
                     <DialogTitle className="text-2xl">
                         Welcome to Learner!
