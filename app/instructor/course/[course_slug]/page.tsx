@@ -18,6 +18,8 @@ import { ChaptersForm } from '../component/chapter-form';
 import { RequirementForm } from '../component/requirement-form';
 import { filter } from 'lodash';
 import { useTopic } from '@/app/hook/use-topic';
+import { LevelForm } from '../component/level-form';
+import { useAllLevel } from '@/app/hook/use-course';
 
 const CourseDetail = ({ params }: { params: { course_slug: string } }) => {
     const session = useSession();
@@ -32,6 +34,8 @@ const CourseDetail = ({ params }: { params: { course_slug: string } }) => {
         session.data?.backendTokens.accessToken
     );
 
+    const { data: levels = [], isLoadingLevel } = useAllLevel(session.data?.backendTokens.accessToken);
+
     const chapters = filter(data?.chapters,{isPublished: true});
 
     const requiredFields = [
@@ -41,7 +45,8 @@ const CourseDetail = ({ params }: { params: { course_slug: string } }) => {
         data?.learning_outcome.length > 0,
         data?.requirement.length > 0,
         data?.topic_id,
-        chapters?.length > 0
+        chapters?.length > 0,
+        data?.level_id
     ];
 
     const totalFields = requiredFields.length;
@@ -51,7 +56,7 @@ const CourseDetail = ({ params }: { params: { course_slug: string } }) => {
 
     const isComplete = requiredFields.every(Boolean);
 
-    if (isLoading || isValidating) {
+    if (isLoading || isValidating || isLoadingLevel) {
         return <LoadingModal />;
     }
 
@@ -135,6 +140,15 @@ const CourseDetail = ({ params }: { params: { course_slug: string } }) => {
                                 <ChaptersForm
                                     initialData={data}
                                     course_slug={data?.slug}
+                                    mutate={mutate}
+                                />
+                                <LevelForm
+                                    initialData={data}
+                                    course_slug={data?.slug}
+                                    options={levels.map((level) => ({
+                                        label: level.name,
+                                        value: level.id,
+                                    }))}
                                     mutate={mutate}
                                 />
                             </div>

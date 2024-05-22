@@ -2,7 +2,6 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { BookOpen, Star, Timer } from 'lucide-react';
 import { IconBadge } from '@/components/icon-badge';
-import { sumBy } from 'lodash';
 import { Chapter } from '@/app/types';
 import { Separator } from '@/components/ui/separator';
 
@@ -11,19 +10,17 @@ interface CourseCardProps {
     title: string;
     imageUrl: string;
     chaptersLength: number;
-    category?: string;
-    chapter?: Chapter[]
+    total?: number;
+    description?: string
 }
-
-const ratings: number = 4.7
 
 export const CourseCard = ({
     slug,
     title,
     imageUrl,
     chaptersLength,
-    category,
-    chapter
+    total,
+    description
 }: CourseCardProps) => {
     function convertTime(second: number): string {
         let hour: number = Math.floor(second / 3600);
@@ -38,11 +35,6 @@ export const CourseCard = ({
             return `${minute} m`;
         }
     }
-
-    var sumTimeCourse = 0;
-    // chapter?.map((item) => {
-    //     sumTimeCourse += sumBy(item.contents, 'duration');
-    // })
 
     return (
         <Link href={`/course/${slug}`}>
@@ -63,22 +55,22 @@ export const CourseCard = ({
                     <div className="text-xs font-bold transition lg:text-lg line-clamp-2 ">
                         {title}
                     </div>
-                    <div className="text-xs font-light lg:text-sm line-clamp-2"> Description Reprehenderit dolore laboris aliqua sit non aliqua dolor.</div> {/*Thêm description */}
+                    <div className="text-xs font-light lg:text-sm line-clamp-2">{description}.</div> {/*Thêm description */}
                     {/* <p className="text-xs text-muted-foreground">{category}</p> */}
-                    <p className="text-xs lg:text-smtext-muted-foreground">Tác giả</p> {/*Thêm tác giả*/}
+                    {/* <p className="text-xs lg:text-smtext-muted-foreground">Tác giả</p> */}
                     <div className="flex items-center my-3 text-xs lg:text-sm gap-x-5 ">
                         <div className="flex items-center gap-x-1 text-slate-500">
                             <IconBadge size="sm" icon={BookOpen} />
                             <span>
                                 {chaptersLength}{' '}
-                                {chaptersLength === 1 ? 'Chapter' : 'Chapters'}
+                                lectures
                             </span>
                         </div>
                         <div className="flex items-center gap-x-1 text-slate-500 ">
                             <IconBadge size="sm" icon={Timer} />
-                            <span>{convertTime(sumTimeCourse)}</span>
+                            <span>{convertTime(total || 0)}</span>
                         </div>
-                        <div className="flex items-center justify-center ">
+                        {/* <div className="flex items-center justify-center ">
                             {[1, 2, 3, 4, 5].map((items) => (
                                 <div key={items} className="">
                                     {items < ratings ? <Star size="20" fill='#0369a1' strokeWidth={0} /> : <Star size="20" color='#0369a1' />}
@@ -86,7 +78,7 @@ export const CourseCard = ({
                                 </div>
                             ))}
                             {ratings}
-                        </div>
+                        </div> */}
                     </div>
                 </div>
             </div>

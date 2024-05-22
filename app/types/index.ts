@@ -32,6 +32,8 @@ export interface Course {
     id: string;
     topic_id: string;
     topic: Topic;
+    level_id: string;
+    level: Level;
     owner_id: string;
     owner: User;
     title: string;
@@ -187,15 +189,12 @@ export interface Code {
     fileTest: FileTest;
 }
 
-
-
-// export interface TestCase {
-//     id: string;
-//     input: string;
-//     output: string;
-//     codeId: string;
-//     code: Code;
-// }
+export interface Level {
+    id: string;
+    slug: string;
+    name: string;
+    course: Course[];
+}
 
 export interface Quizz {
     id: string;
