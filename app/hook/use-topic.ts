@@ -24,7 +24,7 @@ export const useAllTopicHome = () => {
     return {
         data,
         error,
-        isLoading,
+        loadingTopic: isLoading,
         mutate
     }
 }

@@ -1,16 +1,9 @@
 import { Course, Topic } from '@/app/types';
-
-
 // import { CourseCard } from '@/components/course-card';
 import { CourseCard } from "./CardCourse"
 
-type CourseWithProgressWithCategory = Course & {
-    topic: Topic | null;
-    chapters: { id: string }[];
-};
-
 interface CoursesListProps {
-    items?: CourseWithProgressWithCategory[];
+    items?: any[];
 }
 
 export const CoursesList = ({ items }: CoursesListProps) => {
@@ -33,8 +26,8 @@ export const CoursesList = ({ items }: CoursesListProps) => {
                         title={item.title}
                         imageUrl={item.picture!}
                         chaptersLength={item.chapters.length}
-                        category={item?.topic?.title}
-                        chapter={item.chapters}
+                        total={item.total}
+                        description={item.description}
                     />
                 </div>
             ))}
