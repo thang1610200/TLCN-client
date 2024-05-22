@@ -40,35 +40,35 @@ const CourseProgressButton = ({
         setIsOpen(false);
     }
 
-    const openModal = async () => {
-        const url = qs.stringifyUrl({
-            url: `${BACKEND_URL}/lesson/summary-video`,
-            query: {
-                content_token: initdata?.token,
-                course_slug
-            }
-        })
+    // const openModal = async () => {
+    //     const url = qs.stringifyUrl({
+    //         url: `${BACKEND_URL}/lesson/summary-video`,
+    //         query: {
+    //             content_token: initdata?.token,
+    //             course_slug
+    //         }
+    //     })
 
-        setIsLoadingSummary(true);
+    //     setIsLoadingSummary(true);
 
-        try {
-            const response = await axios.get(url,{
-                headers: {
-                    Authorization: `Bearer ${session.data?.backendTokens.accessToken}`,
-                    'Content-Type': 'application/json',
-                },
-            });
+    //     try {
+    //         const response = await axios.get(url,{
+    //             headers: {
+    //                 Authorization: `Bearer ${session.data?.backendTokens.accessToken}`,
+    //                 'Content-Type': 'application/json',
+    //             },
+    //         });
 
-            setSummary(response.data);
-            setIsOpen(true);
-        }
-        catch {
-            toast.error('Something went wrong!');
-        }
-        finally {
-            setIsLoadingSummary(false);
-        }
-    }
+    //         setSummary(response.data);
+    //         setIsOpen(true);
+    //     }
+    //     catch {
+    //         toast.error('Something went wrong!');
+    //     }
+    //     finally {
+    //         setIsLoadingSummary(false);
+    //     }
+    // }
 
     const onClick = async () => {
         const toastId = toast.loading('Loading...');
@@ -109,7 +109,7 @@ const CourseProgressButton = ({
 
     return (
         <>
-            <Transition appear show={isOpen} as={Fragment}>
+            {/* <Transition appear show={isOpen} as={Fragment}>
                 <Dialog as="div" className="relative z-10" onClose={closeModal}>
                     <Transition.Child
                         as={Fragment}
@@ -124,7 +124,7 @@ const CourseProgressButton = ({
                     </Transition.Child>
 
                     <div className="fixed inset-0 overflow-y-auto">
-                        <div className="flex min-h-full items-center justify-center p-4 text-center">
+                        <div className="flex items-center justify-center min-h-full p-4 text-center">
                             <Transition.Child
                                 as={Fragment}
                                 enter="ease-out duration-300"
@@ -134,7 +134,7 @@ const CourseProgressButton = ({
                                 leaveFrom="opacity-100 scale-100"
                                 leaveTo="opacity-0 scale-95"
                             >
-                                <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
+                                <Dialog.Panel className="w-full max-w-md p-6 overflow-hidden text-left align-middle transition-all transform bg-white shadow-xl rounded-2xl">
                                     <Dialog.Title
                                         as="h3"
                                         className="text-lg font-medium leading-6 text-gray-900"
@@ -163,7 +163,7 @@ const CourseProgressButton = ({
                     <span className="absolute bottom-0 right-0 w-24 h-24 -mr-10 bg-pink-500 rounded-full blur-md"></span>
                 </span>
                 <span className="relative text-white">{ isLoadingSummary ? 'LOADING' : "SUMMARY"}</span>
-            </Button>
+            </Button> */}
             <Button
                 onClick={onClick}
                 disabled={isLoading || isCompleted}
@@ -175,7 +175,7 @@ const CourseProgressButton = ({
                     <Loader2 className="w-4 h-4 mr-2 animate-spin" />
                 )}
                 {isCompleted ? 'Completed' : 'Mark as complete'}
-                {isCompleted && <CheckCircle className="h-4 w-4 ml-2" />}
+                {isCompleted && <CheckCircle className="w-4 h-4 ml-2" />}
             </Button>
         </>
     );

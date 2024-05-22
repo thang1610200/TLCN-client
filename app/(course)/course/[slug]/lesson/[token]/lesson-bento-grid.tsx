@@ -24,6 +24,7 @@ import ReviewCourse from '@/app/(course)/component/review-course';
 import { Button } from '@/components/ui/button';
 import CourseProgressButton from '@/app/(course)/component/course-progress-button';
 import { Preview } from '@/components/preview';
+import SummaryVideo from '@/app/(course)/component/summary-video';
 
 
 
@@ -133,7 +134,7 @@ export function MoreInformation({ data, params, contentlist, indexLesson, isLock
 						</Button>
 					</div>
 					<div className="flex flex-col items-center justify-between p-6 mt-6 border rounded-md lg:flex-row">
-						<h2 className="mb-2 text-lg font-semibold lg:text-2xl lg:mb-0 lg:text-center">
+						<h2 className="mb-2 text-lg font-semibold lg:text-2xl lg:mb-0 lg:text-left">
 							{!content?.exercise?.code && (
 								content?.lesson?.title || content?.exercise?.title
 							)}
@@ -162,10 +163,11 @@ export function MoreInformation({ data, params, contentlist, indexLesson, isLock
 						)}
 					</div>
 					<Tabs defaultValue="overview" className="w-full h-full">
-						<TabsList className="grid w-full grid-cols-3">
-							<TabsTrigger value="overview">Overview</TabsTrigger>
-							<TabsTrigger value="resources">Resources</TabsTrigger>
-							<TabsTrigger value="reviews">Reviews</TabsTrigger>
+						<TabsList className="grid w-full grid-cols-4">
+							<TabsTrigger value="overview">Tổng quan</TabsTrigger>
+							<TabsTrigger value="resources">Tài nguyên</TabsTrigger>
+							<TabsTrigger value="reviews">Nhận xét</TabsTrigger>
+							<TabsTrigger value="summary">Tóm tắt</TabsTrigger>
 						</TabsList>
 						<TabsContent value="overview">
 							<Card>
@@ -190,6 +192,13 @@ export function MoreInformation({ data, params, contentlist, indexLesson, isLock
 										course={data}
 										course_slug={params.slug}
 									/>
+								</CardContent>
+							</Card>
+						</TabsContent>
+						<TabsContent value="summary">
+							<Card>
+								<CardContent className="space-y-2">
+									<SummaryVideo course_slug={params.slug} initdata={content}/>
 								</CardContent>
 							</Card>
 						</TabsContent>
