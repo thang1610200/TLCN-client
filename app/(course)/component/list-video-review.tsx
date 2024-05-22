@@ -87,7 +87,7 @@ export default function ListVideoReview({ isOpen, setIsOpen, lessonReview, data 
                                     </div>
 
                                     <div className="absolute top-0 right-0 pr-5 ">
-                                        <Button type='button' variant="ghost" onClick={() => { setIsOpen(false) }} className=''>
+                                        <Button autoFocus type='button' variant="ghost" onClick={() => { setIsOpen(false) }} className=''>
                                             <X color='#020617' size={32}/>
                                         </Button>
                                     </div>

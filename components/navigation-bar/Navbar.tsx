@@ -11,7 +11,7 @@ import RegisterInsModal from '../Reg-Ins-Modal';
 
 export const Navbar = () => {
     return (
-        <div className='sticky w-full h-20 border-2'>
+        <div className='w-full h-20 border-2 '>
             {/* <SideBar/> */}
             <div className="container flex items-center justify-between w-full h-full ">
                 <div className="relative flex items-center justify-center w-fit h-fit">
