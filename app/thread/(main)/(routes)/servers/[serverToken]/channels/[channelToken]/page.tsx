@@ -38,7 +38,7 @@ const ChannelIdPage = ({ params }: ChannelIdPageProps) => {
     }
 
     return (
-        <div className="bg-white dark:bg-[#313338] flex flex-col h-full">
+        <div className="bg-white dark:bg-[#313338] flex flex-col h-screen w-full ">
             <ChatHeader
                 name={channel?.name}
                 serverToken={channel?.server.token}

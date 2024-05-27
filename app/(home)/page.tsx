@@ -4,7 +4,6 @@ import React from 'react';
 import SearchInput from '@/components/search-input';
 import { useSearchParams } from 'next/navigation';
 import useAllCoursePublish from '../hook/useAllCoursePublish';
-import LoadingModal from '@/components/modal/loading-modal';
 import ErrorModal from '@/components/error';
 import { useAllTopicHome } from '../hook/use-topic';
 import { CoursesList } from './components/ListCourse'

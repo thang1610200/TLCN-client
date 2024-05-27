@@ -11,16 +11,16 @@ export const metadata: Metadata = {
 
 const sidebarNavItems = [
     {
-        title: 'Profile',
+        title: 'Thông tin',
         href: '/profile',
     },
     {
-        title: 'Change password',
+        title: 'Đổi mật khẩu',
         href: '/change-password',
     },
     {
-        title: 'Notification',
-        href: '/notification'
+        title: 'Khóa học',
+        href: '/course-access'
     }
 ];
 

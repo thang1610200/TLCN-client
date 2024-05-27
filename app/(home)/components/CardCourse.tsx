@@ -38,20 +38,20 @@ export const CourseCard = ({
 
     return (
         <Link href={`/course/${slug}`}>
-            <div className="flex items-start justify-start w-full h-full gap-4 p-4 overflow-hidden rounded-lg group">
-                <div className="relative overflow-hidden rounded-md min-w-52 max-w-52 h-36">
+            <div className="grid items-start justify-start w-full h-full grid-cols-3 gap-4 p-4 overflow-hidden rounded-lg group auto-cols-fr auto-rows-fr">
+                <div className="relative flex col-span-1 overflow-hidden rounded-md max-w-52 h-36">
                     <Image
                         priority={true}
                         fill
-                        className="object-cover object-center aspect-video"
+                        className="flex object-cover object-center aspect-video"
                         alt={title}
                         src={imageUrl}
-                        sizes="(max-width: 1200px) 13rem"
+                        sizes="(max-width: 768px) 6rem, 13rem"
 
                     />
                     {/* <Image src="/images/learning.jpg" alt='image product' width={100} height={100} className='mix-blend-multiply' /> */}
                 </div>
-                <div className="flex flex-col ">
+                <div className="flex flex-col items-start justify-between w-full h-full col-span-2">
                     <div className="text-xs font-bold transition lg:text-lg line-clamp-2 ">
                         {title}
                     </div>

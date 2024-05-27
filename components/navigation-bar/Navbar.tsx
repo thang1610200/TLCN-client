@@ -1,6 +1,6 @@
 "use client"
 import Link from 'next/link'
-import React from 'react'
+import React, { useState } from 'react'
 import { AnimatePresence, MotionValue, motion, useMotionValue } from "framer-motion";
 import LoginButton from '@/components/navigation-bar/LoginButton';
 import RoleUser from '@/components/navigation-bar/RoleUser';
@@ -61,16 +61,14 @@ function HomeMenu() {
                     <AnimatePresence>
                         {links.map((link) => {
                             return (
-                                <MoveHomeMenu key={link.name} data={link} />
+                                <MoveHomeMenu key={link.name} link={link} isRegister={false} />
                             )
                         })}
                         {role === 'LEARNER' && session.status === "authenticated" &&
-                            <div className='relative flex items-center justify-end '>
-                                <RegisterInsModal />
-                            </div>
+                            <MoveHomeMenu link={instructor} isRegister={true} />
                         }
                         {role === "INSTRUCTOR" && session.status === "authenticated" &&
-                            <MoveHomeMenu data={instructor} />
+                            <MoveHomeMenu link={instructor} isRegister={false} />
                         }
                     </AnimatePresence>
                 </ul>
@@ -79,9 +77,9 @@ function HomeMenu() {
     )
 }
 
-function MoveHomeMenu(link: any) {
+function MoveHomeMenu({ link, isRegister }: { link: { name: string, path: string }, isRegister: boolean }) {
+    const [isOpen, setIsOpen] = useState(false)
     const MotionLink = motion(Link)
-
     const mapRange = (
         inputLower: number,
         inputUpper: number,
@@ -111,16 +109,26 @@ function MoveHomeMenu(link: any) {
             const item = event.currentTarget;
             setTransform(item, event, x, y)
         }}
-            key={link.data.path}
+            key={link.path}
             onPointerLeave={(event) => {
                 x.set(0)
                 y.set(0)
             }}
             style={{ x, y }}>
-            <MotionLink href={link.data.path} className='px-4 py-2 font-medium transition-all duration-500 ease-out rounded-md hover:text-slate-100 hover:bg-slate-950'>
-                <motion.span>{link.data.name}</motion.span>
-            </MotionLink>
+            <motion.div className='px-4 py-2 font-medium transition-all duration-500 ease-out rounded-md hover:text-slate-100 hover:bg-slate-950'>
+                {isRegister
+                    ? <motion.button onClick={(event) => { setIsOpen(true), event.stopPropagation(); }} >
+                        <motion.span>{link.name}</motion.span>
+                    </motion.button>
+                    : <MotionLink href={link.path} >
+                        <motion.span>{link.name}</motion.span>
+                        <RegisterInsModal isOpen={isOpen} setIsOpen={setIsOpen} />
+                    </MotionLink>
+                }
+
+            </motion.div>
         </motion.li>
+        {isRegister && <RegisterInsModal isOpen={isOpen} setIsOpen={setIsOpen} />}
     </>
 }
 

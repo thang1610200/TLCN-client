@@ -25,10 +25,17 @@ import useRegisterInstructor from '@/app/hook/useRegisterInstructor';
 import LoadingModal from './modal/loading-modal';
 import Image from 'next/image';
 
+
+interface RegisterProps{
+    isOpen: boolean;
+    setIsOpen: (value: boolean) => void
+}
+
 const MAX_FILE_SIZE: number = 1000000;
 const ACCEPTED_IMAGE_TYPES = ["image/jpeg", "image/jpg", "image/png", "image/webp"];
 
-export default function RegisterInsModal() {
+
+export default function RegisterInsModal({isOpen, setIsOpen}:RegisterProps) {
     const CertificateFormSchema = z.object({
         image: z.any()
             .refine((files) => files?.size <= MAX_FILE_SIZE, `Max image size is 1MB.`)
@@ -39,9 +46,7 @@ export default function RegisterInsModal() {
     });
 
     type CertificateFormValues = z.infer<typeof CertificateFormSchema>;
-
     const [isLoading, setIsLoading] = useState(false);
-    const [isOpen, setIsOpen] = useState(false);
     const [imageCertificate, setImageCertificate] = useState("");
     const session = useSession();
     const router = useRouter();
@@ -123,13 +128,12 @@ export default function RegisterInsModal() {
 
     if (isLoadingRegister) {
         return (
-            <LoadingModal />
+            <></>
         )
     }
 
     return (
         <>
-            <Button onClick={() => { onHandleClick() }} variant="link" className='relative flex items-center justify-center w-2/3 p-0 text-center text-balance focus-visible::ring-0 focus-visible::ring-offset-0'>Trở thành giảng viên</Button>
             <Transition appear show={isOpen} as={Fragment}>
                 <Dialog as="div" className="relative z-10" onClose={() => { setIsOpen(false) }}>
                     <Transition.Child
