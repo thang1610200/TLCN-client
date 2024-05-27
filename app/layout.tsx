@@ -1,10 +1,13 @@
+"use client";
+
 import './globals.css';
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import ToasterContext from './context/ToasterContext';
 import AuthContext from './context/AuthContext';
 import { ConfettiProvider } from '@/components/provider/confetti-provider';
-import { Toaster } from "@/components/ui/toaster"
+import { Toaster } from '@/components/ui/toaster';
+import Script from 'next/script';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -18,8 +21,34 @@ export default function RootLayout({
 }: {
     children: React.ReactNode;
 }) {
+
     return (
         <html lang="en" suppressHydrationWarning>
+            <head>
+                <Script
+                    src='https://cdn.botpress.cloud/webchat/v1/inject.js'
+                    strategy='lazyOnload'
+                    onLoad={() => {
+                        window.botpressWebChat.init({
+                            "composerPlaceholder": "Chat with bot",
+                            "botConversationDescription": "This chatbot was built surprisingly fast with Botpress",
+                            "botId": "014f8889-2098-46cf-9486-1ca9d791b129",
+                            "hostUrl": "https://cdn.botpress.cloud/webchat/v1",
+                            "messagingUrl": "https://messaging.botpress.cloud",
+                            "clientId": "014f8889-2098-46cf-9486-1ca9d791b129",
+                            "webhookId": "83a924b6-dce9-4a30-a48a-f170c2795f91",
+                            "enableConversationDeletion": true,
+                            "lazySocket": true,
+                            "themeName": "prism",
+                            "frontendVersion": "v1",
+                            "showPoweredBy": true,
+                            "theme": "prism",
+                            "themeColor": "#2563eb",
+                            "allowedOrigins": []
+                        });
+                    }}
+                />
+            </head>
             <body className={inter.className}>
                 <AuthContext>
                     <ConfettiProvider />
