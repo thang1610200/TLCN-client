@@ -11,7 +11,7 @@ export default function RoleUser() {
         return (
             <>
                 <div className='relative flex items-center justify-end '>
-                    <RegisterInsModal />
+                    {/* <RegisterInsModal /> */}
                 </div>
             </>
         )
