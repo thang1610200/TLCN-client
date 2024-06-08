@@ -14,7 +14,7 @@ import { useMemo, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
-import { Lesson } from '@/app/types';
+import { Lesson, QueueType } from '@/app/types';
 import { useSession } from 'next-auth/react';
 import { KeyedMutator } from 'swr';
 import { useForm } from 'react-hook-form';
@@ -119,21 +119,25 @@ export const LessonVideoForm = ({
         <div className="p-4 mt-6 border rounded-md bg-slate-100">
             <div className="flex items-center justify-between font-medium">
                 Video bài học
-                <Button onClick={toggleEdit} variant="ghost">
-                    {isEditing && <>Cancel</>}
-                    {!isEditing && !initialData?.videoUrl && (
-                        <>
-                            <PlusCircle className="w-4 h-4 mr-2" />
-                            Thêm video
-                        </>
-                    )}
-                    {!isEditing && initialData?.videoUrl && (
-                        <>
-                            <Pencil className="w-4 h-4 mr-2" />
-                            Chỉnh sửa video
-                        </>
-                    )}
-                </Button>
+                {
+                    initialData?.asyncVideo?.type !== QueueType.Progressing && (
+                        <Button onClick={toggleEdit} variant="ghost">
+                            {isEditing && <>Cancel</>}
+                            {!isEditing && !initialData?.videoUrl && (
+                                <>
+                                    <PlusCircle className="w-4 h-4 mr-2" />
+                                    Thêm video
+                                </>
+                            )}
+                            {!isEditing && initialData?.videoUrl && (
+                                <>
+                                    <Pencil className="w-4 h-4 mr-2" />
+                                    Chỉnh sửa video
+                                </>
+                            )}
+                        </Button>
+                    )
+                }
             </div>
             {!isEditing &&
                 (!initialData?.videoUrl ? (
@@ -149,7 +153,7 @@ export const LessonVideoForm = ({
                                 controls
                                 light={initialData.thumbnail ? initialData.thumbnail : ""}
                                 url={
-                                    initialData.isCompleteVideo
+                                    initialData?.videoUrl
                                         ? initialData?.videoUrl
                                         : ''
                                 }
@@ -164,7 +168,7 @@ export const LessonVideoForm = ({
                             />
                         }
                         {
-                            initialData?.isCompleteVideo && (
+                            initialData?.videoUrl&& (
                                 <GenerateSubtitleModal
                                     course_slug={course_slug}
                                     chapter_token={chapter_token}
@@ -215,13 +219,17 @@ export const LessonVideoForm = ({
                     </div>
                 </div>
             )}
-            {initialData?.videoUrl &&
-                !isEditing &&
-                !initialData?.isCompleteVideo && (
+            {!isEditing &&
+                initialData?.asyncVideo?.type === QueueType.Progressing && (
                     <div className="mt-2 text-xs text-muted-foreground">
                         Video cần một vài phút để hoàn thành. Refresh trang để hiển thị video
                     </div>
                 )}
+            {initialData?.asyncVideo?.type === QueueType.Warning && (
+                    <div className="mt-2 text-xs text-muted-foreground">
+                        Video có chứa các nội dung như Hate, Self Harm, Sexual, Violence
+                    </div>
+            )}
         </div>
     );
 };

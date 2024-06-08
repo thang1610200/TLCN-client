@@ -71,7 +71,8 @@ export interface Lesson {
     isPreview: boolean;
     videoUrl?: string;
     duration?: number;
-    isCompleteVideo: boolean;
+    //isCompleteVideo: boolean;
+    asyncVideo: AsyncVideo;
     thumbnail?: string;
     contentId: string;
     content: Content;
@@ -79,6 +80,16 @@ export interface Lesson {
     attachment: Attachment[];
     subtitles: Subtitle[];
 }
+
+export interface AsyncVideo {
+    id: string;
+    type: QueueType;
+    description: string;
+    lessonId : string;
+    lesson: Lesson;
+    create_at: Date
+    update_at: Date
+  }
 
 export interface Subtitle {
     id: string;
@@ -90,6 +101,13 @@ export interface Subtitle {
     create_at: Date;
     update_at: Date;
 }
+
+export enum QueueType {
+    Progressing = 'PROGRESSING',
+    Completed = 'COMPLETED',
+    Warning = "WARNING",
+    Error = 'ERROR'
+  }
 
 export enum ContentType {
     Lesson = 'LESSON',
