@@ -25,6 +25,7 @@ import { Button } from '@/components/ui/button';
 import CourseProgressButton from '@/app/(course)/component/course-progress-button';
 import { Preview } from '@/components/preview';
 import SummaryVideo from '@/app/(course)/component/summary-video';
+import SupportCode from '@/app/(course)/component/support-code';
 
 
 
@@ -53,7 +54,7 @@ export default function BentoGridCoursePage({ params }: { params: { slug: string
 	}, [contentlist, params.token]);
 
 	const isOwner = data?.owner.email === session.data?.user.email;
-    const isLocked = (content?.userProgress.length === 0 && !isOwner) ? true : false;
+	const isLocked = (content?.userProgress.length === 0 && !isOwner) ? true : false;
 
 	// if (isLoading || loadingContent) {
 	// 	return <LoadingModal />;
@@ -66,10 +67,10 @@ export default function BentoGridCoursePage({ params }: { params: { slug: string
 		return (
 			<BentoGrid className="w-screen h-full mx-auto md:auto-rows-min">
 				<div className="col-span-3 row-span-1 rounded-xl group/bento hover:shadow-xl transition duration-200 shadow-input dark:shadow-none p-4 dark:bg-black dark:border-white/[0.2] bg-white border  justify-between flex flex-col space-y-4">
-					<MainContent data={data} params={params} contentlist={contentlist} indexLesson={indexLesson} isLocked={isLocked}/>
+					<MainContent data={data} params={params} contentlist={contentlist} indexLesson={indexLesson} isLocked={isLocked} />
 				</div>
 				<div className="md:col-span-2 row-span-1 rounded-xl group/bento hover:shadow-xl transition duration-200 shadow-input dark:shadow-none p-4 dark:bg-black dark:border-white/[0.2] bg-white border  justify-between flex flex-col space-y-4">
-					<MoreInformation data={data} params={params} contentlist={contentlist} indexLesson={indexLesson} isLocked={isLocked}/>
+					<MoreInformation data={data} params={params} contentlist={contentlist} indexLesson={indexLesson} isLocked={isLocked} />
 				</div>
 				<div className="md:col-span-1 row-span-1 rounded-xl group/bento hover:shadow-xl transition duration-200 shadow-input dark:shadow-none p-4 dark:bg-black dark:border-white/[0.2] bg-white border  justify-between flex flex-col space-y-4">
 					<ListLesson data={data} content_token={params.token} course_slug={params.slug} />
@@ -87,7 +88,7 @@ const Skeleton = () => (
 
 
 
-export function MoreInformation({ data, params, contentlist, indexLesson, isLocked }: { data: Course, params: { slug: string, token: string }, contentlist:Content[], indexLesson: number, isLocked: boolean }) {
+export function MoreInformation({ data, params, contentlist, indexLesson, isLocked }: { data: Course, params: { slug: string, token: string }, contentlist: Content[], indexLesson: number, isLocked: boolean }) {
 	const router = useRouter();
 	const session = useSession();
 	const { content, loadingContent, errorContent, isValidating, mutate } =
@@ -121,90 +122,103 @@ export function MoreInformation({ data, params, contentlist, indexLesson, isLock
 
 	if (data && content) {
 		//if (content?.type === "LESSON") {
-			return (
-				<div className='w-full h-full max-w-full max-h-full'>
-					<div className="flex justify-between">
-						<Button onClick={onPrevLesson}>
-							<ArrowLeft className="mr-2" /> Prev
-							Lesson
-						</Button>
-						<Button onClick={onNextLesson}>
-							Next Lesson{' '}
-							<ArrowRight className="ml-2" />
-						</Button>
-					</div>
-					<div className="flex flex-col items-center justify-between p-6 mt-6 border rounded-md lg:flex-row">
-						<h2 className="mb-2 text-lg font-semibold lg:text-2xl lg:mb-0 lg:text-left">
-							{!content?.exercise?.code && (
-								content?.lesson?.title || content?.exercise?.title
-							)}
-							{content?.exercise?.code && (
-								<Preview
-								value={content?.exercise?.code.question}
-								/>
-							)}
-						</h2>
-						{!isLocked && (
-							<div className="flex items-center space-x-2">
-								{
-									content?.type === "LESSON" && (
-										<CourseProgressButton
-											isValidating={isValidating}
-											initdata={content}
-											course_slug={params.slug}
-											mutate={mutate}
-											next_lesson={
-												contentlist[indexLesson + 1]
-											}
-										/>
-									)
-								}
-							</div>
-						)}
-					</div>
-					<Tabs defaultValue="overview" className="w-full h-full">
-						<TabsList className="grid w-full grid-cols-4">
-							<TabsTrigger value="overview">Tổng quan</TabsTrigger>
-							<TabsTrigger value="resources">Tài nguyên</TabsTrigger>
-							<TabsTrigger value="reviews">Nhận xét</TabsTrigger>
-							<TabsTrigger value="summary">Tóm tắt</TabsTrigger>
-						</TabsList>
-						<TabsContent value="overview">
-							<Card>
-								<CardContent className="space-y-2">
-									<Overview lesson={content.lesson} />
-								</CardContent>
-							</Card>
-						</TabsContent>
-						<TabsContent value="resources">
-							<Card>
-								<CardContent className="space-y-2">
-									<ResourcesLesson
-										lesson={content.lesson}
-									/>
-								</CardContent>
-							</Card>
-						</TabsContent>
-						<TabsContent value="reviews">
-							<Card>
-								<CardContent className="space-y-2">
-									<ReviewCourse
-										course={data}
-										course_slug={params.slug}
-									/>
-								</CardContent>
-							</Card>
-						</TabsContent>
-						<TabsContent value="summary">
-							<Card>
-								<CardContent className="space-y-2">
-									<SummaryVideo course_slug={params.slug} initdata={content}/>
-								</CardContent>
-							</Card>
-						</TabsContent>
-					</Tabs>
+		return (
+			<div className='w-full h-full max-w-full max-h-full'>
+				<div className="flex justify-between">
+					<Button onClick={onPrevLesson}>
+						<ArrowLeft className="mr-2" /> Prev
+						Lesson
+					</Button>
+					<Button onClick={onNextLesson}>
+						Next Lesson{' '}
+						<ArrowRight className="ml-2" />
+					</Button>
 				</div>
-			)
+				<div className="flex flex-col items-center justify-between p-6 mt-6 border rounded-md lg:flex-row">
+					<h2 className="mb-2 text-lg font-semibold lg:text-2xl lg:mb-0 lg:text-left">
+						{!content?.exercise?.code && (
+							content?.lesson?.title || content?.exercise?.title
+						)}
+						{content?.exercise?.code && (
+							<Preview
+								value={content?.exercise?.code.question}
+							/>
+						)}
+					</h2>
+					{!isLocked && (
+						<div className="flex items-center space-x-2">
+							{
+								content?.type === "LESSON" && (
+									<CourseProgressButton
+										isValidating={isValidating}
+										initdata={content}
+										course_slug={params.slug}
+										mutate={mutate}
+										next_lesson={
+											contentlist[indexLesson + 1]
+										}
+									/>
+								)
+							}
+						</div>
+					)}
+				</div>
+				<Tabs defaultValue="overview" className="w-full h-full">
+					<TabsList className="grid w-full grid-cols-4">
+						<TabsTrigger value="overview">Tổng quan</TabsTrigger>
+						<TabsTrigger value="resources">Tài nguyên</TabsTrigger>
+						<TabsTrigger value="reviews">Nhận xét</TabsTrigger>
+						{content.type === "LESSON"
+							? <TabsTrigger value="summary">Tóm tắt</TabsTrigger>
+							: (
+								<>
+									{content.exercise?.type === "CODE" && (<TabsTrigger value="supportcode">AI Hỗ trợ</TabsTrigger>)}
+								</>
+							)}
+					</TabsList>
+					<TabsContent value="overview">
+						<Card>
+							<CardContent className="space-y-2">
+								<Overview lesson={content.lesson} />
+							</CardContent>
+						</Card>
+					</TabsContent>
+					<TabsContent value="resources">
+						<Card>
+							<CardContent className="space-y-2">
+								<ResourcesLesson
+									lesson={content.lesson}
+								/>
+							</CardContent>
+						</Card>
+					</TabsContent>
+					<TabsContent value="reviews">
+						<Card>
+							<CardContent className="space-y-2">
+								<ReviewCourse
+									course={data}
+									course_slug={params.slug}
+								/>
+							</CardContent>
+						</Card>
+					</TabsContent>
+					<TabsContent value="summary">
+						<Card>
+							<CardContent className="space-y-2">
+								<SummaryVideo course_slug={params.slug} initdata={content} />
+							</CardContent>
+						</Card>
+					</TabsContent>
+					<TabsContent value="supportcode">
+						<Card>
+							<CardContent className="space-y-2">
+								<SupportCode/>
+							</CardContent>
+						</Card>
+					</TabsContent>
+				</Tabs>
+			</div>
+		)
 		//}
 	}
 }
@@ -216,7 +230,7 @@ interface VideoListProps {
 }
 
 
-export function MainContent({ data, params, contentlist, indexLesson, isLocked }: { data: Course, params: { slug: string, token: string }, contentlist:Content[], indexLesson: number, isLocked: boolean }) {
+export function MainContent({ data, params, contentlist, indexLesson, isLocked }: { data: Course, params: { slug: string, token: string }, contentlist: Content[], indexLesson: number, isLocked: boolean }) {
 	const session = useSession();
 	const { content, loadingContent, errorContent, isValidating, mutate } =
 		useLessonDetailUser(
@@ -225,11 +239,11 @@ export function MainContent({ data, params, contentlist, indexLesson, isLocked }
 			params.token,
 			session.data?.user.email
 		);
-	
+
 	// if (loadingContent) {
 	// 	return <LoadingModal />;
 	// }
-	
+
 	if (isLocked) {
 		return (
 			<Banner

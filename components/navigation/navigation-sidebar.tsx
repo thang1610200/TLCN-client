@@ -6,11 +6,12 @@ import { Separator } from '@/components/ui/separator';
 
 import { NavigationAction } from './navigation-action';
 import { NavigationItem } from './navigation-item';
-import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
+
 import toast from 'react-hot-toast';
 import { useSession } from 'next-auth/react';
 import { useGetServer } from '@/app/hook/useGetServer';
 import LoadingModal from '../modal/loading-modal';
+import SideBar from './SideBar';
 
 export const NavigationSidebar = () => {
     const session = useSession();
@@ -45,15 +46,10 @@ export const NavigationSidebar = () => {
                     </div>
                 ))}
             </ScrollArea>
-            <div className="pb-3 mt-auto flex items-center flex-col gap-y-4">
+            <div className="flex flex-col items-center pb-3 mt-auto gap-y-4">
                 <ModeToggle />
-                <Avatar className="h-[48px] w-[48px]">
-                    <AvatarImage
-                        src={session.data?.user.image}
-                        alt="User Image"
-                    />
-                    <AvatarFallback>User</AvatarFallback>
-                </Avatar>
+                <SideBar/>
+                
             </div>
         </div>
     );

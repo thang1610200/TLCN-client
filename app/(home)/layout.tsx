@@ -1,6 +1,6 @@
 import {Navbar} from '@/components/navigation-bar/Navbar';
 import React from 'react';
-import SideBar from '../../components/navigation-bar/SideBar';
+import SideBar from '../../components/navigation/SideBar';
 import { PaginationCourse } from './components/pagination';
 
 

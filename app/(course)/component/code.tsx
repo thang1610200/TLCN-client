@@ -19,6 +19,7 @@ import Split from 'react-split';
 import OutputWindow from './output-code';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Editor } from '@monaco-editor/react';
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 
 interface QuizModalProps {
     data?: Exercise;
@@ -52,9 +53,9 @@ const CodeModal: React.FC<QuizModalProps> = ({
     const [inputValues, setInputValues] = useState<CodeProps[]>([]);
 
     useEffect(() => {
-        if(content_current.userProgress[0].isCompleted) {
-            setOutputDetails('3');
-        }
+        // if(content_current.userProgress[0].isCompleted) {
+        //     setOutputDetails('3');
+        // }
 
         const initialInputValues = data?.code?.file.map((item, index) => {
             const data: CodeProps = {
@@ -110,7 +111,7 @@ const CodeModal: React.FC<QuizModalProps> = ({
             mutate([url, session.data?.backendTokens.accessToken]);
             mutateProgress();
             router.refresh();
-            if(response.data) {
+            if (response.data) {
                 setOutputDetails('2')
             }
             else {
@@ -123,19 +124,22 @@ const CodeModal: React.FC<QuizModalProps> = ({
         }
     };
 
+
     if (isValidating) {
         return (
-            <div className="absolute inset-0 flex items-center justify-center bg-slate-800 flex-col gap-y-2 text-secondary">
-                <Loader2 className="h-8 w-8 animate-spin" />
+            <div className="absolute inset-0 flex flex-col items-center justify-center bg-slate-800 gap-y-2 text-secondary">
+                <Loader2 className="w-8 h-8 animate-spin" />
             </div>
         );
     }
 
+    const regex = /(<([^>]+)>)/gi;
+
     return (
         <div>
             {isLocked ? (
-                <div className="absolute inset-0 flex items-center justify-center bg-slate-800 flex-col gap-y-2 text-secondary">
-                    <Lock className="h-8 w-8" />
+                <div className="absolute inset-0 flex flex-col items-center justify-center bg-slate-800 gap-y-2 text-secondary">
+                    <Lock className="w-8 h-8" />
                     <p className="text-sm">This exercise is locked</p>
                 </div>
             ) : (
@@ -184,25 +188,34 @@ const CodeModal: React.FC<QuizModalProps> = ({
                                 ))}
                             </Tabs>
                         </div>
-                        <div className="flex flex-col gap-2">
+                        <Split
+                            sizes={[75, 25]}
+                            minSize={200}
+                            expandToMin={true}
+                            gutterSize={10}
+                            gutterAlign="center"
+                            snapOffset={30}
+                            dragInterval={1}
+                            direction="vertical"
+                            cursor="col-resize"
+                            className='flex flex-col w-full h-full row-auto'>
+                            <Card className='w-full h-full'>
+                                <CardHeader className='flex flex-row items-center justify-between'>
+                                    <CardTitle>Bài tập</CardTitle>
+                                    <Button
+                                        onClick={handleSubmit}
+                                        disabled={processing}
+                                        variant={'success'}
+                                    >
+                                        Submit
+                                    </Button>
+                                </CardHeader>
+                                <CardContent className=''>
+                                    {data?.code.question.replace(regex, "")}
+                                </CardContent>
+                            </Card>
                             <OutputWindow outputDetails={outputDetails} />
-                            <div className="flex row gap-2 flex-row-reverse">
-                                <Button
-                                    onClick={handleSubmit}
-                                    disabled={processing}
-                                    variant={'success'}
-                                >
-                                    Submit
-                                </Button>
-                                {/* <Button
-                                    onClick={handleComplie}
-                                    disabled={processing}
-                                    variant={'outline'}
-                                >
-                                    Run
-                                </Button> */}
-                            </div>
-                        </div>
+                        </Split>
                     </Split>
                 </>
             )}

@@ -5,7 +5,7 @@ import { AnimatePresence, MotionValue, motion, useMotionValue } from "framer-mot
 import LoginButton from '@/components/navigation-bar/LoginButton';
 import RoleUser from '@/components/navigation-bar/RoleUser';
 import Notification from '@/components/navigation-bar/Notification';
-import SideBar from './SideBar';
+import SideBar from '../navigation/SideBar';
 import { useSession } from 'next-auth/react';
 import RegisterInsModal from '../Reg-Ins-Modal';
 

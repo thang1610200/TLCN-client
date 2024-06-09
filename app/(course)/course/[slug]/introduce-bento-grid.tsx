@@ -19,9 +19,13 @@ import axios from 'axios';
 import toast from 'react-hot-toast';
 import { BACKEND_URL } from '@/lib/constant';
 import ListVideoReview from "../../component/list-video-review";
+import useAllCoursePublish from "@/app/hook/useAllCoursePublish";
+import { CourseCard } from "@/app/(home)/components/CardCourse";
 
 
 export default function BentoGridIntroducePage({ data, params }: { data: Course, params: { slug: string } }) {
+	const countCompleteLesson = data.userProgress?.reduce((count, item) => count + (item.isCompleted === true ? 1 : 0), 0);
+	const isCompleteCourse = countCompleteLesson > data.userProgress?.length / 2;
 	return (
 		<BentoGrid className="w-screen h-full mx-auto md:auto-rows-min">
 			<div className="md:col-span-2 row-span-1 rounded-xl group/bento hover:shadow-xl transition duration-200 shadow-input dark:shadow-none p-4 dark:bg-black dark:border-white/[0.2] bg-white border  justify-between flex flex-col space-y-4">
@@ -36,6 +40,11 @@ export default function BentoGridIntroducePage({ data, params }: { data: Course,
 			<div className="md:col-span-2 row-span-1 rounded-xl group/bento hover:shadow-xl transition duration-200 shadow-input dark:shadow-none p-4 dark:bg-black dark:border-white/[0.2] bg-white border  justify-between flex flex-col space-y-4">
 				<GoalRequireCourse data={data} />
 			</div>
+			{!isCompleteCourse &&
+				<div className="md:col-span-3 row-span-1 rounded-xl group/bento hover:shadow-xl transition duration-200 shadow-input dark:shadow-none p-4 dark:bg-black dark:border-white/[0.2] bg-white border  justify-between flex flex-col space-y-4">
+					<SuggestCourse />
+				</div>
+			}
 		</BentoGrid>
 	);
 }
@@ -419,4 +428,37 @@ export function ListLesson({ data }: { data: Course }) {
 			</div>
 		)
 	}
+}
+
+
+export function SuggestCourse() {
+	const { data, isLoading, error } = useAllCoursePublish(
+		undefined,
+		[],
+		[],
+		undefined,
+		[]
+	);
+	return (
+		<div className="w-full h-full">
+			<h1 className="text-2xl font-bold ">Một số khóa học liên quan</h1>
+			<div className='grid w-full grid-cols-3 grid-rows-subgrid h-fit'>
+				{data?.map((item, index) => (
+					index < 3 && (
+						<div key={index} className="flex items-center justify-center w-full h-full">
+							<CourseCard
+								key={index}
+								slug={item.slug}
+								title={item.title}
+								imageUrl={item.picture!}
+								chaptersLength={item.chapters.length}
+								total={item.total}
+								description={item.description}
+							/>
+						</div>
+					)
+				))}
+			</div>
+		</div>
+	)
 }
