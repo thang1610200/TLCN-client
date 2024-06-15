@@ -135,16 +135,16 @@ export function MoreInformation({ data, params, contentlist, indexLesson, isLock
 					</Button>
 				</div>
 				<div className="flex flex-col items-center justify-between p-6 mt-6 border rounded-md lg:flex-row">
+					{!content?.exercise?.code && (
 					<h2 className="mb-2 text-lg font-semibold lg:text-2xl lg:mb-0 lg:text-left">
-						{!content?.exercise?.code && (
-							content?.lesson?.title || content?.exercise?.title
-						)}
-						{content?.exercise?.code && (
+							{content?.lesson?.title || content?.exercise?.title}
+						{/* {content?.exercise?.code && (
 							<Preview
 								value={content?.exercise?.code.question}
 							/>
-						)}
+						)} */}
 					</h2>
+					)}
 					{!isLocked && (
 						<div className="flex items-center space-x-2">
 							{
@@ -212,7 +212,10 @@ export function MoreInformation({ data, params, contentlist, indexLesson, isLock
 					<TabsContent value="supportcode">
 						<Card>
 							<CardContent className="space-y-2">
-								<SupportCode/>
+								<SupportCode
+									codeTitle={content.exercise?.code.question}
+									codeLang={content.exercise?.code.labCode.language.join(",")} 
+								/>
 							</CardContent>
 						</Card>
 					</TabsContent>

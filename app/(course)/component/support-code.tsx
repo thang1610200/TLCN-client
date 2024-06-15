@@ -8,16 +8,29 @@ import { Button } from '@/components/ui/button';
 import { Preview } from '@/components/preview';
 import { RotateCw } from 'lucide-react';
 
-export default function SupportCode() {
+interface SupportCodeProps {
+    codeTitle?: string;
+    codeLang?: string;
+}
+
+interface ResponseProps {
+    code?: string,
+    explain?: string;
+}
+
+const SupportCode:React.FC<SupportCodeProps> = ({
+    codeTitle,
+    codeLang
+}) => {
     const session = useSession();
     const [isLoading, setIsLoading] = useState(false);
-    const [data, setData] = useState("")
+    const [data, setData] = useState<ResponseProps>();
     async function supportCode() {
         const url = qs.stringifyUrl({
-            url: `${BACKEND_URL}/chatgpt/support-exercise-code`,
+            url: `${BACKEND_URL}/chatgpt/support-code`,
             query: {
-                question_code: "Tính tổng 2 số nguyên",
-                language_code: "PHP"
+                codeTitle,
+                codeLang
             }
         })
         try {
@@ -28,9 +41,11 @@ export default function SupportCode() {
                     'Content-Type': 'application/json',
                 },
             });
-            setData(response.data)
+            //onsole.log(response.data[0]);
+            setData(response.data[0])
         }
-        catch {
+        catch(err) {
+            console.log(err);
             toast.error('Something went wrong!');
         }
         finally {
@@ -42,7 +57,7 @@ export default function SupportCode() {
     return (
         <>
             <div className='flex items-center justify-center w-full h-full mt-6'>
-                {data === ""
+                {!data
                     ? <>
                         {isLoading
                             ? <Button disabled>
@@ -52,14 +67,13 @@ export default function SupportCode() {
                             : <Button onClick={() => { supportCode() }} className=' bg-emerald-500 hover:bg-emerald-700'>Hỗ trợ</Button>
                         }
                     </>
-                    : <Preview
-                        value={data}
-                    />
-
+                    : (
+                        <p>{data.code}</p>
+                    )
                 }
-
-
             </div>
         </>
     )
 }
+
+export default SupportCode;
