@@ -14,6 +14,8 @@ export default function UserProgressPage() {
     const { data: course = [], isLoading, error } = useAllCourse(session.data?.user.email, session.data?.backendTokens.accessToken);
     const { data = [], isLoadingUser, errorUser} = useUserOfInstructor(session.data?.user.email, session.data?.backendTokens.accessToken);
 
+    console.log(data);
+
     if(isLoading || isLoadingUser){
         return (
             <LoadingModal />
