@@ -11,13 +11,15 @@ import {
     PaginationNext,
     PaginationPrevious,
 } from '@/components/ui/pagination';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useRouter, useSearchParams, usePathname } from 'next/navigation';
 import { useState } from 'react';
 import qs from 'query-string';
 
+
+
 export function PaginationCourse() {
     const searchParams = useSearchParams();
-
+    const pathname = usePathname()
     const currentTitle = searchParams.get('title') || undefined;
     const currentPage= searchParams.get('page');
     const currentTopic = searchParams.getAll('topic');
@@ -29,7 +31,6 @@ export function PaginationCourse() {
         currentLevel
     );
     const router = useRouter();
-
     let pageTotal = 0;
 
     if (data % 6 === 0) {
@@ -45,7 +46,7 @@ export function PaginationCourse() {
     const onSelectPage = (page: number) => {
         const url = qs.stringifyUrl(
             {
-                url: '/',
+                url: pathname,
                 query: {
                     title: currentTitle,
                     topic: currentTopic,

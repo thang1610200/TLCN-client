@@ -100,8 +100,9 @@ const CourseProgressButton = ({
                 );
             }
             toast.success('Progress updated', { id: toastId });
-        } catch {
+        } catch(error) {
             toast.error('Something went wrong', { id: toastId });
+            console.log(error)
         } finally {
             setIsLoading(false);
         }

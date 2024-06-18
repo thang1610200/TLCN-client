@@ -1,6 +1,5 @@
 import React from "react";
 import { Sidebar } from "./components/sidebar";
-import { Navbar } from "@/components/navigation-bar/Navbar";
 
 export default function InstructorLayout({
     children,
@@ -10,7 +9,6 @@ export default function InstructorLayout({
     return (
         <>
             <div className="w-screen h-full">
-                <Navbar />
                 <div className="border-t">
                     <div className="bg-background">
                         <div className="grid lg:grid-cols-5">

@@ -7,6 +7,8 @@ import qs from 'query-string';
 import { Button } from '@/components/ui/button';
 import { Preview } from '@/components/preview';
 import { RotateCw } from 'lucide-react';
+import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card';
+import { Editor } from '@monaco-editor/react';
 
 interface SupportCodeProps {
     codeTitle?: string;
@@ -18,13 +20,14 @@ interface ResponseProps {
     explain?: string;
 }
 
-const SupportCode:React.FC<SupportCodeProps> = ({
+const SupportCode: React.FC<SupportCodeProps> = ({
     codeTitle,
     codeLang
 }) => {
     const session = useSession();
     const [isLoading, setIsLoading] = useState(false);
     const [data, setData] = useState<ResponseProps>();
+
     async function supportCode() {
         const url = qs.stringifyUrl({
             url: `${BACKEND_URL}/chatgpt/support-code`,
@@ -35,16 +38,17 @@ const SupportCode:React.FC<SupportCodeProps> = ({
         })
         try {
             setIsLoading(true)
+            console.log("codeTitle: " + codeTitle + " " + "codeLang: " + codeLang)
             const response = await axios.get(url, {
                 headers: {
                     Authorization: `Bearer ${session.data?.backendTokens.accessToken}`,
                     'Content-Type': 'application/json',
                 },
             });
-            //onsole.log(response.data[0]);
+            console.log(response.data)
             setData(response.data[0])
         }
-        catch(err) {
+        catch (err) {
             console.log(err);
             toast.error('Something went wrong!');
         }
@@ -68,7 +72,18 @@ const SupportCode:React.FC<SupportCodeProps> = ({
                         }
                     </>
                     : (
-                        <p>{data.code}</p>
+                        <Card className='w-full h-full'>
+                            <CardContent className='w-full h-full mt-10'>
+                                <Editor
+                                    height="600px"
+                                    language={codeLang} //Fetch API thêm language
+                                    theme="oceanic-next"
+                                    defaultValue={data.code}
+                                    className=''
+                                />
+                            </CardContent>
+                            <CardFooter className=''>{data.explain}</CardFooter>
+                        </Card>
                     )
                 }
             </div>

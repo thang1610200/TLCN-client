@@ -8,7 +8,6 @@ import AutoRunText from './AutoRunText';
 export default function FirstScreen() {
     return (
         <div className="w-screen h-screen dark:bg-black bg-white  dark:bg-dot-white/[0.2] bg-dot-black/[0.2] overflow-hidden">
-            <FirstNavBar/>
             <div className='flex items-center justify-center flex-auto'>
                 <div className="container flex flex-col ml-20">
                     <div className="flex max-w-4xl mt-20">

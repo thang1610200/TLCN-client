@@ -20,7 +20,7 @@ import toast from 'react-hot-toast';
 import { BACKEND_URL } from '@/lib/constant';
 import ListVideoReview from "../../component/list-video-review";
 import useAllCoursePublish from "@/app/hook/useAllCoursePublish";
-import { CourseCard } from "@/app/(home)/components/CardCourse";
+import { CourseCard } from "@/app/home/components/CardCourse";
 
 
 export default function BentoGridIntroducePage({ data, params }: { data: Course, params: { slug: string } }) {

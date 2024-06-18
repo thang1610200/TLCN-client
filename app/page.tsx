@@ -1,25 +1,11 @@
 "use client";
-
-import { Button } from '@/components/ui/button';
-import Image from 'next/image';
-import { ArrowRight } from 'lucide-react';
-
-import AnimationChatGPT from '../../components/landing-page/components/animation-chatgpt';
-import MiniCourse from '../../components/landing-page/components/mini-course';
+import FirstScreen from '@/components/landing-page/components/FirstScreen';
+import SecondScreen from '@/components/landing-page/components/SecondScreen';
 import Link from 'next/link';
-import SecondPage from '../../components/landing-page/components/secondpage';
-import { useRef } from 'react';
-import { gsap } from "gsap";
-import { useGSAP } from "@gsap/react";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-import ThreadPage from '../../components/landing-page/components/thread-page';
-import FirstScreen from '../../components/landing-page/components/FirstScreen';
-import SecondScreen from '../../components/landing-page/components/SecondScreen';
-import SecondScreenOld from '../../components/landing-page/components/SecondScreenOld';
+
+
 
 export default function HomePage() {
-    
-    
     return (
         <div>
             <div className="w-full h-full"> {/*Chua dung lazy animation*/}

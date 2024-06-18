@@ -22,7 +22,7 @@ import {
     FormMessage,
 } from '@/components/ui/form';
 import { Checkbox } from '@/components/ui/checkbox';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useRouter, useSearchParams, usePathname } from 'next/navigation';
 import qs from 'query-string';
 import { Topic } from '@/app/types';
 
@@ -82,7 +82,7 @@ type TopicProps = {
 const DropBarFilter: React.FC<DropBarFilterProps> = ({ topic }) => {
     const router = useRouter();
     const searchParams = useSearchParams();
-
+    const pathname = usePathname()
     const currentTitle = searchParams.get('title');
     const currentTopic = searchParams.getAll('topic');
     const currentDuration = searchParams.getAll('duration');
@@ -108,7 +108,7 @@ const DropBarFilter: React.FC<DropBarFilterProps> = ({ topic }) => {
         const subscription = form.watch((data) => {
             const url = qs.stringifyUrl(
                 {
-                    url: '/',
+                    url: pathname,
                     query: {
                         title: currentTitle,
                         topic: data.topic ? data.topic : null,

@@ -36,7 +36,7 @@ export const Navbar = () => {
 function HomeMenu() {
     const links = [
         {
-            path: "/",
+            path: "/home",
             name: "Trang chính"
         },
         {

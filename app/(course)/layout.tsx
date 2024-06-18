@@ -10,7 +10,6 @@ export default function CreateCourseLayout({
 }) {
     return (
         <div className="w-screen h-full">
-            <Navbar />
             <div className="flex items-center justify-center">{children}</div>
         </div>
     );
