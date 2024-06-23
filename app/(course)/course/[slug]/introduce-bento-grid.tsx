@@ -150,9 +150,9 @@ export function InfoCourse({ data, slug }: { data: Course; slug: string }) {
 	const [isSubmit, setIsSubmit] = useState(false);
 	const session = useSession();
 	const router = useRouter();
-
+	//console.log(session.data);
 	function handleAccessCourse() {
-		if (session.status === "unauthenticated") {
+		if (!session.data?.backendTokens?.accessToken) {
 			return router.push('/login');
 		} else {
 			const toastId = toast.loading('Loading...');
@@ -184,7 +184,7 @@ export function InfoCourse({ data, slug }: { data: Course; slug: string }) {
 					<span className="font-semibold">
 						{data?.owner.name}
 					</span></h3>
-				<div className="flex items-center justify-start gap-1">
+				{/* <div className="flex items-center justify-start gap-1">
 
 					{[1, 2, 3, 4, 5].map((items) => (
 						<div key={items} className="">
@@ -194,7 +194,7 @@ export function InfoCourse({ data, slug }: { data: Course; slug: string }) {
 					))}
 					{ratings}
 					<div className="">(123 học viên)</div>
-				</div>
+				</div> */}
 				<Button disabled={isSubmit} className="bg-emerald-500" onClick={() => { handleAccessCourse() }}>
 					Tham gia khóa học
 				</Button>

@@ -20,6 +20,12 @@ import BentoGridCoursePage from './lesson-bento-grid';
 import { BentoGrid } from '@/components/ui/bento-grid';
 
 export default function CourseAccessDetail({ params }: { params: { slug: string; token: string } }) {
+    // const session = useSession();
+    // const router = useRouter();
+    // if(!session.data?.backendTokens.accessToken) {
+	// 	return router.push('/login')
+	// }
+
     return (
         <div className='w-screen h-full dark:bg-black bg-white  dark:bg-dot-white/[0.2] bg-dot-black/[0.2]'>
             <BentoGridCoursePage params={params} />

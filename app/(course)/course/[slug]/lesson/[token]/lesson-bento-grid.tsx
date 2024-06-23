@@ -62,7 +62,9 @@ export default function BentoGridCoursePage({ params }: { params: { slug: string
 
 	// if (error || errorContent) {
 	// 	return router.push("/");
-	// }
+	// 
+
+
 	if (data && content) {
 		return (
 			<BentoGrid className="w-screen h-full mx-auto md:auto-rows-min">
@@ -84,8 +86,6 @@ export default function BentoGridCoursePage({ params }: { params: { slug: string
 const Skeleton = () => (
 	<div className="flex flex-1 w-full h-full min-h-[6rem] rounded-xl   dark:bg-dot-white/[0.2] bg-dot-black/[0.2] [mask-image:radial-gradient(ellipse_at_center,white,transparent)]  border border-transparent dark:border-white/[0.2] bg-neutral-100 dark:bg-black"></div>
 );
-
-
 
 
 export function MoreInformation({ data, params, contentlist, indexLesson, isLocked }: { data: Course, params: { slug: string, token: string }, contentlist: Content[], indexLesson: number, isLocked: boolean }) {
@@ -214,7 +214,9 @@ export function MoreInformation({ data, params, contentlist, indexLesson, isLock
 							<CardContent className="space-y-2">
 								<SupportCode
 									codeTitle={content.exercise?.code.question}
-									codeLang={content.exercise?.code.labCode.language.join(",")} 
+									codeLang={content.exercise?.code.file.reduce((accumulator, currentValue) => {
+										return accumulator + currentValue.language + ",";
+									}, "")} 
 								/>
 							</CardContent>
 						</Card>
@@ -300,10 +302,6 @@ export function MainContent({ data, params, contentlist, indexLesson, isLocked }
 		}
 	}
 }
-
-
-
-
 
 
 export const VideoReview: React.FC<VideoListProps> = ({ data, isLocked }) => {

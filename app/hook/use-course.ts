@@ -77,7 +77,7 @@ export const useAllLevel = (token?: string) => {
     }
 }
 
-export const useCountCoursePublish = (title?: string, topic?:string[], level?: string[], page?: string) => {
+export const useCountCoursePublish = (title?: string, topic?:string[], level?: string[], duration?: string[]) => {
     const url = qs.stringifyUrl(
         {
             url: `${BACKEND_URL}/course/count-course-publish`,
@@ -85,7 +85,7 @@ export const useCountCoursePublish = (title?: string, topic?:string[], level?: s
                 title,
                 topic_slug: topic,
                 level_slug: level,
-                page
+                duration
             },
         },
         { skipNull: true, skipEmptyString: true }
@@ -102,5 +102,62 @@ export const useCountCoursePublish = (title?: string, topic?:string[], level?: s
         data,
         error,
         isLoading
+    }
+}
+
+export const useCountCourseAccess = (email?: string, token?: string, title?: string, topic?:string[], level?: string[]) => {
+    const url = qs.stringifyUrl(
+        {
+            url: `${BACKEND_URL}/user-progress/count-course-access`,
+            query: {
+                email,
+                title,
+                topic_slug: topic,
+                level_slug: level,
+            },
+        },
+        { skipNull: true, skipEmptyString: true }
+    );
+
+    const { data, error, isLoading, mutate} = useSwr<any, AxiosError>(token ? [`${url}`,token]: null, fetchers, {
+        revalidateIfStale: true,
+        revalidateOnFocus: false,
+        revalidateOnReconnect: false,
+        shouldRetryOnError: false,       // nếu khi gọi dữ liệu bị lỗi thì sẽ gọi lại (true)
+    })
+
+    return {
+        data,
+        error,
+        isLoading
+    }
+}
+
+export const useCourseAccess = (email?: string, token?: string, title?: string, topic_slug?:string[], level_slug?: string[], page?: string, duration?: string[]) => {
+    const url = qs.stringifyUrl(
+        {
+            url: `${BACKEND_URL}/user-progress/course-access`,
+            query: {
+                email,
+                title,
+                topic_slug,
+                level_slug
+            },
+        },
+        { skipNull: true, skipEmptyString: true }
+    );
+
+    const { data, error, isLoading, mutate} = useSwr<any[], AxiosError>(token ? [`${url}`,token]: null, fetchers, {
+        revalidateIfStale: true,
+        revalidateOnFocus: false,
+        revalidateOnReconnect: false,
+        shouldRetryOnError: false,       // nếu khi gọi dữ liệu bị lỗi thì sẽ gọi lại (true)
+    })
+
+    return {
+        data,
+        error,
+        isLoading,
+        mutate
     }
 }

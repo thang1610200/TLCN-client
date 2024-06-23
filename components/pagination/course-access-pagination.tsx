@@ -1,6 +1,6 @@
 'use client';
 
-import { useCountCoursePublish } from '@/app/hook/use-course';
+import { useCountCourseAccess } from '@/app/hook/use-course';
 import ErrorModal from '@/components/error';
 import {
     Pagination,
@@ -14,18 +14,19 @@ import {
 import { useRouter, useSearchParams, usePathname } from 'next/navigation';
 import { useState } from 'react';
 import qs from 'query-string';
-
-
+import { useSession } from 'next-auth/react';
 
 export function PaginationCourse() {
+    const session = useSession();
     const searchParams = useSearchParams();
     const pathname = usePathname()
     const currentTitle = searchParams.get('title') || undefined;
     const currentPage= searchParams.get('page');
     const currentTopic = searchParams.getAll('topic');
-    const currentDuration = searchParams.getAll('duration');
     const currentLevel = searchParams.getAll('level');
-    const { data, error, isLoading } = useCountCoursePublish(
+    const { data, error, isLoading } = useCountCourseAccess(
+        session.data?.user.email,
+        session.data?.backendTokens.accessToken,
         currentTitle,
         currentTopic,
         currentLevel
@@ -50,7 +51,6 @@ export function PaginationCourse() {
                 query: {
                     title: currentTitle,
                     topic: currentTopic,
-                    duration: currentDuration,
                     level: currentLevel,
                     page
                 },

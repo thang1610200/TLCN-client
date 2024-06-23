@@ -26,7 +26,8 @@ export function PaginationCourse() {
     const { data, error, isLoading } = useCountCoursePublish(
         currentTitle,
         currentTopic,
-        currentLevel
+        currentLevel,
+        currentDuration
     );
     const router = useRouter();
 
