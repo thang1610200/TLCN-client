@@ -167,7 +167,7 @@ export function MoreInformation({ data, params, contentlist, indexLesson, isLock
 					<TabsList className="grid w-full grid-cols-4">
 						<TabsTrigger value="overview">Tổng quan</TabsTrigger>
 						<TabsTrigger value="resources">Tài nguyên</TabsTrigger>
-						<TabsTrigger value="reviews">Nhận xét</TabsTrigger>
+						<TabsTrigger value="reviews">Q&A</TabsTrigger>
 						{content.type === "LESSON"
 							? <TabsTrigger value="summary">Tóm tắt</TabsTrigger>
 							: (
@@ -209,18 +209,22 @@ export function MoreInformation({ data, params, contentlist, indexLesson, isLock
 							</CardContent>
 						</Card>
 					</TabsContent>
-					<TabsContent value="supportcode">
-						<Card>
-							<CardContent className="space-y-2">
-								<SupportCode
-									codeTitle={content.exercise?.code.question}
-									codeLang={content.exercise?.code.file.reduce((accumulator, currentValue) => {
-										return accumulator + currentValue.language + ",";
-									}, "")} 
-								/>
-							</CardContent>
-						</Card>
-					</TabsContent>
+					{
+						content.exercise?.type === "CODE" && (
+							<TabsContent value="supportcode">
+								<Card>
+									<CardContent className="space-y-2">
+										<SupportCode
+											codeTitle={content.exercise?.code?.question}
+											codeLang={content.exercise?.code?.file.reduce((accumulator, currentValue) => {
+												return accumulator + currentValue.language + ",";
+											}, "")} 
+										/>
+									</CardContent>
+								</Card>
+							</TabsContent>
+						)
+					}
 				</Tabs>
 			</div>
 		)

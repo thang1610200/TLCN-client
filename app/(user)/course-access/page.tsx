@@ -12,7 +12,7 @@ import { useSearchParams } from 'next/navigation';
 import FilterCourseAccess from '../components/course-access-filter';
 import SkeletonAccess from '../components/skeleton-access';
 
-export default function page() {
+export default function CourseAccess() {
     const session = useSession();
     const searchParams = useSearchParams();
     const currentTopic = searchParams.getAll('topic') || [];
