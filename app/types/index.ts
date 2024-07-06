@@ -398,12 +398,8 @@ export const Language = [
         language_code: 'en',
     },
     {
-        language: 'US',
-        language_code: 'en_us',
-    },
-    {
-        language: 'Australian',
-        language_code: 'en_au',
+        language: 'Japanese',
+        language_code: 'ja',
     },
     {
         language: 'Spanish',

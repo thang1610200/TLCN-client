@@ -74,8 +74,28 @@ export const LessonVideoForm = ({
         },
     });
 
+    const getVideoDuration = (file: any) => {
+        const videoElmnt = document.createElement('video');
+        var duration = 0;
+        videoElmnt.src = URL.createObjectURL(file);
+        videoElmnt.load();
+
+        videoElmnt.addEventListener('error', () => {
+            toast.error('Something went wrong');
+        });
+        videoElmnt.addEventListener('loadedmetadata', () => {
+            duration = videoElmnt.duration;
+            URL.revokeObjectURL(videoElmnt.src);
+            videoElmnt.remove();
+        });
+
+        return Math.round(duration);
+    };
+
     const onSubmit = async (values: z.infer<typeof formSchema>) => {
         try {
+            const duration = await getVideoDuration(values.videoUrl[0]);
+
             await axios.patch(
                 `${BACKEND_URL}/lesson/update-video`,
                 {
@@ -84,6 +104,7 @@ export const LessonVideoForm = ({
                     course_slug,
                     email: session.data?.user.email,
                     lesson_token,
+                    duration
                 },
                 {
                     headers: {
@@ -102,16 +123,16 @@ export const LessonVideoForm = ({
     };
 
     const tracks: TrackProps[] = useMemo(() => {
-        if(!initialData?.subtitles) return [];
+        if (!initialData?.subtitles) return [];
         return initialData?.subtitles.map((item) => {
             return {
-                kind: "subtitles",
+                kind: 'subtitles',
                 src: item.file,
                 srcLang: item.language_code,
-                label: item.language
-            }
-        })
-    },[initialData])
+                label: item.language,
+            };
+        });
+    }, [initialData]);
 
     const { isSubmitting, isValid } = form.formState;
 
@@ -119,25 +140,23 @@ export const LessonVideoForm = ({
         <div className="p-4 mt-6 border rounded-md bg-slate-100">
             <div className="flex items-center justify-between font-medium">
                 Video bài học
-                {
-                    initialData?.asyncVideo?.type !== QueueType.Progressing && (
-                        <Button onClick={toggleEdit} variant="ghost">
-                            {isEditing && <>Cancel</>}
-                            {!isEditing && !initialData?.videoUrl && (
-                                <>
-                                    <PlusCircle className="w-4 h-4 mr-2" />
-                                    Thêm video
-                                </>
-                            )}
-                            {!isEditing && initialData?.videoUrl && (
-                                <>
-                                    <Pencil className="w-4 h-4 mr-2" />
-                                    Chỉnh sửa video
-                                </>
-                            )}
-                        </Button>
-                    )
-                }
+                {initialData?.asyncVideo?.type !== QueueType.Progressing && (
+                    <Button onClick={toggleEdit} variant="ghost">
+                        {isEditing && <>Cancel</>}
+                        {!isEditing && !initialData?.videoUrl && (
+                            <>
+                                <PlusCircle className="w-4 h-4 mr-2" />
+                                Thêm video
+                            </>
+                        )}
+                        {!isEditing && initialData?.videoUrl && (
+                            <>
+                                <Pencil className="w-4 h-4 mr-2" />
+                                Chỉnh sửa video
+                            </>
+                        )}
+                    </Button>
+                )}
             </div>
             {!isEditing &&
                 (!initialData?.videoUrl ? (
@@ -151,32 +170,34 @@ export const LessonVideoForm = ({
                                 width="100%"
                                 height="100%"
                                 controls
-                                light={initialData.thumbnail ? initialData.thumbnail : ""}
+                                light={
+                                    initialData.thumbnail
+                                        ? initialData.thumbnail
+                                        : ''
+                                }
                                 url={
                                     initialData?.videoUrl
                                         ? initialData?.videoUrl
                                         : ''
                                 }
-                                config={{ 
+                                config={{
                                     file: {
                                         attributes: {
-                                            crossOrigin: "true",
+                                            crossOrigin: 'true',
                                         },
-                                        tracks 
-                                    }
+                                        tracks,
+                                    },
                                 }}
                             />
                         }
-                        {
-                            initialData?.videoUrl&& (
-                                <GenerateSubtitleModal
-                                    course_slug={course_slug}
-                                    chapter_token={chapter_token}
-                                    lesson_token={lesson_token}
-                                    mutate={mutate} 
-                                />
-                            )
-                        }
+                        {initialData?.videoUrl && (
+                            <GenerateSubtitleModal
+                                course_slug={course_slug}
+                                chapter_token={chapter_token}
+                                lesson_token={lesson_token}
+                                mutate={mutate}
+                            />
+                        )}
                     </div>
                 ))}
             {isEditing && (
@@ -222,13 +243,15 @@ export const LessonVideoForm = ({
             {!isEditing &&
                 initialData?.asyncVideo?.type === QueueType.Progressing && (
                     <div className="mt-2 text-xs text-muted-foreground">
-                        Video cần một vài phút để hoàn thành. Refresh trang để hiển thị video
+                        Video cần một vài phút để hoàn thành. Refresh trang để
+                        hiển thị video
                     </div>
                 )}
             {initialData?.asyncVideo?.type === QueueType.Warning && (
-                    <div className="mt-2 text-xs text-muted-foreground">
-                        Video có chứa các nội dung như Hate, Self Harm, Sexual, Violence
-                    </div>
+                <div className="mt-2 text-xs text-muted-foreground">
+                    Video có chứa các nội dung như Hate, Self Harm, Sexual,
+                    Violence
+                </div>
             )}
         </div>
     );
