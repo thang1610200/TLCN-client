@@ -64,9 +64,9 @@ function HomeMenu() {
                                 <MoveHomeMenu key={link.name} link={link} isRegister={false} />
                             )
                         })}
-                        {role === 'LEARNER' && session.status === "authenticated" &&
+                        {/* {role === 'LEARNER' && session.status === "authenticated" &&
                             <MoveHomeMenu link={instructor} isRegister={true} />
-                        }
+                        } */}
                         {role === "INSTRUCTOR" && session.status === "authenticated" &&
                             <MoveHomeMenu link={instructor} isRegister={false} />
                         }

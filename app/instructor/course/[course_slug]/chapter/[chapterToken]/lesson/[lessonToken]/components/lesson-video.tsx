@@ -74,49 +74,44 @@ export const LessonVideoForm = ({
         },
     });
 
-    const getVideoDuration = (file: any) => {
-        const videoElmnt = document.createElement('video');
-        var duration = 0;
-        videoElmnt.src = URL.createObjectURL(file);
-        videoElmnt.load();
-
-        videoElmnt.addEventListener('error', () => {
-            toast.error('Something went wrong');
-        });
-        videoElmnt.addEventListener('loadedmetadata', () => {
-            duration = videoElmnt.duration;
-            URL.revokeObjectURL(videoElmnt.src);
-            videoElmnt.remove();
-        });
-
-        return Math.round(duration);
-    };
-
     const onSubmit = async (values: z.infer<typeof formSchema>) => {
         try {
-            const duration = await getVideoDuration(values.videoUrl[0]);
+            const videoElmnt = document.createElement('video');
 
-            await axios.patch(
-                `${BACKEND_URL}/lesson/update-video`,
-                {
-                    file: values.videoUrl[0],
-                    chapter_token,
-                    course_slug,
-                    email: session.data?.user.email,
-                    lesson_token,
-                    duration
-                },
-                {
-                    headers: {
-                        Authorization: `Bearer ${session.data?.backendTokens.accessToken}`,
-                        'Content-Type': 'multipart/form-data',
+            videoElmnt.src = URL.createObjectURL(values.videoUrl[0]);
+            videoElmnt.load();
+
+            videoElmnt.addEventListener('error', () => {
+                toast.error('Something went wrong');
+            });
+            videoElmnt.addEventListener('loadedmetadata', async () => {
+                const duration = Math.round(videoElmnt.duration).toString();
+
+                await axios.patch(
+                    `${BACKEND_URL}/lesson/update-video`,
+                    {
+                        file: values.videoUrl[0],
+                        chapter_token,
+                        course_slug,
+                        email: session.data?.user.email,
+                        lesson_token,
+                        duration,
                     },
-                }
-            );
-            toast.success('Lesson updated');
-            toggleEdit();
-            router.refresh();
-            mutate();
+                    {
+                        headers: {
+                            Authorization: `Bearer ${session.data?.backendTokens.accessToken}`,
+                            'Content-Type': 'multipart/form-data',
+                        },
+                    }
+                );
+                toast.success('Lesson updated');
+                toggleEdit();
+                router.refresh();
+                mutate();
+
+                URL.revokeObjectURL(videoElmnt.src);
+                videoElmnt.remove();
+            });
         } catch {
             toast.error('Something went wrong');
         }
