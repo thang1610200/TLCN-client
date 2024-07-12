@@ -180,21 +180,10 @@ export function InfoCourse({ data, slug }: { data: Course; slug: string }) {
 		return (
 			<div className='w-full h-full space-y-4'>
 				<h1 className='text-4xl font-bold'>{data?.title}</h1>
-				<h3 className='text-slate-600'>Create by{' '}
+				<h3 className='text-slate-600'>Được tạo bởi{' '}
 					<span className="font-semibold">
 						{data?.owner.name}
 					</span></h3>
-				{/* <div className="flex items-center justify-start gap-1">
-
-					{[1, 2, 3, 4, 5].map((items) => (
-						<div key={items} className="">
-							{items < ratings ? <Star size="20" fill='#10b981' strokeWidth={0} /> : <Star size="20" color='#10b981' />}
-
-						</div>
-					))}
-					{ratings}
-					<div className="">(123 học viên)</div>
-				</div> */}
 				<Button disabled={isSubmit} className="bg-emerald-500" onClick={() => { handleAccessCourse() }}>
 					Tham gia khóa học
 				</Button>

@@ -1,7 +1,7 @@
 "use client"
 import Link from 'next/link'
-import React, { useState } from 'react'
-import { AnimatePresence, MotionValue, motion, useMotionValue } from "framer-motion";
+import React, { useState, useRef } from 'react'
+import { AnimatePresence, MotionValue, motion, useMotionValue, useInView } from "framer-motion";
 import LoginButton from '@/components/navigation-bar/LoginButton';
 import RoleUser from '@/components/navigation-bar/RoleUser';
 import Notification from '@/components/navigation-bar/Notification';
@@ -9,15 +9,61 @@ import SideBar from '../navigation/SideBar';
 import { useSession } from 'next-auth/react';
 import RegisterInsModal from '../Reg-Ins-Modal';
 
+
+
+const LoadingText = ({ children, }: { children: React.ReactNode }) => {
+    const ref = useRef(null);
+    const isInView = useInView(ref, { once: true });
+
+    const containerVariants = {
+        hidden: { width: '50%' },
+        visible: {
+            width: 0,
+            transition: {
+                duration: 0.7,
+                ease: [0.6, 0.05, -0.01, 1], // Custom cubic-bezier for smoother easing
+            },
+        },
+    };
+
+    return (
+        <div ref={ref} className="relative inline-block overflow-hidden ">
+            <div className="relative text-transparent ">{children}</div> {/* Ensure text is initially hidden */}
+            <motion.div
+                className="absolute top-0 bottom-0 left-0 z-10 bg-teal-600"
+                initial="hidden"
+                animate={isInView ? 'visible' : 'hidden'}
+                variants={containerVariants}
+                style={{ width: '50%' }}
+            />
+            <motion.div
+                className="absolute top-0 bottom-0 right-0 z-10 bg-teal-600"
+                initial="hidden"
+                animate={isInView ? 'visible' : 'hidden'}
+                variants={containerVariants}
+                style={{ width: '50%' }}
+            />
+            <div className="absolute inset-0">{children}</div> {/* Ensure text is visible after animation */}
+        </div>
+    );
+};
+
 export const Navbar = () => {
+
     return (
         <div className='w-full h-20 border-2 '>
             {/* <SideBar/> */}
             <div className="container flex items-center justify-between w-full h-full ">
                 <div className="relative flex items-center justify-center w-fit h-fit">
-                    <h2 className="z-10 text-xl font-bold drop-shadow-2xl md:text-4xl">
+                    {/* <h2 className="z-10 text-xl font-bold drop-shadow-2xl md:text-4xl">
                         LEARNER
-                    </h2>
+                    </h2> */}
+                    <LoadingText>
+                        <h1 className="text-xl tracking-tight text-center md:text-5xl font-linotte-bold">
+                            LEARNER
+                        </h1>
+                    </LoadingText>
+
                 </div>
                 <HomeMenu />
                 <div className="flex items-center justify-center gap-4">

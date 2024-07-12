@@ -75,11 +75,6 @@ export default function LoginPage() {
             <div className="relative">
                 <div className="container relative flex-col items-center justify-center hidden h-screen md:grid lg:max-w-none lg:grid-cols-2 lg:px-0 bg-slate-100">
                     <div className="relative flex-col hidden h-full p-10 text-white bg-muted dark:border-r lg:flex">
-                        <Link href="/" legacyBehavior passHref>
-                            <h2 className="z-10 text-4xl font-bold cursor-pointer">
-                                LEARNER
-                            </h2>
-                        </Link>
                         <div className="absolute inset-0 bg-zinc-900" />
                         <div className="relative z-20 mt-auto">
                             <blockquote className="space-y-2">

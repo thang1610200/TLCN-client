@@ -45,10 +45,13 @@ export const CourseCard = ({
                     {/*Thêm description */}
                     {/* <p className="text-xs text-muted-foreground">{category}</p> */}
                     {/* <p className="text-xs lg:text-smtext-muted-foreground">Tác giả</p> */}
-                        {/* <div className="flex items-center my-3 text-xs lg:text-sm gap-x-5 ">
+                    {/* <div className="flex items-center my-3 text-xs lg:text-sm gap-x-5 ">
                             <Progress hidden={false} value={progress} />
                         </div> */}
-                    <Progress className='h-2' value={progress} />
+                    <div className='flex items-center justify-center w-full h-4 gap-4'>
+                        <Progress className='h-2' value={progress} />
+                        <div>{(progress.toFixed(0) || 0)}%</div>
+                    </div>
                 </div>
             </div>
             <Separator orientation="vertical" />

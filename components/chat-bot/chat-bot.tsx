@@ -5,11 +5,6 @@ import { Button } from '../ui/button';
 
 
 export default function ChatBot() {
-    // const [isOpen, setIsOpen] = useState(true)
-    // function handleOnClick() {
-    //     window.botpressWebChat.sendPayload({ type: "openchat"})
-    //     console.log("send")
-    // }
     return (
         <>
             <>
@@ -39,24 +34,11 @@ export default function ChatBot() {
                             if (event.data.type === 'LIFECYCLE.READY') {
                                 window.botpressWebChat.sendPayload({ type: 'text', text: 'Xin chào' })
                             }
-                            // if (event.data.type === 'UI.OPENED') {
-                            // }
-                            // if (event.data.type === 'UI.CLOSED') {
-                            //     window.botpressWebChat.mergeConfig({ hideWidget: true })
-                            // }
                         })
-                        // window.addEventListener('openchat', function (event){
-                        //     if (event.type === 'openchat' ) {
-                        //         window.botpressWebChat.mergeConfig({hideWidget: false })
-                        //     }
-                        //     console.log("openchat "+ event)
-                        // })
                     }}
                 />
             </>
-            {/* <>
-                {isOpen && <Button onClick={handleOnClick} className='absolute bg-red-500 size-7 bottom-5 right-10'>A</Button>}
-            </> */}
+
         </>
     )
 }
